@@ -71,21 +71,12 @@ function HeroBanner(): JSX.Element {
           AI <span className={styles.heroAcronymF}>F</span>oundations · <span className={styles.heroAcronymR}>R</span>easoning · <span className={styles.heroAcronymO1}>O</span>rchestration · <span className={styles.heroAcronymO2}>O</span>perations · <span className={styles.heroAcronymT}>T</span>ransformation
         </p>
 
-        {/* Mission statement — the WHY */}
-        <div style={{ maxWidth: "680px", margin: "16px auto 8px", padding: "16px 24px", borderRadius: "14px", border: "1px solid rgba(16, 185, 129, 0.2)", background: "linear-gradient(135deg, rgba(16, 185, 129, 0.04), rgba(99, 102, 241, 0.04))" }}>
-          <p style={{ fontSize: "0.85rem", fontWeight: 600, color: "var(--ifm-color-emphasis-700)", margin: "0 0 6px", textAlign: "center" }}>
-            🎯 Our Mission
-          </p>
-          <p style={{ fontSize: "0.82rem", color: "var(--ifm-color-emphasis-500)", lineHeight: 1.65, margin: 0, textAlign: "center" }}>
-            A <strong>power kit for infrastructure and platform engineers</strong> to gain deep insight into AI applications, agents, and the agentic ecosystem — so that proper design happens <em>from day one</em>, by design, by default, and by operation, from infra ⇄ platform ⇄ apps. No more silos.
+        {/* Mission statement — concise, impactful */}
+        <div style={{ maxWidth: "640px", margin: "16px auto 8px", padding: "14px 24px", borderRadius: "14px", border: "1px solid rgba(16, 185, 129, 0.2)", background: "linear-gradient(135deg, rgba(16, 185, 129, 0.04), rgba(99, 102, 241, 0.04))" }}>
+          <p style={{ fontSize: "0.84rem", color: "var(--ifm-color-emphasis-600)", lineHeight: 1.6, margin: 0, textAlign: "center" }}>
+            🎯 <strong>The open glue</strong> that binds infra ⇄ platform ⇄ apps — a power kit for infrastructure people to master the AI and agentic ecosystem. Proper design from day one. No more silos.
           </p>
         </div>
-
-        {/* Open Glue message */}
-        <p style={{ fontSize: "1rem", color: "var(--ifm-color-emphasis-600)", maxWidth: "600px", margin: "0 auto 8px", lineHeight: 1.6 }}>
-          <strong>The open glue</strong> that binds infrastructure, platform, and application.
-          <br />From a single token to a production agent fleet.
-        </p>
 
         {/* 3 visual tiles */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "12px", margin: "20px auto", maxWidth: "720px" }}>
