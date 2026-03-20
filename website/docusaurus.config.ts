@@ -76,6 +76,11 @@ const config: Config = {
           label: "AI Hub",
         },
         {
+          to: "/packages",
+          label: "📦 Packages",
+          position: "left",
+        },
+        {
           to: "/",
           label: "🌳 FrootAI",
           position: "right",
