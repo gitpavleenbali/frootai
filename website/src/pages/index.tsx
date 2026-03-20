@@ -59,13 +59,29 @@ function HeroBanner(): JSX.Element {
     <div className={styles.hero}>
       <div className={styles.heroInner}>
         <img src="/frootai/img/aifroot-logo.svg" alt="FrootAI" className={styles.heroLogo} />
-        <p className={styles.heroLabel}>From Root to Fruit</p>
+        <p className={styles.heroLabel}>From Root ⇄ Fruit</p>
         <h1 className={styles.heroTitle}>FrootAI</h1>
+        <p style={{ fontSize: "0.88rem", fontStyle: "italic", color: "var(--ifm-color-emphasis-500)", margin: "0 auto 4px", letterSpacing: "0.01em" }}>
+          From a single token to a production agent fleet
+        </p>
+        <p style={{ fontSize: "0.82rem", fontStyle: "italic", color: "var(--ifm-color-emphasis-400)", margin: "0 auto 12px" }}>
+          Infra ⇄ Apps
+        </p>
         <p className={styles.heroAcronym}>
           AI <span className={styles.heroAcronymF}>F</span>oundations · <span className={styles.heroAcronymR}>R</span>easoning · <span className={styles.heroAcronymO1}>O</span>rchestration · <span className={styles.heroAcronymO2}>O</span>perations · <span className={styles.heroAcronymT}>T</span>ransformation
         </p>
 
-        {/* Open Glue message — prominent at top */}
+        {/* Mission statement — the WHY */}
+        <div style={{ maxWidth: "680px", margin: "16px auto 8px", padding: "16px 24px", borderRadius: "14px", border: "1px solid rgba(16, 185, 129, 0.2)", background: "linear-gradient(135deg, rgba(16, 185, 129, 0.04), rgba(99, 102, 241, 0.04))" }}>
+          <p style={{ fontSize: "0.85rem", fontWeight: 600, color: "var(--ifm-color-emphasis-700)", margin: "0 0 6px", textAlign: "center" }}>
+            🎯 Our Mission
+          </p>
+          <p style={{ fontSize: "0.82rem", color: "var(--ifm-color-emphasis-500)", lineHeight: 1.65, margin: 0, textAlign: "center" }}>
+            A <strong>power kit for infrastructure and platform engineers</strong> to gain deep insight into AI applications, agents, and the agentic ecosystem — so that proper design happens <em>from day one</em>, by design, by default, and by operation, from infra ⇄ platform ⇄ apps. No more silos.
+          </p>
+        </div>
+
+        {/* Open Glue message */}
         <p style={{ fontSize: "1rem", color: "var(--ifm-color-emphasis-600)", maxWidth: "600px", margin: "0 auto 8px", lineHeight: 1.6 }}>
           <strong>The open glue</strong> that binds infrastructure, platform, and application.
           <br />From a single token to a production agent fleet.
