@@ -161,25 +161,27 @@ export default function FrootAIPage(): JSX.Element {
         </section>
 
         {/* ═══ 6. CTA ═══ */}
-        <section className={styles.ctaSection}>
+        <section className={styles.lensSection}>
           <h2 className={styles.sectionTitle}>FrootAI — The BIY AI Kit</h2>
-          <p style={{ fontSize: "0.85rem", color: "var(--ifm-color-emphasis-500)", textAlign: "center", margin: "0 0 4px" }}>For Infrastructure, Platform, and Application Teams</p>
-          <p style={{ fontSize: "0.78rem", fontStyle: "italic", color: "var(--ifm-color-emphasis-400)", textAlign: "center", margin: "0 auto 20px" }}>
-            Infrastructure are the roots. Platform is the trunk. Application is the fruit.
-          </p>
-          <div style={{ display: "flex", gap: "10px", justifyContent: "center", flexWrap: "wrap" }}>
-            {[
-              { label: "🎓 AI Knowledge Hub", to: "/docs/", color: "#f59e0b" },
-              { label: "🔗 Ecosystem", to: "/ecosystem", color: "#10b981" },
-              { label: "🎯 Solution Plays", to: "/solution-plays", color: "#7c3aed" },
-              { label: "📦 Packages", to: "/packages", color: "#06b6d4" },
-              { label: "⭐ Star on GitHub", to: "https://github.com/gitpavleenbali/frootai", color: "#f59e0b" },
-            ].map((link) => (
-              <Link key={link.label} to={link.to} className={styles.glowPill} style={{ "--pill-color": link.color } as React.CSSProperties}
-                onClick={() => setTimeout(() => window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior }), 100)}>
-                {link.label}
-              </Link>
-            ))}
+          <p className={styles.sectionSub}>For Infrastructure, Platform, and Application Teams</p>
+          <div className={styles.ctaSection}>
+            <p style={{ fontSize: "0.78rem", fontStyle: "italic", color: "var(--ifm-color-emphasis-400)", textAlign: "center", margin: "0 auto 16px" }}>
+              Infrastructure are the roots. Platform is the trunk. Application is the fruit.
+            </p>
+            <div style={{ display: "flex", gap: "10px", justifyContent: "center", flexWrap: "wrap" }}>
+              {[
+                { label: "🎓 AI Knowledge Hub", to: "/docs/", color: "#f59e0b" },
+                { label: "🔗 Ecosystem", to: "/ecosystem", color: "#10b981" },
+                { label: "🎯 Solution Plays", to: "/solution-plays", color: "#7c3aed" },
+                { label: "📦 Packages", to: "/packages", color: "#06b6d4" },
+                { label: "⭐ Star on GitHub", to: "https://github.com/gitpavleenbali/frootai", color: "#f59e0b" },
+              ].map((link) => (
+                <Link key={link.label} to={link.to} className={styles.glowPill} style={{ "--pill-color": link.color } as React.CSSProperties}
+                  onClick={() => setTimeout(() => window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior }), 100)}>
+                  {link.label}
+                </Link>
+              ))}
+            </div>
           </div>
         </section>
       </main>
