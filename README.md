@@ -73,6 +73,56 @@ Or search **"FrootAI"** in VS Code Extensions (Ctrl+Shift+X).
 
 ---
 
+## How the Ecosystem Works
+
+```mermaid
+graph TB
+    YOU["👤 YOU<br/>Developer / Architect"]
+    
+    subgraph EXT["💻 VS Code Extension — For YOU"]
+        E1["Browse 20 Solution Plays"]
+        E2["Search 200+ AI Terms"]
+        E3["Init DevKit for Your Project"]
+    end
+    
+    subgraph MCP["📦 MCP Server — For Your AGENT"]
+        M1["lookup_term → definitions"]
+        M2["search_knowledge → answers"]
+        M3["get_architecture_pattern → guides"]
+    end
+    
+    subgraph SP["🎯 Solution Plays — What You BUILD"]
+        subgraph DK["🛠️ DevKit — Before Coding"]
+            D1["agent.md"]
+            D2["instructions.md"]
+            D3["MCP + plugins"]
+        end
+        subgraph TK["🎛️ TuneKit — Before Shipping"]
+            T1["config/*.json"]
+            T2["evaluation/"]
+            T3["infra/main.bicep"]
+        end
+    end
+    
+    YOU --> EXT
+    YOU --> SP
+    EXT -.->|"human browses"| SP
+    MCP -.->|"agent queries"| SP
+    DK -->|"co-coder builds"| TK
+    TK -->|"deploy + evaluate"| SHIP["🚀 Production"]
+```
+
+| Component | Who Uses It | What It Does |
+|-----------|------------|-------------|
+| **VS Code Extension** | You (human) | Browse plays, search terms, init DevKit from sidebar |
+| **MCP Server (npm)** | Your AI agent | Copilot/Claude calls 6 tools for architecture answers |
+| **Solution Play DevKit** | Your co-coder | agent.md + instructions tune the AI for THIS solution |
+| **Solution Play TuneKit** | Platform team | Pre-tuned AI configs + evaluation pipeline |
+| **Big MCP** (frootai-mcp) | Any agent | "What is temperature?" "How to design RAG?" |
+| **Solution MCP** (per play) | Solution agent | "Is my RAG config optimal?" "Validate chunk size" |
+
+---
+
 ## The FROOT Framework
 
 ```mermaid

@@ -339,6 +339,54 @@ export default function FrootAIPage(): JSX.Element {
           </div>
         </section>
 
+        {/* ── How the Ecosystem Works ── */}
+        <section className={styles.lensSection}>
+          <h2 className={styles.sectionTitle}>How the Ecosystem Works</h2>
+          <p className={styles.sectionSub}>Three components, each serving a different user at a different stage</p>
+          
+          {/* Visual flow */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "16px", marginBottom: "24px" }}>
+            <div style={{ padding: "20px", borderRadius: "14px", border: "2px solid rgba(99, 102, 241, 0.3)", background: "rgba(99, 102, 241, 0.03)", textAlign: "center" }}>
+              <div style={{ fontSize: "2rem", marginBottom: "6px" }}>💻</div>
+              <div style={{ fontWeight: 800, fontSize: "0.95rem", marginBottom: "4px" }}>VS Code Extension</div>
+              <div style={{ fontSize: "0.72rem", fontWeight: 600, color: "#6366f1", marginBottom: "8px" }}>For YOU (the human)</div>
+              <div style={{ fontSize: "0.75rem", color: "var(--ifm-color-emphasis-500)", lineHeight: 1.6, textAlign: "left" }}>
+                Browse 20 solution plays in sidebar<br/>
+                Search 200+ AI terms instantly<br/>
+                Init DevKit → copies agent.md + MCP to your project<br/>
+                <strong>You browse. You click. You search.</strong>
+              </div>
+            </div>
+            <div style={{ padding: "20px", borderRadius: "14px", border: "2px solid rgba(16, 185, 129, 0.3)", background: "rgba(16, 185, 129, 0.03)", textAlign: "center" }}>
+              <div style={{ fontSize: "2rem", marginBottom: "6px" }}>📦</div>
+              <div style={{ fontWeight: 800, fontSize: "0.95rem", marginBottom: "4px" }}>MCP Server (npm)</div>
+              <div style={{ fontSize: "0.72rem", fontWeight: 600, color: "#10b981", marginBottom: "8px" }}>For YOUR AGENT (the AI)</div>
+              <div style={{ fontSize: "0.75rem", color: "var(--ifm-color-emphasis-500)", lineHeight: 1.6, textAlign: "left" }}>
+                Copilot/Claude calls 6 tools automatically<br/>
+                lookup_term → precise definitions<br/>
+                search_knowledge → finds answers in 17 modules<br/>
+                <strong>The AI reads this. Not you.</strong>
+              </div>
+            </div>
+            <div style={{ padding: "20px", borderRadius: "14px", border: "2px solid rgba(124, 58, 237, 0.3)", background: "rgba(124, 58, 237, 0.03)", textAlign: "center" }}>
+              <div style={{ fontSize: "2rem", marginBottom: "6px" }}>🎯</div>
+              <div style={{ fontWeight: 800, fontSize: "0.95rem", marginBottom: "4px" }}>Solution Plays</div>
+              <div style={{ fontSize: "0.72rem", fontWeight: 600, color: "#7c3aed", marginBottom: "8px" }}>What you BUILD with</div>
+              <div style={{ fontSize: "0.75rem", color: "var(--ifm-color-emphasis-500)", lineHeight: 1.6, textAlign: "left" }}>
+                🛠️ DevKit → empowers co-coder BEFORE coding<br/>
+                🎛️ TuneKit → fine-tunes AI BEFORE shipping<br/>
+                Each play has its own MCP for solution-specific tools<br/>
+                <strong>LEGO blocks that compose into full solutions.</strong>
+              </div>
+            </div>
+          </div>
+
+          {/* Flow arrows */}
+          <div style={{ textAlign: "center", padding: "16px 24px", borderRadius: "12px", border: "1px solid var(--ifm-color-emphasis-200)", background: "var(--ifm-background-surface-color)", fontSize: "0.82rem", lineHeight: 1.7 }}>
+            <strong>The Flow:</strong> You browse plays (Extension) → Your agent gets context (MCP) → You build with DevKit → You ship with TuneKit → Production 🚀
+          </div>
+        </section>
+
         {/* ── Learning Paths ── */}
         <section className={styles.paths}>
           <h2 className={styles.sectionTitle}>Learning Paths</h2>
