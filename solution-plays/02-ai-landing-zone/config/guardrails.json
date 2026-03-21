@@ -1,0 +1,1 @@
+{"network_security":{"private_endpoints":true,"nsg_enabled":true},"identity":{"managed_identity":true,"rbac_least_privilege":true}}

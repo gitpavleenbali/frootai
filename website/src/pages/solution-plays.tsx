@@ -1,108 +1,102 @@
-import React from "react";
+import React, { useState } from "react";
 import Layout from "@theme/Layout";
 import Link from "@docusaurus/Link";
 
 const plays = [
-  {
-    id: "01", name: "Enterprise RAG Q&A", icon: "🔍", status: "Ready", complexity: "Medium",
-    desc: "Production RAG pipeline — AI Search + OpenAI + Container App. Pre-tuned: temp=0.1, hybrid search 60/40, top-k=5, semantic reranker.",
-    infra: "AI Search · Azure OpenAI · Container Apps · Blob Storage",
-    tuning: "temperature · top-k · chunk size · reranking · relevance threshold",
-    files: ["agent.md", "instructions.md", "config/openai.json", "config/search.json", "config/chunking.json", "config/guardrails.json", "infra/main.bicep", "evaluation/eval.py", "mcp/index.js"],
-    github: "https://github.com/gitpavleenbali/frootai/tree/main/solution-plays/01-enterprise-rag",
-  },
-  {
-    id: "02", name: "AI Landing Zone", icon: "⛰️", status: "Ready", complexity: "Foundation",
-    desc: "Foundational Azure infrastructure for all AI workloads. VNet, private endpoints, managed identity, RBAC, GPU quotas, core AI services.",
-    infra: "VNet · Private Endpoints · RBAC · Managed Identity · Key Vault",
-    tuning: "N/A (infra only — the bedrock for other solution plays)",
-    files: ["infra/main.bicep", "infra/parameters.json", "config/landing-zone.json"],
-    github: "https://github.com/gitpavleenbali/frootai/tree/main/solution-plays/02-ai-landing-zone",
-  },
-  {
-    id: "03", name: "Deterministic Agent", icon: "🎯", status: "Ready", complexity: "Medium",
-    desc: "Reliable agent with temp=0, structured JSON output, multi-layer guardrails, anti-sycophancy, and evaluation pipeline.",
-    infra: "Container Apps · Azure OpenAI · Content Safety",
-    tuning: "temperature=0 · JSON schema · seed · confidence threshold · citation verification",
-    files: ["agent.md", "instructions.md", "config/openai.json", "config/guardrails.json", "infra/main.bicep", "evaluation/eval.py"],
-    github: "https://github.com/gitpavleenbali/frootai/tree/main/solution-plays/03-deterministic-agent",
-  },
+  { id: "01", name: "Enterprise RAG Q&A", icon: "🔍", status: "Ready", cx: "Medium", desc: "Production RAG — AI Search + OpenAI + Container Apps. Pre-tuned: temp=0.1, hybrid 60/40, top-k=5, semantic reranker.", infra: "AI Search · Azure OpenAI · Container Apps · Blob", tune: "temperature · top-k · chunk size · reranking · relevance threshold", github: "https://github.com/gitpavleenbali/frootai/tree/main/solution-plays/01-enterprise-rag",
+    devkitFiles: ["agent.md", "instructions.md", "copilot-instructions.md", ".vscode/mcp.json", "mcp/index.js", "plugins/"],
+    tunekitFiles: ["config/openai.json", "config/search.json", "config/chunking.json", "config/guardrails.json", "infra/main.bicep", "evaluation/"],
+    guide: "1. Clone repo → cd solution-plays/01-enterprise-rag\n2. Open in VS Code → Copilot is RAG-aware (reads agent.md + copilot-instructions)\n3. MCP auto-connects via .vscode/mcp.json\n4. Build: Co-coder fills skeleton using DevKit context\n5. Tune: Review config/*.json → adjust knobs per your data\n6. Deploy: az deployment group create --template-file infra/main.bicep\n7. Evaluate: python evaluation/eval.py → verify quality targets\n8. Ship it." },
+  { id: "02", name: "AI Landing Zone", icon: "⛰️", status: "Ready", cx: "Foundation", desc: "Foundational Azure infra for AI — VNet, private endpoints, managed identity, RBAC, GPU quotas.", infra: "VNet · Private Endpoints · RBAC · Managed Identity · Key Vault", tune: "Network config · service SKUs · GPU quota · region", github: "https://github.com/gitpavleenbali/frootai/tree/main/solution-plays/02-ai-landing-zone",
+    devkitFiles: ["agent.md", "instructions.md", "copilot-instructions.md", ".vscode/mcp.json", "mcp/index.js", "plugins/"],
+    tunekitFiles: ["config/landing-zone.json", "config/openai.json", "config/guardrails.json", "infra/main.bicep"],
+    guide: "1. Clone → cd solution-plays/02-ai-landing-zone\n2. Review config/landing-zone.json → set CIDR, SKUs, region\n3. Deploy: az deployment group create --template-file infra/main.bicep\n4. Verify: all services have private endpoints + managed identity\n5. Layer other solution plays on top." },
+  { id: "03", name: "Deterministic Agent", icon: "🎯", status: "Ready", cx: "Medium", desc: "Reliable agent — temp=0, structured JSON, multi-layer guardrails, anti-sycophancy, evaluation.", infra: "Container Apps · Azure OpenAI · Content Safety", tune: "temperature=0 · JSON schema · seed · confidence · citations", github: "https://github.com/gitpavleenbali/frootai/tree/main/solution-plays/03-deterministic-agent",
+    devkitFiles: ["agent.md", "instructions.md", "copilot-instructions.md", ".vscode/mcp.json", "mcp/index.js", "plugins/"],
+    tunekitFiles: ["config/openai.json", "config/guardrails.json", "infra/main.bicep", "evaluation/"],
+    guide: "1. Clone → cd solution-plays/03-deterministic-agent\n2. Review agent.md → understand anti-sycophancy + abstention rules\n3. Build: Co-coder implements guardrail pipeline using DevKit\n4. Tune: config/openai.json has temp=0, seed=42, strict schema\n5. Evaluate: python evaluation/eval.py → consistency >95%, groundedness >0.95\n6. Ship when all green." },
+  { id: "04", name: "Call Center Voice AI", icon: "📞", status: "Skeleton", cx: "High", desc: "Voice-enabled customer service — Communication Services + AI Speech + OpenAI Agent.", infra: "Communication Services · AI Speech · Azure OpenAI · Container Apps", tune: "Speech config · grounding prompts · fallback chains · voice personality", github: "https://github.com/gitpavleenbali/frootai/tree/main/solution-plays/04-call-center-voice-ai",
+    devkitFiles: ["agent.md", "instructions.md", "copilot-instructions.md", ".vscode/mcp.json", "mcp/index.js", "plugins/"],
+    tunekitFiles: ["config/openai.json", "config/guardrails.json", "infra/main.bicep", "evaluation/"],
+    guide: "Skeleton ready. DevKit + TuneKit files present. Open in VS Code → co-coder fills implementation." },
+  { id: "05", name: "IT Ticket Resolution", icon: "🎫", status: "Skeleton", cx: "Medium", desc: "Auto-classify, route, and resolve IT tickets — Logic Apps + AI Foundry + ServiceNow MCP.", infra: "Logic Apps · Azure OpenAI · ServiceNow MCP · Container Apps", tune: "Classification prompts · routing rules · confidence thresholds", github: "https://github.com/gitpavleenbali/frootai/tree/main/solution-plays/05-it-ticket-resolution",
+    devkitFiles: ["agent.md", "instructions.md", "copilot-instructions.md", ".vscode/mcp.json", "mcp/index.js", "plugins/"],
+    tunekitFiles: ["config/openai.json", "config/guardrails.json", "infra/main.bicep", "evaluation/"],
+    guide: "Skeleton ready. DevKit + TuneKit files present. Open in VS Code → co-coder fills implementation." },
+  { id: "06", name: "Document Intelligence", icon: "📄", status: "Skeleton", cx: "Medium", desc: "Extract, classify, and structure document data — Blob + Doc Intelligence + OpenAI.", infra: "Blob Storage · Document Intelligence · Azure OpenAI · Cosmos DB", tune: "Extraction prompts · confidence thresholds · field schemas", github: "https://github.com/gitpavleenbali/frootai/tree/main/solution-plays/06-document-intelligence",
+    devkitFiles: ["agent.md", "instructions.md", "copilot-instructions.md", ".vscode/mcp.json", "mcp/index.js", "plugins/"],
+    tunekitFiles: ["config/openai.json", "config/guardrails.json", "infra/main.bicep", "evaluation/"],
+    guide: "Skeleton ready. DevKit + TuneKit files present." },
+  { id: "07", name: "Multi-Agent Service", icon: "🤖", status: "Skeleton", cx: "High", desc: "Supervisor agent routes to specialists — Container Apps + Agent Framework + Dapr.", infra: "Container Apps · Azure OpenAI · Cosmos DB · Dapr", tune: "Supervisor routing · tool schemas · agent memory · handoff rules", github: "https://github.com/gitpavleenbali/frootai/tree/main/solution-plays/07-multi-agent-service",
+    devkitFiles: ["agent.md", "instructions.md", "copilot-instructions.md", ".vscode/mcp.json", "mcp/index.js", "plugins/"],
+    tunekitFiles: ["config/openai.json", "config/guardrails.json", "infra/main.bicep", "evaluation/"],
+    guide: "Skeleton ready." },
+  { id: "08", name: "Copilot Studio Bot", icon: "💬", status: "Skeleton", cx: "Low", desc: "Low-code enterprise bot — Copilot Studio + Dataverse + SharePoint.", infra: "Copilot Studio · Dataverse · SharePoint · Power Platform", tune: "Topic design · knowledge sources · guardrails · flow", github: "https://github.com/gitpavleenbali/frootai/tree/main/solution-plays/08-copilot-studio-bot",
+    devkitFiles: ["agent.md", "instructions.md", "copilot-instructions.md", ".vscode/mcp.json", "mcp/index.js", "plugins/"],
+    tunekitFiles: ["config/openai.json", "config/guardrails.json", "infra/main.bicep", "evaluation/"],
+    guide: "Skeleton ready." },
+  { id: "09", name: "AI Search Portal", icon: "🔎", status: "Skeleton", cx: "Medium", desc: "Enterprise search — AI Search + Web App + Semantic Ranking.", infra: "AI Search · App Service · Azure OpenAI · Blob Storage", tune: "Hybrid weights · semantic config · scoring profiles · filters", github: "https://github.com/gitpavleenbali/frootai/tree/main/solution-plays/09-ai-search-portal",
+    devkitFiles: ["agent.md", "instructions.md", "copilot-instructions.md", ".vscode/mcp.json", "mcp/index.js", "plugins/"],
+    tunekitFiles: ["config/openai.json", "config/guardrails.json", "infra/main.bicep", "evaluation/"],
+    guide: "Skeleton ready." },
+  { id: "10", name: "Content Moderation", icon: "🛡️", status: "Skeleton", cx: "Low", desc: "Filter harmful content — AI Content Safety + APIM + Functions.", infra: "Content Safety · API Management · Azure Functions", tune: "Severity levels · custom categories · blocklists · actions", github: "https://github.com/gitpavleenbali/frootai/tree/main/solution-plays/10-content-moderation",
+    devkitFiles: ["agent.md", "instructions.md", "copilot-instructions.md", ".vscode/mcp.json", "mcp/index.js", "plugins/"],
+    tunekitFiles: ["config/openai.json", "config/guardrails.json", "infra/main.bicep", "evaluation/"],
+    guide: "Skeleton ready." },
 ];
 
-const upcoming = [
-  { id: "04", name: "Call Center Voice AI", icon: "📞" },
-  { id: "05", name: "IT Ticket Resolution", icon: "🎫" },
-  { id: "06", name: "Document Intelligence", icon: "📄" },
-  { id: "07", name: "Multi-Agent Service", icon: "🤖" },
-  { id: "08", name: "Copilot Studio Bot", icon: "💬" },
-];
+function PlayCard({ play }: { play: typeof plays[0] }): JSX.Element {
+  const [expanded, setExpanded] = useState(false);
+  const isReady = play.status === "Ready";
+  return (
+    <div style={{ padding: "20px 24px", borderRadius: "16px", border: `1px solid var(--ifm-color-emphasis-200)`, background: "var(--ifm-background-surface-color)", marginBottom: "16px" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "16px", flexWrap: "wrap" }}>
+        <div style={{ flex: 1, minWidth: "200px" }}>
+          <h3 style={{ fontSize: "1.05rem", fontWeight: 700, margin: "0 0 4px" }}>{play.icon} {play.id} — {play.name}</h3>
+          <div style={{ display: "flex", gap: "6px", marginBottom: "8px", flexWrap: "wrap" }}>
+            <span style={{ fontSize: "0.68rem", padding: "2px 8px", borderRadius: "8px", background: isReady ? "rgba(16,185,129,0.1)" : "rgba(245,158,11,0.1)", color: isReady ? "#10b981" : "#f59e0b", fontWeight: 600 }}>{play.status}</span>
+            <span style={{ fontSize: "0.68rem", padding: "2px 8px", borderRadius: "8px", background: "rgba(99,102,241,0.1)", color: "#6366f1", fontWeight: 600 }}>{play.cx}</span>
+          </div>
+          <p style={{ fontSize: "0.82rem", color: "var(--ifm-color-emphasis-500)", lineHeight: 1.5, margin: "0 0 8px" }}>{play.desc}</p>
+          <div style={{ fontSize: "0.72rem", color: "var(--ifm-color-emphasis-400)", marginBottom: "4px" }}><strong>Infra:</strong> {play.infra}</div>
+          <div style={{ fontSize: "0.72rem", color: "var(--ifm-color-emphasis-400)" }}><strong>Tuning:</strong> {play.tune}</div>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: "6px", flexShrink: 0 }}>
+          <Link to={play.github} style={{ padding: "6px 14px", borderRadius: "8px", background: "linear-gradient(135deg, #6366f1, #7c3aed)", color: "#fff", fontSize: "0.75rem", fontWeight: 600, textDecoration: "none", textAlign: "center" }}>GitHub</Link>
+          <Link to={`${play.github}#-devkit--developer-velocity-ecosystem`} style={{ padding: "6px 14px", borderRadius: "8px", border: "1px solid rgba(6,182,212,0.3)", color: "#06b6d4", fontSize: "0.75rem", fontWeight: 600, textDecoration: "none", textAlign: "center" }}>🛠️ DevKit</Link>
+          <Link to={`${play.github}#-tunekit--ai-fine-tuning-ecosystem`} style={{ padding: "6px 14px", borderRadius: "8px", border: "1px solid rgba(124,58,237,0.3)", color: "#7c3aed", fontSize: "0.75rem", fontWeight: 600, textDecoration: "none", textAlign: "center" }}>🎛️ TuneKit</Link>
+        </div>
+      </div>
+      {/* Expandable user guide */}
+      <div style={{ marginTop: "12px", borderTop: "1px solid var(--ifm-color-emphasis-100)", paddingTop: "8px" }}>
+        <button onClick={() => setExpanded(!expanded)} style={{ background: "none", border: "none", color: "#10b981", fontSize: "0.78rem", fontWeight: 600, cursor: "pointer", padding: 0 }}>
+          {expanded ? "▼ Hide User Guide" : "▶ Show User Guide"}
+        </button>
+        {expanded && (
+          <div style={{ marginTop: "8px", padding: "12px 16px", borderRadius: "10px", background: "var(--ifm-color-emphasis-100)", fontSize: "0.78rem", lineHeight: 1.7, whiteSpace: "pre-wrap", fontFamily: "var(--ifm-font-family-monospace)" }}>
+            {play.guide}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
 
 export default function SolutionPlaysPage(): JSX.Element {
   return (
-    <Layout title="Solution Plays — FrootAI" description="Pre-tuned, deployable AI solutions. Infrastructure + AI config + agent instructions + evaluation — one command to deploy.">
+    <Layout title="Solution Plays — FrootAI" description="Pre-tuned deployable AI solutions. DevKit empowers the builder. TuneKit ships it to production.">
       <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "40px 24px 80px" }}>
-        <div style={{ textAlign: "center", marginBottom: "40px" }}>
+        <div style={{ textAlign: "center", marginBottom: "32px" }}>
           <h1 style={{ fontSize: "2rem", fontWeight: 800 }}>🎯 Solution Plays</h1>
-          <p style={{ fontSize: "0.95rem", color: "var(--ifm-color-emphasis-500)", maxWidth: "600px", margin: "0 auto" }}>
-            Pre-tuned, deployable AI solutions. Each play ships with infrastructure blueprints, AI configuration,
-            agent instructions, and evaluation pipeline. One command to deploy. Zero AI expertise required.
+          <p style={{ fontSize: "0.92rem", color: "var(--ifm-color-emphasis-500)", maxWidth: "600px", margin: "0 auto 8px" }}>
+            Each play ships with <strong>🛠️ DevKit</strong> (empower your co-coder) and <strong>🎛️ TuneKit</strong> (fine-tune AI for production). LEGO blocks that compose into complete solutions.
+          </p>
+          <p style={{ fontSize: "0.78rem", color: "var(--ifm-color-emphasis-400)" }}>
+            {plays.filter(p => p.status === "Ready").length} ready · {plays.filter(p => p.status === "Skeleton").length} skeleton · {plays.length} total
           </p>
         </div>
-
-        {/* Available plays */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "20px", marginBottom: "48px" }}>
-          {plays.map((play) => (
-            <div key={play.id} style={{ padding: "24px", borderRadius: "16px", border: "1px solid var(--ifm-color-emphasis-200)", background: "var(--ifm-background-surface-color)" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "12px" }}>
-                <div>
-                  <h2 style={{ fontSize: "1.15rem", fontWeight: 700, margin: "0 0 4px" }}>
-                    <span style={{ marginRight: "8px" }}>{play.icon}</span>
-                    {play.id} — {play.name}
-                  </h2>
-                  <div style={{ display: "flex", gap: "8px" }}>
-                    <span style={{ fontSize: "0.7rem", padding: "2px 10px", borderRadius: "10px", background: "rgba(16, 185, 129, 0.1)", color: "#10b981", fontWeight: 600 }}>{play.status}</span>
-                    <span style={{ fontSize: "0.7rem", padding: "2px 10px", borderRadius: "10px", background: "rgba(99, 102, 241, 0.1)", color: "#6366f1", fontWeight: 600 }}>{play.complexity}</span>
-                  </div>
-                </div>
-                <Link to={play.github} style={{ padding: "8px 20px", borderRadius: "8px", background: "linear-gradient(135deg, #6366f1, #7c3aed)", color: "#fff", fontWeight: 600, fontSize: "0.82rem", textDecoration: "none" }}>
-                  Open on GitHub
-                </Link>
-              </div>
-              <p style={{ fontSize: "0.85rem", color: "var(--ifm-color-emphasis-500)", lineHeight: 1.6, marginBottom: "12px" }}>{play.desc}</p>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "12px" }}>
-                <div>
-                  <div style={{ fontSize: "0.72rem", fontWeight: 600, color: "var(--ifm-color-emphasis-400)", marginBottom: "4px", textTransform: "uppercase", letterSpacing: "0.04em" }}>Infrastructure</div>
-                  <div style={{ fontSize: "0.8rem", color: "var(--ifm-color-emphasis-600)" }}>{play.infra}</div>
-                </div>
-                <div>
-                  <div style={{ fontSize: "0.72rem", fontWeight: 600, color: "var(--ifm-color-emphasis-400)", marginBottom: "4px", textTransform: "uppercase", letterSpacing: "0.04em" }}>AI Tuning</div>
-                  <div style={{ fontSize: "0.8rem", color: "var(--ifm-color-emphasis-600)" }}>{play.tuning}</div>
-                </div>
-              </div>
-              <div>
-                <div style={{ fontSize: "0.72rem", fontWeight: 600, color: "var(--ifm-color-emphasis-400)", marginBottom: "4px", textTransform: "uppercase", letterSpacing: "0.04em" }}>Included Files</div>
-                <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
-                  {play.files.map((f) => (
-                    <span key={f} style={{ fontSize: "0.7rem", padding: "2px 8px", borderRadius: "6px", background: "var(--ifm-color-emphasis-100)", fontFamily: "var(--ifm-font-family-monospace)" }}>{f}</span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Coming soon */}
-        <h2 style={{ fontSize: "1.2rem", fontWeight: 700, textAlign: "center", marginBottom: "16px" }}>Coming Soon</h2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "12px", marginBottom: "40px" }}>
-          {upcoming.map((p) => (
-            <div key={p.id} style={{ padding: "16px", borderRadius: "12px", border: "1px dashed var(--ifm-color-emphasis-200)", textAlign: "center", opacity: 0.6 }}>
-              <div style={{ fontSize: "1.5rem", marginBottom: "4px" }}>{p.icon}</div>
-              <div style={{ fontSize: "0.82rem", fontWeight: 600 }}>{p.id} — {p.name}</div>
-            </div>
-          ))}
-        </div>
-
-        <div style={{ textAlign: "center" }}>
+        {plays.map((p) => <PlayCard key={p.id} play={p} />)}
+        <div style={{ textAlign: "center", marginTop: "32px" }}>
           <Link to="/" style={{ display: "inline-block", padding: "12px 32px", borderRadius: "10px", background: "linear-gradient(135deg, #10b981, #06b6d4)", color: "#fff", fontWeight: 700, textDecoration: "none" }}>
             ← Back to FrootAI
           </Link>

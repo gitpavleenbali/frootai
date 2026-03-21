@@ -164,14 +164,14 @@ export default function FrootAIPage(): JSX.Element {
           </div>
         </section>
 
-        {/* ── USP: Two-Part Model ── */}
+        {/* ── USP: DevKit + TuneKit ── */}
         <section className={styles.lensSection}>
           <h2 className={styles.sectionTitle}>We Help You Build AND Ship</h2>
-          <p className={styles.sectionSub}>FrootAI empowers at both stages — pre-development and post-development</p>
+          <p className={styles.sectionSub}>Every solution play ships with two ecosystems — LEGO blocks that compose into complete deployments</p>
           <div className={styles.lensGrid}>
             <div className={styles.lensCard} style={{ borderColor: "rgba(6, 182, 212, 0.3)", background: "rgba(6, 182, 212, 0.03)" }}>
               <div className={styles.lensEmoji}>🛠️</div>
-              <h3 className={styles.lensTitle}>Pre-Dev: Co-Coder Empowerment</h3>
+              <h3 className={styles.lensTitle}>DevKit — Developer Velocity</h3>
               <ul className={styles.lensList}>
                 <li><strong>agent.md</strong> — co-coder becomes solution-aware</li>
                 <li><strong>instructions.md</strong> — prompts, few-shot, guardrails</li>
@@ -182,7 +182,7 @@ export default function FrootAIPage(): JSX.Element {
             </div>
             <div className={styles.lensCard} style={{ borderColor: "rgba(124, 58, 237, 0.3)", background: "rgba(124, 58, 237, 0.03)" }}>
               <div className={styles.lensEmoji}>🎛️</div>
-              <h3 className={styles.lensTitle}>Post-Dev: AI Fine-Tuning</h3>
+              <h3 className={styles.lensTitle}>TuneKit — AI Fine-Tuning</h3>
               <ul className={styles.lensList}>
                 <li><strong>config/openai.json</strong> — temperature, top-k, schema</li>
                 <li><strong>config/guardrails</strong> — safety, PII, abstention</li>
