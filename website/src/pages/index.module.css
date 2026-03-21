@@ -478,19 +478,37 @@
 }
 
 /* ================================================================== */
-/*  RESPONSIVE                                                         */
+/*  RESPONSIVE — Mobile (≤768px) · Tablet (769–1024px) · Desktop      */
 /* ================================================================== */
 
+/* ── Global mobile fixes ── */
+html, body {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+}
+
+/* ── Mobile ≤768px ── */
 @media (max-width: 768px) {
+  .hero {
+    padding: 48px 16px 36px;
+  }
   .heroTitle {
-    font-size: 2.4rem;
+    font-size: 2rem;
   }
   .heroStats {
-    gap: 20px;
+    gap: 16px;
+    flex-wrap: wrap;
   }
   .heroCta {
     flex-direction: column;
     align-items: center;
+    gap: 10px;
+  }
+  .main {
+    padding: 24px 16px 48px;
+  }
+  .sectionTitle {
+    font-size: 1.2rem;
   }
   .lensGrid {
     grid-template-columns: 1fr;
@@ -501,9 +519,22 @@
   .layerModules {
     grid-template-columns: 1fr;
   }
+  .layerHeader {
+    padding: 14px 16px;
+  }
+  .ctaSection {
+    padding: 24px 16px;
+  }
 }
 
+/* ── Tablet 769–1024px ── */
 @media (min-width: 769px) and (max-width: 1024px) {
+  .hero {
+    padding: 60px 20px 48px;
+  }
+  .heroTitle {
+    font-size: 2.6rem;
+  }
   .layerModules {
     grid-template-columns: repeat(2, 1fr);
   }

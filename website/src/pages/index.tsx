@@ -164,11 +164,41 @@ export default function FrootAIPage(): JSX.Element {
           </div>
         </section>
 
-        {/* ── Two Lenses, One Tree (with MCP + Packages woven in) ── */}
+        {/* ── USP: Two-Part Model ── */}
+        <section className={styles.lensSection}>
+          <h2 className={styles.sectionTitle}>We Help You Build AND Ship</h2>
+          <p className={styles.sectionSub}>FrootAI empowers at both stages — pre-development and post-development</p>
+          <div className={styles.lensGrid}>
+            <div className={styles.lensCard} style={{ borderColor: "rgba(6, 182, 212, 0.3)", background: "rgba(6, 182, 212, 0.03)" }}>
+              <div className={styles.lensEmoji}>🛠️</div>
+              <h3 className={styles.lensTitle}>Pre-Dev: Co-Coder Empowerment</h3>
+              <ul className={styles.lensList}>
+                <li><strong>agent.md</strong> — co-coder becomes solution-aware</li>
+                <li><strong>instructions.md</strong> — prompts, few-shot, guardrails</li>
+                <li><strong>MCP server</strong> — query patterns while coding</li>
+                <li><strong>plugins</strong> — reusable SK/Agent functions</li>
+                <li><strong>copilot-instructions</strong> — IDE tuned for THIS solution</li>
+              </ul>
+            </div>
+            <div className={styles.lensCard} style={{ borderColor: "rgba(124, 58, 237, 0.3)", background: "rgba(124, 58, 237, 0.03)" }}>
+              <div className={styles.lensEmoji}>🎛️</div>
+              <h3 className={styles.lensTitle}>Post-Dev: AI Fine-Tuning</h3>
+              <ul className={styles.lensList}>
+                <li><strong>config/openai.json</strong> — temperature, top-k, schema</li>
+                <li><strong>config/guardrails</strong> — safety, PII, abstention</li>
+                <li><strong>infra/main.bicep</strong> — one-click Azure deploy</li>
+                <li><strong>evaluation/</strong> — test set + automated scoring</li>
+                <li><strong>Pre-tuned</strong> — review knobs, deploy, validate</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Two Lenses, One Tree ── */}
         <section className={styles.lensSection}>
           <h2 className={styles.sectionTitle}>Two Lenses, One Tree</h2>
           <p className={styles.sectionSub}>FrootAI gives you the big picture AND the tiny details — plus the tools to act on both</p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "16px" }}>
+          <div className={styles.lensGrid}>
             <div className={styles.lensCard}>
               <div className={styles.lensEmoji}>🔭</div>
               <h3 className={styles.lensTitle}>Telescope — Big Picture</h3>
