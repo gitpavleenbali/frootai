@@ -542,3 +542,70 @@ html, body {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+/* ================================================================== */
+/*  GLOW CARD — ecosystem cards that glow on hover                     */
+/* ================================================================== */
+
+.glowCard {
+  display: block;
+  padding: 18px;
+  border-radius: 14px;
+  border: 2px solid color-mix(in srgb, var(--glow-color) 25%, transparent);
+  text-decoration: none !important;
+  color: var(--ifm-font-color-base) !important;
+  text-align: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glowCard:hover {
+  border-color: color-mix(in srgb, var(--glow-color) 60%, transparent);
+  box-shadow: 0 0 24px color-mix(in srgb, var(--glow-color) 20%, transparent);
+  transform: translateY(-2px);
+  text-decoration: none !important;
+}
+
+/* ================================================================== */
+/*  MODULE CHIP — clickable module links in expanded layers            */
+/* ================================================================== */
+
+.moduleChip {
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-decoration: none !important;
+  color: var(--ifm-font-color-base) !important;
+  transition: all 0.2s;
+}
+
+.moduleChip:hover {
+  background: rgba(99, 102, 241, 0.06);
+  border-color: #6366f1;
+  transform: translateY(-1px);
+  text-decoration: none !important;
+}
+
+/* ================================================================== */
+/*  GLOW PILL — CTA footer link pills with color glow                 */
+/* ================================================================== */
+
+.glowPill {
+  padding: 8px 18px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--pill-color) 30%, transparent);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-decoration: none !important;
+  color: var(--ifm-font-color-base) !important;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glowPill:hover {
+  border-color: var(--pill-color);
+  background: color-mix(in srgb, var(--pill-color) 8%, transparent);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--pill-color) 15%, transparent);
+  transform: translateY(-1px);
+  text-decoration: none !important;
+}
