@@ -73,7 +73,7 @@ const config: Config = {
           type: "docSidebar",
           sidebarId: "frootSidebar",
           position: "left",
-          label: "AI Hub",
+          label: "AI Knowledge Hub",
         },
         {
           to: "/ecosystem",
@@ -96,11 +96,6 @@ const config: Config = {
           position: "left",
         },
         {
-          href: "https://github.com/gitpavleenbali/frootai/tree/main/mcp-server",
-          label: "🔌 MCP Server",
-          position: "right",
-        },
-        {
           href: "https://github.com/gitpavleenbali/frootai",
           label: "GitHub",
           position: "right",
@@ -112,7 +107,7 @@ const config: Config = {
       style: "dark",
       links: [
         {
-          title: "FROOT Layers",
+          title: "AI Knowledge Hub",
           items: [
             { label: "🌱 Foundations", to: "/docs/GenAI-Foundations" },
             { label: "🪵 Reasoning", to: "/docs/Prompt-Engineering" },
@@ -124,10 +119,13 @@ const config: Config = {
         {
           title: "Ecosystem",
           items: [
-            { label: "🔌 MCP Server", href: "https://github.com/gitpavleenbali/frootai/tree/main/mcp-server" },
+            { label: "🔗 Ecosystem Overview", to: "/ecosystem" },
+            { label: "🔌 MCP Tooling", to: "/mcp-tooling" },
+            { label: "📦 npm: frootai-mcp", href: "https://www.npmjs.com/package/frootai-mcp" },
+            { label: "💻 VS Code Extension", href: "https://marketplace.visualstudio.com/items?itemName=pavleenbali.frootai" },
+            { label: "🎯 Solution Plays", to: "/solution-plays" },
             { label: "📦 FROOT Packages", to: "/packages" },
             { label: "📖 Setup Guide", to: "/setup-guide" },
-            { label: "Azure Wiki", href: "https://gitpavleenbali.github.io/azure-wiki/" },
           ],
         },
         {

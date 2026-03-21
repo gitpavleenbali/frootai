@@ -4,7 +4,7 @@ const sidebars: SidebarsConfig = {
   frootSidebar: [
     {
       type: "category",
-      label: "🌳 AI Hub — FrootAI",
+      label: "🌳 AI Knowledge Hub",
       collapsible: true,
       collapsed: false,
       items: [

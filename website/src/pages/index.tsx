@@ -33,13 +33,13 @@ const layers = [
   ]},
 ];
 
-const paths = [
-  { emoji: "🚀", title: "New to AI", modules: "F1 → F3 → F2 → R1 → R2 → R3", duration: "6–8h" },
-  { emoji: "⚡", title: "Build an Agent", modules: "F1 → R1 → O2 → O3 → O1 → T3", duration: "4–5h" },
-  { emoji: "🏗️", title: "AI Infra", modules: "F1 → O4 → O5 → T3 → R2 → T1", duration: "5–6h" },
-  { emoji: "🔍", title: "Reliable AI", modules: "R3 → R1 → R2 → T2", duration: "3–4h" },
-  { emoji: "🎯", title: "Complete", modules: "F1 → F2 → ... → T3", duration: "16–22h" },
-  { emoji: "💡", title: "Pro Tip", modules: "Share across teams — the open glue", duration: "" },
+const outcomes = [
+  { icon: "🚀", title: "New to AI?", desc: "Build AI literacy from zero — tokens, models, glossary" },
+  { icon: "🤖", title: "Build Agents", desc: "Design multi-agent systems with MCP, SK, Agent Framework" },
+  { icon: "🏗️", title: "AI Infra Expert", desc: "Deploy landing zones, GPU, hosting at scale" },
+  { icon: "🎛️", title: "Fine-Tuning Pro", desc: "LoRA, evaluation pipelines, production patterns" },
+  { icon: "🛡️", title: "Reliable AI", desc: "Determinism, grounding, guardrails, safety" },
+  { icon: "🔗", title: "Bridge the Gap", desc: "Remove silos between infra, platform, and app teams" },
 ];
 
 // ─── Components ────────────────────────────────────────────────────
@@ -67,118 +67,110 @@ function ExpandableLayer({ layer }: { layer: typeof layers[0] }) {
   );
 }
 
-function ExpandablePath({ path }: { path: typeof paths[0] }) {
-  const [open, setOpen] = useState(false);
-  return (
-    <div className={styles.pathCard} onClick={() => setOpen(!open)} style={{ cursor: "pointer" }}>
-      <div className={styles.pathEmoji}>{path.emoji}</div>
-      <h3 className={styles.pathTitle}>{path.title}</h3>
-      {path.duration && <p className={styles.pathDuration}>{path.duration}</p>}
-      {open && <p className={styles.pathModules}>{path.modules}</p>}
-      {!open && <p style={{ fontSize: "0.7rem", color: "var(--ifm-color-emphasis-400)" }}>Click to expand</p>}
-    </div>
-  );
-}
-
-// ─── Main Page (LEAN — 6 sections) ────────────────────────────────
+// ─── MAIN PAGE ─────────────────────────────────────────────────────
 
 export default function FrootAIPage(): JSX.Element {
   return (
-    <Layout title="FrootAI — Know the Roots. Ship the Fruit." description="The open glue for AI architecture. 17 modules, 200+ AI terms, MCP server, 20 solution plays.">
-      {/* ── 1. Hero ── */}
+    <Layout title="FrootAI — From the Roots to the Fruits. Build It Yourself." description="Power kit for infrastructure and platform people to master AI applications, agents, and the GenAI ecosystem.">
+
+      {/* ═══ 1. HERO ═══ */}
       <div className={styles.hero}>
         <div className={styles.heroInner}>
           <img src="/frootai/img/aifroot-logo.svg" alt="FrootAI" className={styles.heroLogo} />
-          <p className={styles.heroLabel}>Know the roots. Ship the fruit.</p>
           <h1 className={styles.heroTitle}>FrootAI</h1>
+          <p style={{ fontSize: "1.05rem", fontWeight: 700, color: "var(--ifm-color-emphasis-600)", margin: "4px auto 6px", letterSpacing: "0.01em" }}>
+            From the Roots to the Fruits. Build It Yourself.
+          </p>
           <p className={styles.heroAcronym}>
             AI <span className={styles.heroAcronymF}>F</span>oundations · <span className={styles.heroAcronymR}>R</span>easoning · <span className={styles.heroAcronymO1}>O</span>rchestration · <span className={styles.heroAcronymO2}>O</span>perations · <span className={styles.heroAcronymT}>T</span>ransformation
           </p>
-          <div style={{ maxWidth: "600px", margin: "16px auto 12px", padding: "12px 24px", borderRadius: "14px", border: "1px solid rgba(16, 185, 129, 0.15)", background: "linear-gradient(135deg, rgba(16, 185, 129, 0.03), rgba(99, 102, 241, 0.03))" }}>
-            <p style={{ fontSize: "0.82rem", color: "var(--ifm-color-emphasis-600)", lineHeight: 1.55, margin: 0, textAlign: "center" }}>
-              A power kit for infrastructure and platform people to master and bridge the gap with AI applications, agents, and the agentic ecosystem.
-            </p>
-          </div>
-          <div className={styles.heroCta}>
-            <Link className={styles.ctaPrimary} to="/docs/" onClick={() => setTimeout(() => window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior }), 100)}>🌱 Start from the Roots</Link>
-            <Link className={styles.ctaSecondary} to="/ecosystem">🔗 Ecosystem</Link>
-            <Link className={styles.ctaSecondary} to="/solution-plays">🎯 Solution Plays</Link>
-          </div>
-          <div className={styles.heroStats}>
-            <div className={styles.stat}><span className={styles.statNum} style={{ color: "#10b981" }}>17</span><span className={styles.statLabel}>Modules</span></div>
-            <div className={styles.stat}><span className={styles.statNum} style={{ color: "#06b6d4" }}>20</span><span className={styles.statLabel}>Solutions</span></div>
-            <div className={styles.stat}><span className={styles.statNum} style={{ color: "#6366f1" }}>6</span><span className={styles.statLabel}>MCP Tools</span></div>
-            <div className={styles.stat}><span className={styles.statNum} style={{ color: "#7c3aed" }}>200+</span><span className={styles.statLabel}>AI Terms</span></div>
-          </div>
+          <p style={{ fontSize: "0.82rem", fontStyle: "italic", color: "var(--ifm-color-emphasis-500)", margin: "6px auto 0", maxWidth: "560px", lineHeight: 1.5 }}>
+            Build It Yourself — a power kit for infrastructure and platform people to master and bridge the gap with AI applications, agents, and the GenAI ecosystem.
+          </p>
         </div>
       </div>
 
       <main className={styles.main}>
-        {/* ── 2. Ecosystem Overview (clickable cards → sub-pages) ── */}
+
+        {/* ═══ 2. ECOSYSTEM (clickable, glowing cards) ═══ */}
         <section className={styles.lensSection}>
           <h2 className={styles.sectionTitle}>The Ecosystem</h2>
+          <p style={{ fontSize: "0.75rem", fontStyle: "italic", color: "var(--ifm-color-emphasis-400)", textAlign: "center", marginBottom: "16px" }}>Click on the cards to explore more</p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "14px" }}>
-            <Link to="/ecosystem" style={{ padding: "18px", borderRadius: "14px", border: "2px solid rgba(99, 102, 241, 0.2)", textDecoration: "none", color: "var(--ifm-font-color-base)", textAlign: "center", transition: "all 0.2s" }} className={styles.lensCard}>
-              <div style={{ fontSize: "1.8rem", marginBottom: "4px" }}>💻</div>
-              <div style={{ fontWeight: 700, fontSize: "0.85rem" }}>VS Code Extension</div>
-              <div style={{ fontSize: "0.72rem", color: "#6366f1" }}>For you (the human)</div>
-            </Link>
-            <Link to="/mcp-tooling" style={{ padding: "18px", borderRadius: "14px", border: "2px solid rgba(16, 185, 129, 0.2)", textDecoration: "none", color: "var(--ifm-font-color-base)", textAlign: "center", transition: "all 0.2s" }} className={styles.lensCard}>
-              <div style={{ fontSize: "1.8rem", marginBottom: "4px" }}>📦</div>
-              <div style={{ fontWeight: 700, fontSize: "0.85rem" }}>MCP Server (npm)</div>
-              <div style={{ fontSize: "0.72rem", color: "#10b981" }}>For your agent (the AI)</div>
-            </Link>
-            <Link to="/solution-plays" style={{ padding: "18px", borderRadius: "14px", border: "2px solid rgba(124, 58, 237, 0.2)", textDecoration: "none", color: "var(--ifm-font-color-base)", textAlign: "center", transition: "all 0.2s" }} className={styles.lensCard}>
-              <div style={{ fontSize: "1.8rem", marginBottom: "4px" }}>🎯</div>
-              <div style={{ fontWeight: 700, fontSize: "0.85rem" }}>Solution Plays</div>
-              <div style={{ fontSize: "0.72rem", color: "#7c3aed" }}>DevKit + TuneKit</div>
-            </Link>
+            {[
+              { to: "/ecosystem", icon: "💻", title: "VS Code Extension", sub: "For you (the human)", color: "99, 102, 241" },
+              { to: "/mcp-tooling", icon: "📦", title: "MCP Server (npm)", sub: "For your agent (the AI)", color: "16, 185, 129" },
+              { to: "/solution-plays", icon: "🎯", title: "Solution Plays", sub: "DevKit + TuneKit", color: "124, 58, 237" },
+            ].map((card) => (
+              <Link key={card.title} to={card.to} style={{ display: "block", padding: "18px", borderRadius: "14px", border: `2px solid rgba(${card.color}, 0.2)`, textDecoration: "none", color: "var(--ifm-font-color-base)", textAlign: "center", transition: "all 0.25s" }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = `rgba(${card.color}, 0.6)`; (e.currentTarget as HTMLElement).style.boxShadow = `0 0 20px rgba(${card.color}, 0.15)`; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = `rgba(${card.color}, 0.2)`; (e.currentTarget as HTMLElement).style.boxShadow = "none"; }}>
+                <div style={{ fontSize: "1.8rem", marginBottom: "4px" }}>{card.icon}</div>
+                <div style={{ fontWeight: 700, fontSize: "0.85rem" }}>{card.title}</div>
+                <div style={{ fontSize: "0.72rem", color: `rgba(${card.color}, 1)` }}>{card.sub}</div>
+              </Link>
+            ))}
           </div>
         </section>
 
-        {/* ── 3. FROOT Framework (expandable) ── */}
+        {/* ═══ 3. STATS BAR ═══ */}
+        <div style={{ display: "flex", justifyContent: "center", gap: "32px", padding: "16px 0", marginBottom: "8px", flexWrap: "wrap" }}>
+          {[
+            { num: "17+", label: "Modules", color: "#10b981" },
+            { num: "20", label: "Solution Plays", color: "#06b6d4" },
+            { num: "6", label: "MCP Tools", color: "#6366f1" },
+            { num: "200+", label: "AI Terms", color: "#7c3aed" },
+          ].map((s) => (
+            <div key={s.label} style={{ textAlign: "center" }}>
+              <div style={{ fontSize: "1.5rem", fontWeight: 800, color: s.color }}>{s.num}</div>
+              <div style={{ fontSize: "0.7rem", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--ifm-color-emphasis-400)" }}>{s.label}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* ═══ 4. AI KNOWLEDGE HUB — FROOT Framework (expandable) ═══ */}
         <section className={styles.lensSection}>
-          <h2 className={styles.sectionTitle}>The FROOT Framework</h2>
-          <p className={styles.sectionSub}>5 layers, 17 modules — click to expand</p>
+          <h2 className={styles.sectionTitle}>AI Knowledge Hub</h2>
+          <p className={styles.sectionSub}>The FROOT Framework — 5 layers, 17 modules. Click to expand.</p>
           {layers.map((l) => <ExpandableLayer key={l.id} layer={l} />)}
         </section>
 
-        {/* ── 4. Get FrootAI (compact) ── */}
+        {/* ═══ 5. WHAT YOU'LL ACHIEVE (outcome cards) ═══ */}
         <section className={styles.lensSection}>
-          <h2 className={styles.sectionTitle}>Get FrootAI</h2>
-          <div className={styles.lensGrid}>
-            <Link to="https://www.npmjs.com/package/frootai-mcp" className={styles.lensCard} style={{ textDecoration: "none", color: "var(--ifm-font-color-base)", cursor: "pointer" }}>
-              <div style={{ fontWeight: 700, fontSize: "0.9rem", marginBottom: "4px" }}>📦 npm: MCP Server</div>
-              <code style={{ fontSize: "0.82rem", color: "#10b981" }}>npx frootai-mcp</code>
-              <p style={{ fontSize: "0.75rem", color: "var(--ifm-color-emphasis-400)", marginTop: "6px" }}>6 tools · 17 modules · 200+ terms</p>
-            </Link>
-            <Link to="https://marketplace.visualstudio.com/items?itemName=pavleenbali.frootai" className={styles.lensCard} style={{ textDecoration: "none", color: "var(--ifm-font-color-base)", cursor: "pointer" }}>
-              <div style={{ fontWeight: 700, fontSize: "0.9rem", marginBottom: "4px" }}>💻 VS Code Extension</div>
-              <code style={{ fontSize: "0.82rem", color: "#6366f1" }}>Search "FrootAI"</code>
-              <p style={{ fontSize: "0.75rem", color: "var(--ifm-color-emphasis-400)", marginTop: "6px" }}>Sidebar · Commands · DevKit Init</p>
-            </Link>
+          <h2 className={styles.sectionTitle}>What These Help You Achieve</h2>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "12px" }}>
+            {outcomes.map((o) => (
+              <div key={o.title} style={{ padding: "16px", borderRadius: "12px", border: "1px solid var(--ifm-color-emphasis-200)", textAlign: "center" }}>
+                <div style={{ fontSize: "1.4rem", marginBottom: "4px" }}>{o.icon}</div>
+                <div style={{ fontWeight: 700, fontSize: "0.82rem", marginBottom: "2px" }}>{o.title}</div>
+                <div style={{ fontSize: "0.72rem", color: "var(--ifm-color-emphasis-500)" }}>{o.desc}</div>
+              </div>
+            ))}
           </div>
         </section>
 
-        {/* ── 5. Learning Paths (clickable/expandable) ── */}
-        <section className={styles.paths}>
-          <h2 className={styles.sectionTitle}>Learning Paths</h2>
-          <p className={styles.sectionSub}>Click a path to see the module sequence</p>
-          <div className={styles.pathGrid}>
-            {paths.map((p) => <ExpandablePath key={p.title} path={p} />)}
-          </div>
-        </section>
-
-        {/* ── 6. CTA ── */}
+        {/* ═══ 6. CTA — The Open Glue (loop back to everything) ═══ */}
         <section className={styles.ctaSection}>
-          <h2 className={styles.sectionTitle}>The Open Glue for AI Architecture</h2>
+          <h2 className={styles.sectionTitle}>The Open Glue for Infrastructure & Platform Teams</h2>
           <p className={styles.ctaDesc}>
-            Infrastructure is the bedrock. Platform is the trunk. Application is the fruit.
+            From the roots to the fruits — the power kit that bridges infra, platform, and the GenAI ecosystem. Build it yourself.
           </p>
-          <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
-            <Link className={styles.ctaButton} to="/docs/" onClick={() => setTimeout(() => window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior }), 100)}>🌱 Start from the Roots</Link>
-            <Link className={styles.ctaButton} to="/mcp-tooling" style={{ background: "linear-gradient(135deg, #6366f1, #7c3aed)" }}>🔌 MCP Tooling</Link>
-            <Link className={styles.ctaButton} to="https://github.com/gitpavleenbali/frootai" style={{ background: "linear-gradient(135deg, #f59e0b, #d97706)" }}>⭐ Star on GitHub</Link>
+          <div style={{ display: "flex", gap: "10px", justifyContent: "center", flexWrap: "wrap", marginTop: "16px" }}>
+            {[
+              { label: "🎓 AI Knowledge Hub", to: "/docs/" },
+              { label: "🔗 Ecosystem", to: "/ecosystem" },
+              { label: "🎯 Solution Plays", to: "/solution-plays" },
+              { label: "🔌 MCP Tooling", to: "/mcp-tooling" },
+              { label: "📦 Packages", to: "/packages" },
+              { label: "⭐ Star on GitHub", to: "https://github.com/gitpavleenbali/frootai" },
+            ].map((link) => (
+              <Link key={link.label} to={link.to} style={{ padding: "8px 18px", borderRadius: "10px", border: "1px solid var(--ifm-color-emphasis-200)", fontSize: "0.78rem", fontWeight: 600, textDecoration: "none", color: "var(--ifm-font-color-base)", transition: "all 0.2s" }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "#10b981"; (e.currentTarget as HTMLElement).style.background = "rgba(16,185,129,0.06)"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "var(--ifm-color-emphasis-200)"; (e.currentTarget as HTMLElement).style.background = "transparent"; }}
+                onClick={() => setTimeout(() => window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior }), 100)}>
+                {link.label}
+              </Link>
+            ))}
           </div>
         </section>
       </main>
