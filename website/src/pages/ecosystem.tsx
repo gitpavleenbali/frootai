@@ -20,7 +20,7 @@ export default function EcosystemPage(): JSX.Element {
           <h2 style={{ fontSize: "1.3rem", fontWeight: 700, marginBottom: "4px" }}>🔭 Telescope — The Big Picture</h2>
           <p style={{ fontSize: "0.82rem", color: "var(--ifm-color-emphasis-500)", marginBottom: "16px" }}>Complete solutions and downloadable building blocks</p>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "16px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "16px" }}>
             {/* Solution Plays */}
             <div style={{ padding: "24px", borderRadius: "16px", border: "2px solid rgba(124, 58, 237, 0.25)", background: "rgba(124, 58, 237, 0.03)" }}>
               <div style={{ fontSize: "2rem", marginBottom: "6px", textAlign: "center" }}>🎯</div>
@@ -64,7 +64,7 @@ export default function EcosystemPage(): JSX.Element {
           <h2 style={{ fontSize: "1.3rem", fontWeight: 700, marginBottom: "4px" }}>🔬 Microscope — The Tiny Details</h2>
           <p style={{ fontSize: "0.82rem", color: "var(--ifm-color-emphasis-500)", marginBottom: "16px" }}>Tools that integrate into your editor and agent workflow</p>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "16px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "16px" }}>
             {/* MCP Server */}
             <div style={{ padding: "24px", borderRadius: "16px", border: "2px solid rgba(16, 185, 129, 0.25)", background: "rgba(16, 185, 129, 0.03)" }}>
               <div style={{ fontSize: "2rem", marginBottom: "6px", textAlign: "center" }}>📦</div>

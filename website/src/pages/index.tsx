@@ -108,7 +108,7 @@ export default function FrootAIPage(): JSX.Element {
         <section className={styles.lensSection}>
           <h2 className={styles.sectionTitle}>The Ecosystem</h2>
           <p style={{ fontSize: "0.75rem", fontStyle: "italic", color: "var(--ifm-color-emphasis-400)", textAlign: "center", marginBottom: "16px" }}>Click on the cards to explore more</p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "14px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "14px" }}>
             {[
               { to: "/vscode-extension", icon: "💻", title: "VS Code Extension", sub: "For you (the human)", color: "#6366f1" },
               { to: "/mcp-tooling", icon: "📦", title: "MCP Server (npm)", sub: "For your agent (the AI)", color: "#10b981" },
@@ -149,7 +149,7 @@ export default function FrootAIPage(): JSX.Element {
         {/* ═══ 5. OUTCOMES ═══ */}
         <section className={styles.lensSection}>
           <h2 className={styles.sectionTitle}>What These Help You Achieve</h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "12px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))", gap: "12px" }}>
             {outcomes.map((o) => (
               <div key={o.title} style={{ padding: "16px", borderRadius: "12px", border: "1px solid var(--ifm-color-emphasis-200)", textAlign: "center" }}>
                 <div style={{ fontSize: "1.4rem", marginBottom: "4px" }}>{o.icon}</div>

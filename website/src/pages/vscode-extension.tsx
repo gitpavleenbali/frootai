@@ -31,7 +31,7 @@ export default function VSCodeExtensionPage(): JSX.Element {
         {/* What you get */}
         <h2 style={{ fontSize: "1.2rem", fontWeight: 700, marginBottom: "16px" }}>What You Get</h2>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "12px", marginBottom: "32px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "12px", marginBottom: "32px" }}>
           {[
             { icon: "📋", title: "Solution Plays", desc: "Browse all 20 plays in the sidebar. Click to open README or folder." },
             { icon: "📖", title: "FROOT Modules", desc: "17 modules grouped by layer. Click to open and read." },

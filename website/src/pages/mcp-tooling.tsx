@@ -68,7 +68,7 @@ export default function MCPToolingPage(): JSX.Element {
 
         {/* 6 tools */}
         <h2 style={{ fontSize: "1.2rem", fontWeight: 700, textAlign: "center", marginBottom: "16px" }}>6 Tools Your Agent Receives</h2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "12px", marginBottom: "32px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: "12px", marginBottom: "32px" }}>
           {[
             { name: "list_modules", desc: "Browse 17 modules by FROOT layer", icon: "📋" },
             { name: "get_module", desc: "Read any module content (F1–T3)", icon: "📖" },
