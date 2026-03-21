@@ -26,7 +26,9 @@ export default function MCPToolingPage(): JSX.Element {
           </div>
           <div style={{ flex: "1 1 220px", maxWidth: "320px", padding: "16px 20px", borderRadius: "14px", border: "2px solid rgba(124, 58, 237, 0.3)", background: "rgba(124, 58, 237, 0.04)", textAlign: "center" }}>
             <div style={{ fontSize: "0.72rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "#7c3aed", marginBottom: "6px" }}>npm Registry</div>
-            <a href="https://www.npmjs.com/package/frootai-mcp" target="_blank" style={{ fontSize: "0.82rem", color: "#7c3aed", fontWeight: 600 }}>npmjs.com/package/frootai-mcp →</a>
+            <Link to="https://www.npmjs.com/package/frootai-mcp" className={styles.glowPill} style={{ "--pill-color": "#7c3aed", display: "inline-block", fontSize: "0.78rem" } as React.CSSProperties}>
+              npmjs.com/package/frootai-mcp →
+            </Link>
           </div>
         </div>
 
@@ -60,9 +62,10 @@ export default function MCPToolingPage(): JSX.Element {
           {[
             { name: "Claude Desktop", icon: "💬", file: "claude_desktop_config.json", config: '{"mcpServers":{"frootai":{"command":"npx","args":["frootai-mcp"]}}}' },
             { name: "VS Code / Copilot", icon: "💻", file: ".vscode/mcp.json", config: '{"servers":{"frootai":{"command":"npx","args":["frootai-mcp"]}}}' },
-            { name: "Azure AI Foundry", icon: "☁️", file: "Agent → Tools → Add MCP", config: "Point to npx frootai-mcp" },
+            { name: "Azure MS Foundry", icon: "☁️", file: "Agent → Tools → Add MCP", config: "Point to npx frootai-mcp" },
             { name: "Cursor / Windsurf", icon: "⚡", file: "MCP settings", config: '{"mcpServers":{"frootai":{"command":"npx","args":["frootai-mcp"]}}}' },
             { name: "Copilot Studio", icon: "🤖", file: "Copilot Studio tools", config: "Add MCP connector" },
+            { name: "Gemini / Codex", icon: "💎", file: "MCP config", config: '{"mcpServers":{"frootai":{"command":"npx","args":["frootai-mcp"]}}}' },
           ].map((c) => (
             <div key={c.name} style={{ padding: "16px", borderRadius: "12px", border: "1px solid var(--ifm-color-emphasis-200)" }}>
               <div style={{ fontSize: "1.2rem", marginBottom: "4px" }}>{c.icon}</div>
@@ -73,8 +76,8 @@ export default function MCPToolingPage(): JSX.Element {
           ))}
         </div>
 
-        {/* 6 tools */}
-        <h2 style={{ fontSize: "1.2rem", fontWeight: 700, textAlign: "center", marginBottom: "16px" }}>6 Tools Your Agent Receives</h2>
+        {/* Tools */}
+        <h2 style={{ fontSize: "1.2rem", fontWeight: 700, textAlign: "center", marginBottom: "16px" }}>Tools Agent Receives</h2>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: "12px", marginBottom: "32px" }}>
           {[
             { name: "list_modules", desc: "Browse 17 modules by FROOT layer", icon: "📋" },
@@ -90,6 +93,12 @@ export default function MCPToolingPage(): JSX.Element {
               <div style={{ fontSize: "0.75rem", color: "var(--ifm-color-emphasis-500)", marginTop: "4px" }}>{t.desc}</div>
             </div>
           ))}
+          {/* Coming Soon tile */}
+          <div style={{ padding: "16px", borderRadius: "12px", border: "2px dashed rgba(245, 158, 11, 0.3)", textAlign: "center", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", opacity: 0.7 }}>
+            <div style={{ fontSize: "1.5rem", marginBottom: "4px" }}>🔮</div>
+            <div style={{ fontSize: "0.8rem", fontWeight: 600, color: "#f59e0b" }}>Coming Soon</div>
+            <div style={{ fontSize: "0.75rem", color: "var(--ifm-color-emphasis-400)", marginTop: "4px" }}>New tools growing</div>
+          </div>
         </div>
 
         {/* Setup Guide tile + Back */}

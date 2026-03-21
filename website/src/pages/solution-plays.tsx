@@ -128,13 +128,42 @@ export default function SolutionPlaysPage(): JSX.Element {
       <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "40px 24px 80px" }}>
         <div style={{ textAlign: "center", marginBottom: "32px" }}>
           <h1 style={{ fontSize: "2rem", fontWeight: 800 }}>🎯 Solution Plays</h1>
-          <p style={{ fontSize: "0.92rem", color: "var(--ifm-color-emphasis-500)", maxWidth: "600px", margin: "0 auto 8px" }}>
-            Each play ships with <strong>🛠️ DevKit</strong> (empower your co-coder) and <strong>🎛️ TuneKit</strong> (fine-tune AI for production). LEGO blocks that compose into complete solutions.
-          </p>
-          <p style={{ fontSize: "0.78rem", color: "var(--ifm-color-emphasis-400)" }}>
-            {plays.filter(p => p.status === "Ready").length} ready · {plays.filter(p => p.status === "Skeleton").length} skeleton · {plays.length} total
+          <p style={{ fontSize: "0.92rem", color: "var(--ifm-color-emphasis-500)", maxWidth: "660px", margin: "0 auto 16px" }}>
+            Each play ships with <strong>🛠️ DevKit</strong> (empower your coding agent before you write a single line) and <strong>🎛️ TuneKit</strong> (fine-tune AI workloads for production). LEGO blocks that compose into complete solutions.
           </p>
         </div>
+
+        {/* DevKit + TuneKit Explainer */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "16px", marginBottom: "32px", padding: "6px 0" }}>
+          <div style={{ padding: "24px", borderRadius: "16px", border: "2px solid rgba(6, 182, 212, 0.25)", background: "rgba(6, 182, 212, 0.03)", textAlign: "center" }}>
+            <div style={{ fontSize: "2rem", marginBottom: "6px" }}>🛠️</div>
+            <h3 style={{ fontSize: "1.05rem", fontWeight: 800, marginBottom: "12px" }}>DevKit — Developer Velocity</h3>
+            <div style={{ textAlign: "left", fontSize: "0.82rem", lineHeight: 1.8 }}>
+              <div><strong style={{ color: "#06b6d4" }}>agent.md</strong> — co-coder becomes solution-aware</div>
+              <div><strong style={{ color: "#06b6d4" }}>instructions.md</strong> — prompts, few-shot, guardrails</div>
+              <div><strong style={{ color: "#06b6d4" }}>MCP server</strong> — query patterns while coding</div>
+              <div><strong style={{ color: "#06b6d4" }}>plugins</strong> — reusable SK/Agent functions</div>
+              <div><strong style={{ color: "#06b6d4" }}>copilot-instructions</strong> — IDE tuned for THIS solution</div>
+            </div>
+            <p style={{ fontSize: "0.72rem", color: "var(--ifm-color-emphasis-400)", marginTop: "12px", marginBottom: 0, fontStyle: "italic" }}>Your coding agent understands the solution <em>before</em> you start building.</p>
+          </div>
+          <div style={{ padding: "24px", borderRadius: "16px", border: "2px solid rgba(124, 58, 237, 0.25)", background: "rgba(124, 58, 237, 0.03)", textAlign: "center" }}>
+            <div style={{ fontSize: "2rem", marginBottom: "6px" }}>🎛️</div>
+            <h3 style={{ fontSize: "1.05rem", fontWeight: 800, marginBottom: "12px" }}>TuneKit — AI Fine-Tuning</h3>
+            <div style={{ textAlign: "left", fontSize: "0.82rem", lineHeight: 1.8 }}>
+              <div><strong style={{ color: "#7c3aed" }}>config/openai.json</strong> — temperature, top-k, schema</div>
+              <div><strong style={{ color: "#7c3aed" }}>config/guardrails</strong> — safety, PII, abstention</div>
+              <div><strong style={{ color: "#7c3aed" }}>infra/main.bicep</strong> — one-click Azure deploy</div>
+              <div><strong style={{ color: "#7c3aed" }}>evaluation/</strong> — test set + automated scoring</div>
+              <div><strong style={{ color: "#7c3aed" }}>Pre-tuned</strong> — review knobs, deploy, validate</div>
+            </div>
+            <p style={{ fontSize: "0.72rem", color: "var(--ifm-color-emphasis-400)", marginTop: "12px", marginBottom: 0, fontStyle: "italic" }}>Ship AI to production with confidence — every knob pre-calibrated.</p>
+          </div>
+        </div>
+
+        <p style={{ fontSize: "0.78rem", color: "var(--ifm-color-emphasis-400)", textAlign: "center", marginBottom: "24px" }}>
+          {plays.filter(p => p.status === "Ready").length} ready · {plays.filter(p => p.status === "Skeleton").length} skeleton · {plays.length} total
+        </p>
         {plays.map((p) => <PlayCard key={p.id} play={p} />)}
         <div style={{ textAlign: "center", marginTop: "32px" }}>
           <Link to="/" style={{ display: "inline-block", padding: "12px 32px", borderRadius: "10px", background: "linear-gradient(135deg, #10b981, #06b6d4)", color: "#fff", fontWeight: 700, textDecoration: "none" }}>

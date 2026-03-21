@@ -55,7 +55,7 @@ const config: Config = {
     announcementBar: {
       id: "frootai_mcp",
       content:
-        '🔌 <b>FrootAI MCP Server</b> — Add AI architecture knowledge to your agent: <code>git clone</code> → <code>npm install</code> → connect. <a href="/frootai/setup-guide">Setup Guide →</a>',
+        '🔌 <b>FrootAI MCP Server</b> — Add AI <b style="color:#10b981">Infra</b>, <b style="color:#06b6d4">Platform</b> &amp; <b style="color:#7c3aed">Application</b> knowledge to your agent · <code>npx frootai-mcp</code> · <a href="/frootai/setup-guide" style="color:#10b981;font-weight:700">📖 Setup Guide →</a>',
       backgroundColor: "#0a0a0f",
       textColor: "#e0e0e0",
       isCloseable: true,
@@ -73,21 +73,21 @@ const config: Config = {
           type: "docSidebar",
           sidebarId: "frootSidebar",
           position: "left",
-          label: "AI Knowledge Hub",
+          label: "Φ Knowledge Hub",
         },
         {
           to: "/ecosystem",
-          label: "🔗 Ecosystem",
+          label: "Φ Ecosystem",
           position: "left",
         },
         {
           to: "/solution-plays",
-          label: "🎯 Solution Plays",
+          label: "Φ Solution Plays",
           position: "left",
         },
         {
           to: "/packages",
-          label: "🧩 Packages",
+          label: "Φ Packages",
           position: "left",
         },
         {
