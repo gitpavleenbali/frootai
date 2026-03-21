@@ -42,20 +42,7 @@ const outcomes = [
   { icon: "🔗", title: "Bridge the Gap", desc: "Infra ⇄ Platform ⇄ Apps" },
 ];
 
-// ─── Glow card helper ──────────────────────────────────────────────
-
-function GlowCard({ to, color, icon, title, sub, children }: { to: string; color: string; icon: string; title: string; sub: string; children?: React.ReactNode }) {
-  return (
-    <Link to={to} className={styles.glowCard} style={{ "--glow-color": color } as React.CSSProperties}>
-      <div style={{ fontSize: "1.8rem", marginBottom: "4px" }}>{icon}</div>
-      <div style={{ fontWeight: 700, fontSize: "0.85rem" }}>{title}</div>
-      <div style={{ fontSize: "0.72rem", color }}>{sub}</div>
-      {children}
-    </Link>
-  );
-}
-
-// ─── Expandable FROOT layer ────────────────────────────────────────
+// ─── Components ────────────────────────────────────────────────────
 
 function ExpandableLayer({ layer }: { layer: typeof layers[0] }) {
   const [open, setOpen] = useState(false);
@@ -84,28 +71,29 @@ function ExpandableLayer({ layer }: { layer: typeof layers[0] }) {
 
 export default function FrootAIPage(): JSX.Element {
   return (
-    <Layout title="FrootAI — From the Roots to the Fruits. Build It Yourself." description="BIY power kit for infrastructure, platform, and application teams to master AI, agents, and the GenAI ecosystem.">
+    <Layout title="FrootAI — From the Roots to the Fruits. Build It Yourself." description="The BIY AI Kit for infrastructure, platform, and application teams to master AI infra, AI platform, and AI application agent ecosystem.">
 
       {/* ═══ 1. HERO ═══ */}
       <div className={styles.hero}>
         <div className={styles.heroInner}>
           <img src="/frootai/img/aifroot-logo.svg" alt="FrootAI" className={styles.heroLogo} />
 
-          {/* Slogan ABOVE FrootAI */}
           <p className={styles.heroLabel}>From the Roots to the Fruits</p>
 
-          {/* Title */}
+          <p style={{ fontSize: "0.82rem", color: "var(--ifm-color-emphasis-400)", margin: "0 auto 8px", letterSpacing: "0.03em" }}>
+            Infra ⇄ Platform ⇄ Apps
+          </p>
+
           <h1 className={styles.heroTitle}>FrootAI</h1>
 
-          {/* FROOT acronym */}
           <p className={styles.heroAcronym}>
             AI <span className={styles.heroAcronymF}>F</span>oundations · <span className={styles.heroAcronymR}>R</span>easoning · <span className={styles.heroAcronymO1}>O</span>rchestration · <span className={styles.heroAcronymO2}>O</span>perations · <span className={styles.heroAcronymT}>T</span>ransformation
           </p>
 
           {/* Green translucent mission box */}
-          <div style={{ maxWidth: "620px", margin: "16px auto 0", padding: "14px 24px", borderRadius: "14px", border: "1px solid rgba(16, 185, 129, 0.25)", background: "linear-gradient(135deg, rgba(16, 185, 129, 0.06), rgba(99, 102, 241, 0.04))" }}>
+          <div style={{ maxWidth: "640px", margin: "16px auto 0", padding: "14px 24px", borderRadius: "14px", border: "1px solid rgba(16, 185, 129, 0.25)", background: "linear-gradient(135deg, rgba(16, 185, 129, 0.06), rgba(99, 102, 241, 0.04))" }}>
             <p style={{ fontSize: "0.84rem", color: "var(--ifm-color-emphasis-600)", lineHeight: 1.6, margin: 0, textAlign: "center" }}>
-              <strong>Build It Yourself (BIY)</strong> — A power kit for infrastructure, platform, and application teams to master and bridge the gap with AI applications, agents, and the GenAI ecosystem.
+              <em>"Build It Yourself (BIY) — A power kit for infrastructure, platform, and application teams to master and bridge the gap with AI Infra, AI Platform, and AI Application Agent Ecosystem."</em>
             </p>
           </div>
         </div>
@@ -118,9 +106,17 @@ export default function FrootAIPage(): JSX.Element {
           <h2 className={styles.sectionTitle}>The Ecosystem</h2>
           <p style={{ fontSize: "0.75rem", fontStyle: "italic", color: "var(--ifm-color-emphasis-400)", textAlign: "center", marginBottom: "16px" }}>Click on the cards to explore more</p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "14px" }}>
-            <GlowCard to="/ecosystem" color="#6366f1" icon="💻" title="VS Code Extension" sub="For you (the human)" />
-            <GlowCard to="/mcp-tooling" color="#10b981" icon="📦" title="MCP Server (npm)" sub="For your agent (the AI)" />
-            <GlowCard to="/solution-plays" color="#7c3aed" icon="🎯" title="Solution Plays" sub="DevKit + TuneKit" />
+            {[
+              { to: "/ecosystem", icon: "💻", title: "VS Code Extension", sub: "For you (the human)", color: "#6366f1" },
+              { to: "/mcp-tooling", icon: "📦", title: "MCP Server (npm)", sub: "For your agent (the AI)", color: "#10b981" },
+              { to: "/solution-plays", icon: "🎯", title: "Solution Plays", sub: "DevKit + TuneKit", color: "#7c3aed" },
+            ].map((card) => (
+              <Link key={card.title} to={card.to} className={styles.glowCard} style={{ "--glow-color": card.color } as React.CSSProperties}>
+                <div style={{ fontSize: "1.8rem", marginBottom: "4px" }}>{card.icon}</div>
+                <div style={{ fontWeight: 700, fontSize: "0.85rem" }}>{card.title}</div>
+                <div style={{ fontSize: "0.72rem", color: card.color }}>{card.sub}</div>
+              </Link>
+            ))}
           </div>
         </section>
 
@@ -139,14 +135,14 @@ export default function FrootAIPage(): JSX.Element {
           ))}
         </div>
 
-        {/* ═══ 4. AI KNOWLEDGE HUB — FROOT Framework ═══ */}
+        {/* ═══ 4. FROOT Framework ═══ */}
         <section className={styles.lensSection}>
           <h2 className={styles.sectionTitle}>The FROOT Framework</h2>
           <p className={styles.sectionSub}>AI Knowledge Hub — 5 layers, 17 modules. Click to expand, then click modules to learn.</p>
           {layers.map((l) => <ExpandableLayer key={l.id} layer={l} />)}
         </section>
 
-        {/* ═══ 5. WHAT THESE HELP YOU ACHIEVE ═══ */}
+        {/* ═══ 5. OUTCOMES ═══ */}
         <section className={styles.lensSection}>
           <h2 className={styles.sectionTitle}>What These Help You Achieve</h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "12px" }}>
@@ -160,11 +156,11 @@ export default function FrootAIPage(): JSX.Element {
           </div>
         </section>
 
-        {/* ═══ 6. CTA — BIY Open Glue ═══ */}
+        {/* ═══ 6. CTA ═══ */}
         <section className={styles.ctaSection}>
-          <h2 className={styles.sectionTitle}>The Build-It-Yourself Open Glue</h2>
-          <h3 style={{ fontSize: "0.88rem", fontWeight: 400, color: "var(--ifm-color-emphasis-500)", textAlign: "center", margin: "0 auto 4px" }}>For Infrastructure, Platform, and Application Teams</h3>
-          <p style={{ fontSize: "0.82rem", fontStyle: "italic", color: "var(--ifm-color-emphasis-400)", textAlign: "center", margin: "0 auto 20px", maxWidth: "500px" }}>
+          <h2 style={{ fontSize: "1.3rem", fontWeight: 800, textAlign: "center", margin: "0 0 4px" }}>FrootAI — The BIY AI Kit</h2>
+          <h3 style={{ fontSize: "0.85rem", fontWeight: 400, color: "var(--ifm-color-emphasis-500)", textAlign: "center", margin: "0 0 4px" }}>For Infrastructure, Platform, and Application Teams</h3>
+          <p style={{ fontSize: "0.78rem", fontStyle: "italic", color: "var(--ifm-color-emphasis-400)", textAlign: "center", margin: "0 auto 20px" }}>
             Infrastructure are the roots. Platform is the trunk. Application is the fruit.
           </p>
           <div style={{ display: "flex", gap: "10px", justifyContent: "center", flexWrap: "wrap" }}>
@@ -174,6 +170,7 @@ export default function FrootAIPage(): JSX.Element {
               { label: "🎯 Solution Plays", to: "/solution-plays", color: "#7c3aed" },
               { label: "📦 Packages", to: "/packages", color: "#06b6d4" },
               { label: "⭐ Star on GitHub", to: "https://github.com/gitpavleenbali/frootai", color: "#f59e0b" },
+              { label: "📂 GitHub Codebase", to: "https://github.com/gitpavleenbali/frootai", color: "#6366f1" },
             ].map((link) => (
               <Link key={link.label} to={link.to} className={styles.glowPill} style={{ "--pill-color": link.color } as React.CSSProperties}
                 onClick={() => setTimeout(() => window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior }), 100)}>

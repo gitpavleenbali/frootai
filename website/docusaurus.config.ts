@@ -81,11 +81,6 @@ const config: Config = {
           position: "left",
         },
         {
-          to: "/mcp-tooling",
-          label: "🔌 MCP Tooling",
-          position: "left",
-        },
-        {
           to: "/solution-plays",
           label: "🎯 Solution Plays",
           position: "left",
@@ -107,25 +102,20 @@ const config: Config = {
       style: "dark",
       links: [
         {
-          title: "AI Knowledge Hub",
+          title: "Explore",
           items: [
-            { label: "🌱 Foundations", to: "/docs/GenAI-Foundations" },
-            { label: "🪵 Reasoning", to: "/docs/Prompt-Engineering" },
-            { label: "🌿 Orchestration", to: "/docs/Semantic-Kernel" },
-            { label: "🍃 Operations", to: "/docs/Azure-AI-Foundry" },
-            { label: "🍎 Transformation", to: "/docs/T1-Fine-Tuning-MLOps" },
+            { label: "AI Knowledge Hub", to: "/docs/" },
+            { label: "Ecosystem", to: "/ecosystem" },
+            { label: "Solution Plays", to: "/solution-plays" },
+            { label: "Packages", to: "/packages" },
+            { label: "Setup Guide", to: "/setup-guide" },
           ],
         },
         {
-          title: "Ecosystem",
+          title: "Install",
           items: [
-            { label: "🔗 Ecosystem Overview", to: "/ecosystem" },
-            { label: "🔌 MCP Tooling", to: "/mcp-tooling" },
-            { label: "📦 npm: frootai-mcp", href: "https://www.npmjs.com/package/frootai-mcp" },
-            { label: "💻 VS Code Extension", href: "https://marketplace.visualstudio.com/items?itemName=pavleenbali.frootai" },
-            { label: "🎯 Solution Plays", to: "/solution-plays" },
-            { label: "📦 FROOT Packages", to: "/packages" },
-            { label: "📖 Setup Guide", to: "/setup-guide" },
+            { label: "npm: frootai-mcp", href: "https://www.npmjs.com/package/frootai-mcp" },
+            { label: "VS Code Extension", href: "https://marketplace.visualstudio.com/items?itemName=pavleenbali.frootai" },
           ],
         },
         {
@@ -137,7 +127,7 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Pavleen Bali — FrootAI: The open glue for AI architecture.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Pavleen Bali — FrootAI: From the Roots to the Fruits.`,
     },
 
     prism: {
