@@ -257,14 +257,23 @@ export default function FrootAIPage(): JSX.Element {
             </div>
           </div>
 
-          {/* 5 config cards (Claude, VS Code, AI Foundry, Windsurf, Copilot Studio) */}
+          {/* npm install banner */}
+          <div style={{ padding: "16px 20px", borderRadius: "12px", border: "1px solid rgba(16, 185, 129, 0.3)", background: "rgba(16, 185, 129, 0.04)", marginBottom: "16px", textAlign: "center" }}>
+            <div style={{ fontWeight: 700, fontSize: "0.9rem", marginBottom: "6px" }}>📦 Install from npm</div>
+            <code style={{ fontSize: "0.85rem", padding: "6px 16px", borderRadius: "8px", background: "rgba(16, 185, 129, 0.08)" }}>npx frootai-mcp</code>
+            <div style={{ fontSize: "0.72rem", color: "var(--ifm-color-emphasis-400)", marginTop: "6px" }}>
+              or <code>npm install -g frootai-mcp</code> · <a href="https://www.npmjs.com/package/frootai-mcp" target="_blank" style={{ color: "#10b981" }}>npmjs.com/package/frootai-mcp</a>
+            </div>
+          </div>
+
+          {/* 5 config cards */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "12px", marginBottom: "32px" }}>
             {[
-              { name: "Claude Desktop", icon: "💬", config: '{"mcpServers":{"frootai":{"command":"node","args":["mcp-server/index.js"]}}}', file: "claude_desktop_config.json" },
-              { name: "VS Code / Copilot", icon: "💻", config: '{"servers":{"frootai":{"command":"node","args":["mcp-server/index.js"]}}}', file: ".vscode/mcp.json" },
-              { name: "Azure AI Foundry", icon: "☁️", config: "Tools → Add Tool → MCP → Point to server", file: "Agent configuration" },
-              { name: "Cursor / Windsurf", icon: "⚡", config: '{"mcpServers":{"frootai":{"command":"node","args":["mcp-server/index.js"]}}}', file: "MCP settings" },
-              { name: "Copilot Studio", icon: "🤖", config: "Add MCP connector → Point to FrootAI endpoint", file: "Copilot Studio tools" },
+              { name: "Claude Desktop", icon: "💬", config: 'npx frootai-mcp', file: "claude_desktop_config.json" },
+              { name: "VS Code / Copilot", icon: "💻", config: 'npx frootai-mcp', file: ".vscode/mcp.json" },
+              { name: "Azure AI Foundry", icon: "☁️", config: "Tools → Add Tool → MCP", file: "Agent configuration" },
+              { name: "Cursor / Windsurf", icon: "⚡", config: 'npx frootai-mcp', file: "MCP settings" },
+              { name: "Copilot Studio", icon: "🤖", config: "MCP connector", file: "Copilot Studio tools" },
             ].map((c) => (
               <div key={c.name} style={{ padding: "14px 16px", borderRadius: "12px", border: "1px solid var(--ifm-color-emphasis-200)", fontSize: "0.75rem" }}>
                 <div style={{ fontSize: "1.1rem", marginBottom: "4px" }}>{c.icon}</div>

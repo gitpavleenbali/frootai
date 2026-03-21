@@ -40,7 +40,22 @@ export default function SetupGuidePage(): JSX.Element {
         </div>
 
         {/* ── Step 1 ── */}
-        <h2 style={h2Style}>Step 1: Clone & Install</h2>
+        <h2 style={h2Style}>Step 1: Install</h2>
+
+        <h3 style={h3Style}>Option A: npm (Recommended — zero clone)</h3>
+        <div style={codeStyle}>
+{`# Run directly (no install needed)
+npx frootai-mcp
+
+# OR install globally
+npm install -g frootai-mcp
+frootai-mcp`}
+        </div>
+        <p style={{ fontSize: "0.85rem", color: "var(--ifm-color-emphasis-500)" }}>
+          Published on <a href="https://www.npmjs.com/package/frootai-mcp" target="_blank">npmjs.com/package/frootai-mcp</a> — 664KB knowledge base bundled inside. Works from anywhere.
+        </p>
+
+        <h3 style={h3Style}>Option B: From GitHub (for development)</h3>
         <div style={codeStyle}>
 {`# Clone the repository
 git clone https://github.com/gitpavleenbali/frootai.git
