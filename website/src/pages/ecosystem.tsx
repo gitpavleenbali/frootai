@@ -14,8 +14,8 @@ export default function EcosystemPage(): JSX.Element {
           </p>
         </div>
 
-        {/* 3 main pillars */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px", marginBottom: "40px" }}>
+        {/* 4 pillars */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "20px", marginBottom: "40px" }}>
           <div style={{ padding: "24px", borderRadius: "16px", border: "2px solid rgba(99, 102, 241, 0.3)", background: "rgba(99, 102, 241, 0.03)" }}>
             <div style={{ fontSize: "2.5rem", marginBottom: "8px", textAlign: "center" }}>💻</div>
             <h2 style={{ fontSize: "1.1rem", fontWeight: 800, textAlign: "center", marginBottom: "4px" }}>VS Code Extension</h2>
@@ -66,6 +66,24 @@ export default function EcosystemPage(): JSX.Element {
             <div style={{ textAlign: "center", marginTop: "16px" }}>
               <Link to="/solution-plays" style={{ padding: "8px 20px", borderRadius: "8px", background: "linear-gradient(135deg, #7c3aed, #6d28d9)", color: "#fff", fontSize: "0.82rem", fontWeight: 600, textDecoration: "none" }}>
                 Browse 20 Solution Plays
+              </Link>
+            </div>
+          </div>
+
+          <div style={{ padding: "24px", borderRadius: "16px", border: "2px solid rgba(6, 182, 212, 0.3)", background: "rgba(6, 182, 212, 0.03)" }}>
+            <div style={{ fontSize: "2.5rem", marginBottom: "8px", textAlign: "center" }}>🧩</div>
+            <h2 style={{ fontSize: "1.1rem", fontWeight: 800, textAlign: "center", marginBottom: "4px" }}>FROOT Packages</h2>
+            <p style={{ fontSize: "0.75rem", fontWeight: 600, color: "#06b6d4", textAlign: "center", marginBottom: "12px" }}>Downloadable LEGO blocks</p>
+            <ul style={{ fontSize: "0.82rem", lineHeight: 1.7, paddingLeft: "16px" }}>
+              <li>Knowledge modules by FROOT layer (download individual .md files)</li>
+              <li>MCP tools (6 tools bundled in npm package)</li>
+              <li>DevKit packs (agent.md + instructions per solution play)</li>
+              <li>TuneKit packs (config JSONs + eval scripts per play)</li>
+              <li>Each package usable standalone or composed into solutions</li>
+            </ul>
+            <div style={{ textAlign: "center", marginTop: "16px" }}>
+              <Link to="/packages" style={{ padding: "8px 20px", borderRadius: "8px", background: "linear-gradient(135deg, #06b6d4, #0891b2)", color: "#fff", fontSize: "0.82rem", fontWeight: 600, textDecoration: "none" }}>
+                Browse FROOT Packages
               </Link>
             </div>
           </div>

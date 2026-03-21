@@ -108,11 +108,12 @@ export default function FrootAIPage(): JSX.Element {
         <section className={styles.lensSection}>
           <h2 className={styles.sectionTitle}>The Ecosystem</h2>
           <p style={{ fontSize: "0.75rem", fontStyle: "italic", color: "var(--ifm-color-emphasis-400)", textAlign: "center", marginBottom: "16px" }}>Click on the cards to explore more</p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "14px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "14px" }}>
             {[
               { to: "/ecosystem", icon: "💻", title: "VS Code Extension", sub: "For you (the human)", color: "#6366f1" },
               { to: "/mcp-tooling", icon: "📦", title: "MCP Server (npm)", sub: "For your agent (the AI)", color: "#10b981" },
               { to: "/solution-plays", icon: "🎯", title: "Solution Plays", sub: "DevKit + TuneKit", color: "#7c3aed" },
+              { to: "/packages", icon: "🧩", title: "FROOT Packages", sub: "Downloadable LEGO blocks", color: "#06b6d4" },
             ].map((card) => (
               <Link key={card.title} to={card.to} className={styles.glowCard} style={{ "--glow-color": card.color } as React.CSSProperties}>
                 <div style={{ fontSize: "1.8rem", marginBottom: "4px" }}>{card.icon}</div>
