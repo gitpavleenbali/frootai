@@ -835,7 +835,7 @@ function activate(context) {
       const terminal = vscode.window.createTerminal("FrootAI MCP Server");
       terminal.sendText("npx frootai-mcp");
       terminal.show();
-      vscode.window.showInformationMessage("🔌 FrootAI MCP Server starting... 10 tools (6 static + 4 live).");
+      vscode.window.showInformationMessage("🔌 FrootAI MCP Server starting... 13 tools (6 static + 4 live).");
     })
   );
 
@@ -865,7 +865,7 @@ function activate(context) {
     vscode.commands.registerCommand("frootai.mcpToolAction", async (tool) => {
       const action = await vscode.window.showQuickPick([
         { label: "$(package) Install MCP Server globally", description: "npm install -g frootai-mcp", value: "install" },
-        { label: "$(play) Start MCP Server (npx)", description: "Launch in terminal — 10 tools ready", value: "start" },
+        { label: "$(play) Start MCP Server (npx)", description: "Launch in terminal — 13 tools ready", value: "start" },
         { label: "$(gear) Configure MCP for this workspace", description: "Add .vscode/mcp.json — auto-connects", value: "config" },
         { label: "$(globe) Open npm page", description: "npmjs.com/package/frootai-mcp", value: "npm" },
         { label: "$(book) Open setup guide", description: "Full MCP setup documentation", value: "guide" },
@@ -960,7 +960,7 @@ function activate(context) {
   // ── Status Bar ──
   const statusBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
   statusBar.text = "$(tree-view-icon) FrootAI";
-  statusBar.tooltip = `FrootAI — From the Roots to the Fruits\n${knowledgeLoaded ? `${Object.keys(KNOWLEDGE.modules).length} modules · ${Object.keys(GLOSSARY).length} terms · 10 MCP tools` : "Knowledge loading..."}`;
+  statusBar.tooltip = `FrootAI — From the Roots to the Fruits\n${knowledgeLoaded ? `${Object.keys(KNOWLEDGE.modules).length} modules · ${Object.keys(GLOSSARY).length} terms · 13 MCP tools` : "Knowledge loading..."}`;
   statusBar.command = "frootai.browseSolutionPlays";
   statusBar.show();
   context.subscriptions.push(statusBar);

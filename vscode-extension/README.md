@@ -30,7 +30,7 @@ Each step prompts you to continue to the next. The full `builder → reviewer �
 
 ### MCP Tools — Right-click any tool:
 - **📦 Install MCP Server** → Choose: Install globally (npm) / Run directly (npx) / Add .vscode/mcp.json
-- **▶️ Start MCP Server** → Launches `npx frootai-mcp` in terminal (10 tools ready)
+- **▶️ Start MCP Server** → Launches `npx frootai-mcp` in terminal (13 tools ready)
 
 ---
 
@@ -85,7 +85,7 @@ When you run **Init TuneKit**, FrootAI copies production AI configuration:
 ## 🔌 MCP Server Integration
 
 The extension works alongside the FrootAI MCP Server (`npx frootai-mcp`):
-- **MCP Server** = for your **AI agent** (Copilot, Claude, Cursor call its 10 tools)
+- **MCP Server** = for your **AI agent** (Copilot, Claude, Cursor call its 13 tools)
 - **VS Code Extension** = for **you** (browse, search, scaffold, learn)
 
 Install MCP: Right-click any tool in MCP panel → **Install MCP Server** → choose method.

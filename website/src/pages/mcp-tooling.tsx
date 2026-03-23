@@ -5,7 +5,7 @@ import styles from "./index.module.css";
 
 export default function MCPToolingPage(): JSX.Element {
   return (
-    <Layout title="MCP Tooling — FrootAI" description="Add FrootAI to your AI agent. 10 tools (6 static + 4 live), 18 modules, 200+ terms. npx frootai-mcp.">
+    <Layout title="MCP Tooling — FrootAI" description="Add FrootAI to your AI agent. 13 tools (6 static + 4 live), 18 modules, 200+ terms. npx frootai-mcp.">
       <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "40px 24px 80px" }}>
         <div style={{ textAlign: "center", marginBottom: "32px" }}>
           <h1 style={{ fontSize: "2rem", fontWeight: 800 }}>🔌 FrootAI MCP Server</h1>
@@ -78,7 +78,7 @@ export default function MCPToolingPage(): JSX.Element {
 
         {/* Tools */}
         <h2 style={{ fontSize: "1.2rem", fontWeight: 700, textAlign: "center", marginBottom: "4px" }}>Tools Agent Receives</h2>
-        <p style={{ fontSize: "0.75rem", color: "var(--ifm-color-emphasis-400)", textAlign: "center", marginBottom: "16px" }}>6 static (bundled knowledge) + 4 live (network-enabled, graceful fallback)</p>
+        <p style={{ fontSize: "0.75rem", color: "var(--ifm-color-emphasis-400)", textAlign: "center", marginBottom: "16px" }}>6 static (bundled) + 4 live (network) + 3 agent chain (Build → Review → Tune)</p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: "12px", marginBottom: "16px" }}>
           {[
             { name: "list_modules", desc: "Browse 18 modules by FROOT layer", icon: "📋", kind: "static" },
@@ -108,6 +108,21 @@ export default function MCPToolingPage(): JSX.Element {
               <div style={{ fontSize: "0.8rem", fontFamily: "var(--ifm-font-family-monospace)", fontWeight: 600, color: "#f59e0b" }}>{t.name}</div>
               <div style={{ fontSize: "0.75rem", color: "var(--ifm-color-emphasis-500)", marginTop: "4px" }}>{t.desc}</div>
               <div style={{ fontSize: "0.62rem", color: "var(--ifm-color-emphasis-400)", marginTop: "2px", fontStyle: "italic" }}>Falls back to static if offline</div>
+            </div>
+          ))}
+        </div>
+        <h3 style={{ fontSize: "1rem", fontWeight: 700, textAlign: "center", marginBottom: "12px", color: "#7c3aed" }}>⚡ Agent Chain Tools (Build → Review → Tune)</h3>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "12px", marginBottom: "16px" }}>
+          {[
+            { name: "agent_build", desc: "🛠️ Builder — architecture guidance, suggests review", icon: "🛠️" },
+            { name: "agent_review", desc: "🔍 Reviewer — security + quality checklist, suggests tune", icon: "🔍" },
+            { name: "agent_tune", desc: "🎛️ Tuner — production readiness verdict", icon: "🎛️" },
+          ].map((t) => (
+            <div key={t.name} style={{ padding: "16px", borderRadius: "12px", border: "1px solid rgba(124, 58, 237, 0.25)", background: "rgba(124, 58, 237, 0.03)", textAlign: "center" }}>
+              <div style={{ fontSize: "1.5rem", marginBottom: "4px" }}>{t.icon}</div>
+              <div style={{ fontSize: "0.8rem", fontFamily: "var(--ifm-font-family-monospace)", fontWeight: 600, color: "#7c3aed" }}>{t.name}</div>
+              <div style={{ fontSize: "0.75rem", color: "var(--ifm-color-emphasis-500)", marginTop: "4px" }}>{t.desc}</div>
+              <div style={{ fontSize: "0.62rem", color: "var(--ifm-color-emphasis-400)", marginTop: "2px", fontStyle: "italic" }}>Just talk in chat — auto-chains</div>
             </div>
           ))}
         </div>

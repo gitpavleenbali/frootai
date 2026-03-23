@@ -115,7 +115,7 @@ graph TB
 | Component | Who Uses It | What It Does |
 |-----------|------------|-------------|
 | **VS Code Extension** | You (human) | Browse plays, search terms, init DevKit from sidebar |
-| **MCP Server (npm)** | Your AI agent | Copilot/Claude calls 10 tools (6 static + 4 live) |
+| **MCP Server (npm)** | Your AI agent | Copilot/Claude calls 13 tools (6 static + 4 live) |
 | **DevKit (.github/)** | Your co-coder | 7 primitives: instructions, prompts, agents, skills, hooks, workflows |
 | **TuneKit (config/)** | Platform team | Pre-tuned AI configs + evaluation pipeline |
 
@@ -179,7 +179,7 @@ graph TB
 
 ---
 
-## MCP Server — 10 Tools (v2)
+## MCP Server — 13 tools (v2)
 
 ### Static Tools (bundled knowledge)
 
