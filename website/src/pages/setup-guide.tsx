@@ -304,7 +304,9 @@ npm install`}
             {[
               { cmd: "FrootAI: Look Up AI Term", desc: "Type any AI/ML term → jumps to definition" },
               { cmd: "FrootAI: Search Knowledge Base", desc: "Full-text search across all 18 docs" },
-              { cmd: "FrootAI: Initialize DevKit", desc: "Select a play → copies agent.md + MCP config to your project" },
+              { cmd: "FrootAI: Initialize DevKit", desc: "Full .github Agentic OS (19 files) + agent.md + MCP + plugin.json" },
+              { cmd: "FrootAI: Initialize Hooks", desc: "Copy guardrails.json (preToolUse policy gates)" },
+              { cmd: "FrootAI: Initialize Prompts", desc: "Copy 4 slash commands (/deploy, /test, /review, /evaluate)" },
               { cmd: "FrootAI: Open Solution Play", desc: "Opens a play's README with option to open folder" },
               { cmd: "FrootAI: Show Architecture Pattern", desc: "Pick from 7 patterns: RAG, agents, hosting, cost" },
               { cmd: "FrootAI: Open Setup Guide", desc: "Opens this setup guide page" },
@@ -321,14 +323,14 @@ npm install`}
           <div style={{ padding: "14px 18px", borderRadius: "12px", border: "1px solid rgba(6,182,212,0.2)", background: "rgba(6,182,212,0.03)", fontSize: "0.82rem", lineHeight: 1.7 }}>
             <p style={{ margin: "0 0 6px" }}><strong>1.</strong> Run <code>Ctrl+Shift+P → FrootAI: Initialize DevKit</code></p>
             <p style={{ margin: "0 0 6px" }}><strong>2.</strong> Select a solution play (e.g., Enterprise RAG)</p>
-            <p style={{ margin: "0 0 6px" }}><strong>3.</strong> FrootAI copies to your workspace: <code>agent.md</code>, <code>instructions.md</code>, <code>.github/copilot-instructions.md</code>, <code>.vscode/mcp.json</code></p>
-            <p style={{ margin: 0 }}><strong>4.</strong> Start coding — Copilot generates solution-aware code.</p>
+            <p style={{ margin: "0 0 6px" }}><strong>3.</strong> FrootAI copies the <strong>full .github Agentic OS</strong> (19 files) + agent.md + .vscode/mcp.json + plugin.json to your workspace</p>
+            <p style={{ margin: 0 }}><strong>4.</strong> Start coding — Copilot has full agentic context: instructions, prompts, agents, skills, hooks, workflows.</p>
           </div>
 
           <h3 style={h3Style}>Troubleshooting</h3>
           <div style={cardStyle}>
             {[
-              { q: "Extension not showing in sidebar", a: "Reload VS Code (Ctrl+Shift+P → 'Reload Window'). Ensure v0.1.0+ is installed." },
+              { q: "Extension not showing in sidebar", a: "Reload VS Code (Ctrl+Shift+P → 'Reload Window'). Ensure v0.2.0+ is installed." },
               { q: "Commands not appearing", a: "Check that FrootAI is enabled in Extensions. Try reinstalling: code --install-extension pavleenbali.frootai" },
               { q: "DevKit Init copies nothing", a: "Ensure you have a workspace folder open. FrootAI copies files to the root of your active workspace." },
               { q: "MCP tools panel empty", a: "This is informational — it shows what tools the MCP server exposes. Install the MCP server separately (see Part 1)." },

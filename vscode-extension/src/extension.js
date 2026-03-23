@@ -30,6 +30,7 @@ const FROOT_MODULES = [
     { id: "F1", name: "GenAI Foundations", file: "GenAI-Foundations.md" },
     { id: "F2", name: "LLM Landscape", file: "LLM-Landscape.md" },
     { id: "F3", name: "AI Glossary A–Z", file: "F3-AI-Glossary-AZ.md" },
+    { id: "F4", name: ".github Agentic OS", file: "F4-GitHub-Agentic-OS.md" },
   ]},
   { layer: "🪵 Reasoning", modules: [
     { id: "R1", name: "Prompt Engineering", file: "Prompt-Engineering.md" },
@@ -54,12 +55,16 @@ const FROOT_MODULES = [
 ];
 
 const MCP_TOOLS = [
-  { name: "list_modules", desc: "Browse 17 modules by FROOT layer" },
-  { name: "get_module", desc: "Read any module (F1–T3)" },
+  { name: "list_modules", desc: "Browse 18 modules by FROOT layer" },
+  { name: "get_module", desc: "Read any module (F1–T3, F4)" },
   { name: "lookup_term", desc: "200+ AI/ML term definitions" },
   { name: "search_knowledge", desc: "Full-text search all modules" },
   { name: "get_architecture_pattern", desc: "7 decision guides" },
   { name: "get_froot_overview", desc: "Complete FROOT summary" },
+  { name: "fetch_azure_docs", desc: "⛅ Live — Search Azure docs" },
+  { name: "fetch_external_mcp", desc: "⛅ Live — Find MCP servers" },
+  { name: "list_community_plays", desc: "⛅ Live — List plays from GitHub" },
+  { name: "get_github_agentic_os", desc: "⛅ Live — .github OS guide" },
 ];
 
 // ─── Tree Data Providers ───────────────────────────────────────────
@@ -308,7 +313,7 @@ function activate(context) {
     })
   );
 
-  // Command: Init DevKit
+  // Command: Init DevKit (Full .github Agentic OS)
   context.subscriptions.push(
     vscode.commands.registerCommand("frootai.initDevKit", async () => {
       const plays = SOLUTION_PLAYS.map((p) => ({ label: `${p.icon} ${p.id} — ${p.name}`, description: p.status, value: p }));
@@ -321,28 +326,118 @@ function activate(context) {
         return;
       }
       
-      // Copy DevKit files to current workspace
       const wsFolder = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
       if (!wsFolder) return;
       
-      const devkitFiles = [
-        { src: "agent.md", dst: "agent.md" },
-        { src: "instructions.md", dst: "instructions.md" },
-        { src: ".github/copilot-instructions.md", dst: ".github/copilot-instructions.md" },
-        { src: ".vscode/mcp.json", dst: ".vscode/mcp.json" },
+      // Copy FULL .github agentic OS + DevKit files + plugin.json
+      const filesToCopy = [
+        // Layer 1: Instructions
+        ".github/copilot-instructions.md",
+        ".github/instructions/azure-coding.instructions.md",
+        ".github/instructions/security.instructions.md",
+        // Layer 2: Prompts
+        ".github/prompts/deploy.prompt.md",
+        ".github/prompts/test.prompt.md",
+        ".github/prompts/review.prompt.md",
+        ".github/prompts/evaluate.prompt.md",
+        // Layer 2: Agents
+        ".github/agents/builder.agent.md",
+        ".github/agents/reviewer.agent.md",
+        ".github/agents/tuner.agent.md",
+        // Layer 2: Skills
+        ".github/skills/deploy-azure/SKILL.md",
+        ".github/skills/deploy-azure/deploy.sh",
+        ".github/skills/evaluate/SKILL.md",
+        ".github/skills/tune/SKILL.md",
+        ".github/skills/tune/tune-config.sh",
+        // Layer 3: Hooks + Workflows
+        ".github/hooks/guardrails.json",
+        ".github/workflows/ai-review.md",
+        ".github/workflows/ai-deploy.md",
+        // DevKit legacy
+        "agent.md",
+        "instructions.md",
+        ".vscode/mcp.json",
+        // Layer 4: Plugin manifest
+        "plugin.json",
       ];
       
-      for (const f of devkitFiles) {
-        const srcPath = path.join(playDir, f.src);
-        const dstPath = path.join(wsFolder, f.dst);
+      // Also copy play-specific instruction file if exists
+      const instrDir = path.join(playDir, ".github", "instructions");
+      if (fs.existsSync(instrDir)) {
+        const instrFiles = fs.readdirSync(instrDir).filter(f => f.endsWith(".instructions.md") && !filesToCopy.some(c => c.endsWith(f)));
+        instrFiles.forEach(f => filesToCopy.push(`.github/instructions/${f}`));
+      }
+      
+      let copied = 0;
+      for (const f of filesToCopy) {
+        const srcPath = path.join(playDir, f);
+        const dstPath = path.join(wsFolder, f);
         if (fs.existsSync(srcPath)) {
           const dir = path.dirname(dstPath);
           if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
           fs.copyFileSync(srcPath, dstPath);
+          copied++;
         }
       }
       
-      vscode.window.showInformationMessage(`DevKit initialized for ${pick.value.name}! agent.md, instructions.md, MCP config copied to your workspace.`);
+      vscode.window.showInformationMessage(
+        `✅ DevKit initialized for ${pick.value.name}! ${copied} files copied:\n` +
+        `• .github/ Agentic OS (4 layers, 7 primitives)\n` +
+        `• agent.md + instructions.md\n` +
+        `• .vscode/mcp.json\n` +
+        `• plugin.json`
+      );
+    })
+  );
+
+  // Command: Init Hooks Only
+  context.subscriptions.push(
+    vscode.commands.registerCommand("frootai.initHooks", async () => {
+      const plays = SOLUTION_PLAYS.map((p) => ({ label: `${p.icon} ${p.id} — ${p.name}`, description: p.status, value: p }));
+      const pick = await vscode.window.showQuickPick(plays, { placeHolder: "Initialize hooks from which solution play?" });
+      if (!pick || !root) return;
+      
+      const wsFolder = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
+      if (!wsFolder) return;
+      
+      const srcPath = path.join(root, "solution-plays", pick.value.dir, ".github", "hooks", "guardrails.json");
+      const dstDir = path.join(wsFolder, ".github", "hooks");
+      const dstPath = path.join(dstDir, "guardrails.json");
+      
+      if (fs.existsSync(srcPath)) {
+        if (!fs.existsSync(dstDir)) fs.mkdirSync(dstDir, { recursive: true });
+        fs.copyFileSync(srcPath, dstPath);
+        vscode.window.showInformationMessage("✅ Hooks initialized! .github/hooks/guardrails.json copied with preToolUse policy gates.");
+      } else {
+        vscode.window.showWarningMessage("Hooks template not found for this solution play.");
+      }
+    })
+  );
+
+  // Command: Init Prompts Only
+  context.subscriptions.push(
+    vscode.commands.registerCommand("frootai.initPrompts", async () => {
+      const plays = SOLUTION_PLAYS.map((p) => ({ label: `${p.icon} ${p.id} — ${p.name}`, description: p.status, value: p }));
+      const pick = await vscode.window.showQuickPick(plays, { placeHolder: "Initialize prompt files from which solution play?" });
+      if (!pick || !root) return;
+      
+      const wsFolder = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
+      if (!wsFolder) return;
+      
+      const promptFiles = ["deploy.prompt.md", "test.prompt.md", "review.prompt.md", "evaluate.prompt.md"];
+      const dstDir = path.join(wsFolder, ".github", "prompts");
+      if (!fs.existsSync(dstDir)) fs.mkdirSync(dstDir, { recursive: true });
+      
+      let copied = 0;
+      for (const f of promptFiles) {
+        const srcPath = path.join(root, "solution-plays", pick.value.dir, ".github", "prompts", f);
+        if (fs.existsSync(srcPath)) {
+          fs.copyFileSync(srcPath, path.join(dstDir, f));
+          copied++;
+        }
+      }
+      vscode.window.showInformationMessage(`✅ Prompt files initialized! ${copied} slash commands copied to .github/prompts/`);
     })
   );
 

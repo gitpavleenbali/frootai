@@ -1,8 +1,8 @@
 {
   "name": "frootai",
   "displayName": "FrootAI — AI Architecture Power Kit",
-  "description": "Know the roots. Ship the fruit. 20 solution plays, 17 knowledge modules, 200+ AI terms, MCP integration — right in your editor.",
-  "version": "0.1.0",
+  "description": "The open glue for AI architecture. 20 solution plays, 18 knowledge modules, 10 MCP tools, .github Agentic OS — right in your editor.",
+  "version": "0.2.0",
   "publisher": "pavleenbali",
   "engines": {
     "vscode": "^1.85.0"
@@ -85,11 +85,19 @@
       },
       {
         "command": "frootai.initDevKit",
-        "title": "FrootAI: Initialize DevKit for Current Project"
+        "title": "FrootAI: Initialize DevKit (Full .github Agentic OS)"
       },
       {
         "command": "frootai.showArchitecturePattern",
         "title": "FrootAI: Show Architecture Pattern"
+      },
+      {
+        "command": "frootai.initHooks",
+        "title": "FrootAI: Initialize Hooks (guardrails.json)"
+      },
+      {
+        "command": "frootai.initPrompts",
+        "title": "FrootAI: Initialize Prompt Files (slash commands)"
       }
     ],
     "menus": {

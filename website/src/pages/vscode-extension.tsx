@@ -51,10 +51,12 @@ export default function VSCodeExtensionPage(): JSX.Element {
           {[
             { cmd: "FrootAI: Look Up AI Term", desc: "Type any AI/ML term → jumps to definition in glossary" },
             { cmd: "FrootAI: Search Knowledge Base", desc: "Full-text search across all 18 docs → QuickPick results" },
-            { cmd: "FrootAI: Initialize DevKit", desc: "Select a solution play → copies agent.md, instructions, MCP config to your project" },
+            { cmd: "FrootAI: Initialize DevKit", desc: "Full .github Agentic OS (19 files) + agent.md + MCP + plugin.json" },
+            { cmd: "FrootAI: Initialize Hooks", desc: "Copy guardrails.json (preToolUse policy gates) to your project" },
+            { cmd: "FrootAI: Initialize Prompts", desc: "Copy 4 slash commands (/deploy, /test, /review, /evaluate)" },
             { cmd: "FrootAI: Open Solution Play", desc: "Opens a play's README. Offers to open the full folder" },
             { cmd: "FrootAI: Show Architecture Pattern", desc: "Pick from 7 patterns: RAG, agents, hosting, cost, etc." },
-            { cmd: "FrootAI: Open Setup Guide", desc: "Opens the MCP setup guide on the website" },
+            { cmd: "FrootAI: Open Setup Guide", desc: "Opens the setup guide on the website" },
             { cmd: "FrootAI: Browse Solution Plays", desc: "Opens the solution plays page on the website" },
           ].map((c) => (
             <div key={c.cmd} style={{ padding: "10px 16px", borderRadius: "8px", border: "1px solid var(--ifm-color-emphasis-100)", marginBottom: "6px", display: "flex", gap: "12px", alignItems: "center" }}>
@@ -65,18 +67,22 @@ export default function VSCodeExtensionPage(): JSX.Element {
         </div>
 
         {/* How DevKit Init Works */}
-        <h2 style={{ fontSize: "1.2rem", fontWeight: 700, marginBottom: "12px" }}>How DevKit Init Works</h2>
+        <h2 style={{ fontSize: "1.2rem", fontWeight: 700, marginBottom: "12px" }}>How DevKit Init Works (v2)</h2>
         <div style={{ padding: "16px 20px", borderRadius: "12px", border: "1px solid rgba(6, 182, 212, 0.2)", background: "rgba(6, 182, 212, 0.03)", marginBottom: "32px", fontSize: "0.82rem", lineHeight: 1.7 }}>
           <p style={{ margin: "0 0 8px" }}><strong>1.</strong> Run <code>Ctrl+Shift+P → FrootAI: Initialize DevKit</code></p>
           <p style={{ margin: "0 0 8px" }}><strong>2.</strong> Select a solution play (e.g., Enterprise RAG)</p>
-          <p style={{ margin: "0 0 8px" }}><strong>3.</strong> FrootAI copies these files to your current workspace:</p>
+          <p style={{ margin: "0 0 8px" }}><strong>3.</strong> FrootAI copies the <strong>full .github Agentic OS</strong> to your workspace:</p>
           <ul style={{ margin: "0 0 8px", paddingLeft: "20px" }}>
-            <li><code>agent.md</code> — your co-coder now understands the solution</li>
-            <li><code>instructions.md</code> — system prompts and guardrails</li>
-            <li><code>.github/copilot-instructions.md</code> — Copilot knows the context</li>
-            <li><code>.vscode/mcp.json</code> — MCP auto-connects</li>
+            <li><strong>Layer 1:</strong> <code>instructions/*.instructions.md</code> — coding standards, patterns, security</li>
+            <li><strong>Layer 2:</strong> <code>prompts/*.prompt.md</code> — /deploy, /test, /review, /evaluate</li>
+            <li><strong>Layer 2:</strong> <code>agents/*.agent.md</code> — builder → reviewer → tuner (chained)</li>
+            <li><strong>Layer 2:</strong> <code>skills/*/SKILL.md</code> — deploy-azure, evaluate, tune</li>
+            <li><strong>Layer 3:</strong> <code>hooks/guardrails.json</code> — preToolUse policy gates</li>
+            <li><strong>Layer 3:</strong> <code>workflows/*.md</code> — AI-driven CI/CD</li>
+            <li><strong>Layer 4:</strong> <code>plugin.json</code> — distribution manifest</li>
+            <li><code>agent.md</code> + <code>.vscode/mcp.json</code> — co-coder + MCP</li>
           </ul>
-          <p style={{ margin: 0 }}><strong>4.</strong> Start coding — Copilot generates solution-aware code.</p>
+          <p style={{ margin: 0 }}><strong>4.</strong> Start coding — Copilot generates solution-aware code with full agentic OS context.</p>
         </div>
 
         <div style={{ textAlign: "center" }}>
