@@ -1,0 +1,50 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/azure-marketplace/master/schema.json",
+  "name": "FrootAI",
+  "displayName": "FrootAI — AI Architecture Power Kit",
+  "publisher": "pavleenbali",
+  "description": "The open glue binding Infrastructure, Platform & Application teams with the GenAI ecosystem. 20 pre-packaged solution plays with DevKit (.github Agentic OS) + TuneKit (AI fine-tuning configs). From RAG pipelines to multi-agent systems.",
+  "categories": [
+    "AI + Machine Learning",
+    "Developer Tools",
+    "Azure Architecture"
+  ],
+  "keywords": [
+    "AI",
+    "GenAI",
+    "RAG",
+    "Azure OpenAI",
+    "MCP",
+    "Copilot",
+    "agents",
+    "infrastructure as code",
+    "Bicep",
+    "AI landing zone",
+    "solution accelerator"
+  ],
+  "links": {
+    "website": "https://gitpavleenbali.github.io/frootai",
+    "repository": "https://github.com/gitpavleenbali/frootai",
+    "npm": "https://www.npmjs.com/package/frootai-mcp",
+    "vscode": "https://marketplace.visualstudio.com/items?itemName=pavleenbali.frootai"
+  },
+  "artifacts": {
+    "mcpServer": {
+      "name": "frootai-mcp",
+      "version": "2.2.0",
+      "install": "npm install -g frootai-mcp",
+      "run": "npx frootai-mcp",
+      "tools": 16
+    },
+    "vscodeExtension": {
+      "name": "pavleenbali.frootai",
+      "version": "0.9.0",
+      "commands": 13,
+      "standalone": true
+    },
+    "solutionPlays": 20,
+    "knowledgeModules": 18,
+    "glossaryTerms": "200+"
+  },
+  "license": "MIT"
+}

@@ -18,7 +18,7 @@
 |---|------|----------|
 | 🎯 | **Solution Plays** — pre-tuned, deployable AI solutions (RAG, agents, landing zones) | Infra & platform engineers |
 | 📖 | **18 knowledge modules** covering AI architecture end-to-end | Cloud Architects, CSAs |
-| 🔌 | **MCP Server** — 13 tools (6 static + 4 live + 3 agent chain), add to any AI agent as a callable skill set | Agent builders, developers |
+| 🔌 | **MCP Server** — 16 tools (6 static + 4 live + 3 agent chain + 3 AI ecosystem), add to any AI agent as a callable skill set | Agent builders, developers |
 | 🔗 | **The open glue** — removes silos between infra, platform, and app teams | Everyone |
 
 ---
@@ -115,7 +115,7 @@ graph TB
 | Component | Who Uses It | What It Does |
 |-----------|------------|-------------|
 | **VS Code Extension** | You (human) | Browse plays, search terms, init DevKit/TuneKit, auto-chain agents |
-| **MCP Server (npm)** | Your AI agent | Copilot/Claude calls 13 tools (6 static + 4 live + 3 agent chain) |
+| **MCP Server (npm)** | Your AI agent | Copilot/Claude calls 16 tools (6 static + 4 live + 3 chain + 3 AI ecosystem) |
 | **DevKit (.github/ + infra/)** | Developer | .github Agentic OS + Bicep infrastructure + co-coder context |
 | **TuneKit (config/ + eval/)** | Platform team | AI parameter tuning: temperature, models, guardrails, evaluation |
 
@@ -179,7 +179,7 @@ graph TB
 
 ---
 
-## MCP Server — 13 tools (v2)
+## MCP Server — 16 tools (v2.2)
 
 ### Static Tools (bundled knowledge)
 
@@ -200,6 +200,22 @@ graph TB
 | `fetch_external_mcp` | Find MCP servers from public registries |
 | `list_community_plays` | List 20 solution plays from GitHub |
 | `get_github_agentic_os` | .github agentic OS guide (7 primitives) |
+
+### Agent Chain Tools (build → review → tune)
+
+| Tool | What It Does |
+|------|-------------|
+| `agent_build` | Builder agent guidance + suggests reviewer |
+| `agent_review` | Reviewer agent (security, cost, compliance) |
+| `agent_tune` | Tuner agent (production readiness validation) |
+
+### AI Ecosystem Tools (NEW in v2.2)
+
+| Tool | What It Does |
+|------|-------------|
+| `get_model_catalog` | Azure AI model catalog with pricing + capabilities |
+| `get_azure_pricing` | Monthly cost estimates for AI solution architectures |
+| `compare_models` | Side-by-side model comparison for a specific use case |
 
 [📖 Full MCP documentation →](./mcp-server/README.md) · [📖 Setup Guide →](https://gitpavleenbali.github.io/frootai/setup-guide)
 

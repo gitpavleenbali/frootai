@@ -71,7 +71,7 @@ export default function EcosystemPage(): JSX.Element {
               <h3 style={{ fontSize: "1.05rem", fontWeight: 800, textAlign: "center", marginBottom: "4px" }}>MCP Server (npm)</h3>
               <p style={{ fontSize: "0.75rem", fontWeight: 600, color: "#10b981", textAlign: "center", marginBottom: "12px" }}>For your AI agent</p>
               <ul style={{ fontSize: "0.82rem", lineHeight: 1.7, paddingLeft: "16px" }}>
-                <li>13 tools called automatically by Copilot/Claude/Cursor</li>
+                <li>16 tools called automatically by Copilot/Claude/Cursor</li>
                 <li><code>lookup_term</code> → 200+ precise definitions</li>
                 <li><code>search_knowledge</code> → answers across 18 modules</li>
                 <li><code>get_architecture_pattern</code> → 7 decision guides</li>

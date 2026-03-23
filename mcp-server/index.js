@@ -1170,6 +1170,174 @@ If any checks fail:
   }
 );
 
+// ── C4: AI Ecosystem Live Tools (v2.2) ─────────────────────────────
+
+server.tool(
+  "get_model_catalog",
+  "AI MODEL CATALOG — Lists available Azure OpenAI models with capabilities, pricing tiers, context windows, and recommended use cases. Helps pick the right model for the job.",
+  {
+    category: z.enum(["all", "gpt", "embedding", "image", "speech"]).optional().describe("Filter by model category (default: all)"),
+  },
+  async ({ category = "all" }) => {
+    const models = [
+      { name: "gpt-4o", category: "gpt", context: "128K", pricing: "$2.50/1M input, $10/1M output", speed: "Fast", quality: "Highest", bestFor: "Complex reasoning, multi-modal, production agents" },
+      { name: "gpt-4o-mini", category: "gpt", context: "128K", pricing: "$0.15/1M input, $0.60/1M output", speed: "Very Fast", quality: "Good", bestFor: "High-volume, cost-sensitive, simple tasks" },
+      { name: "gpt-4.1", category: "gpt", context: "1M", pricing: "$2.00/1M input, $8.00/1M output", speed: "Fast", quality: "Highest", bestFor: "Long-context analysis, coding, complex instructions" },
+      { name: "gpt-4.1-mini", category: "gpt", context: "1M", pricing: "$0.40/1M input, $1.60/1M output", speed: "Very Fast", quality: "Good", bestFor: "Long-context at lower cost, balanced workloads" },
+      { name: "gpt-4.1-nano", category: "gpt", context: "1M", pricing: "$0.10/1M input, $0.40/1M output", speed: "Fastest", quality: "Basic", bestFor: "Classification, extraction, high-throughput" },
+      { name: "o3", category: "gpt", context: "200K", pricing: "$10/1M input, $40/1M output", speed: "Slower (thinks)", quality: "Exceptional", bestFor: "Hard reasoning, math, science, code review" },
+      { name: "o4-mini", category: "gpt", context: "200K", pricing: "$1.10/1M input, $4.40/1M output", speed: "Medium", quality: "Very Good", bestFor: "Reasoning at scale, STEM, analysis" },
+      { name: "text-embedding-3-large", category: "embedding", context: "8K", pricing: "$0.13/1M tokens", speed: "Fast", quality: "Best", bestFor: "RAG, semantic search, document similarity" },
+      { name: "text-embedding-3-small", category: "embedding", context: "8K", pricing: "$0.02/1M tokens", speed: "Fast", quality: "Good", bestFor: "Cost-effective embeddings, basic search" },
+      { name: "dall-e-3", category: "image", context: "N/A", pricing: "$0.04-0.12/image", speed: "Medium", quality: "High", bestFor: "Image generation, creative content" },
+      { name: "whisper", category: "speech", context: "N/A", pricing: "$0.006/minute", speed: "Fast", quality: "High", bestFor: "Speech-to-text, transcription" },
+      { name: "tts-1-hd", category: "speech", context: "N/A", pricing: "$0.03/1K chars", speed: "Fast", quality: "High", bestFor: "Text-to-speech, voice assistants" },
+    ];
+
+    const filtered = category === "all" ? models : models.filter(m => m.category === category);
+    const table = filtered.map(m =>
+      `| ${m.name} | ${m.context} | ${m.pricing} | ${m.speed} | ${m.quality} | ${m.bestFor} |`
+    ).join("\n");
+
+    return {
+      content: [{
+        type: "text",
+        text: `## 📋 Azure AI Model Catalog${category !== "all" ? ` (${category})` : ""}
+
+| Model | Context | Pricing | Speed | Quality | Best For |
+|-------|---------|---------|-------|---------|----------|
+${table}
+
+> **Pricing** is approximate and may vary by region and commitment tier.
+> **Recommendation**: Use gpt-4o-mini for 80% of workloads, gpt-4o or gpt-4.1 for complex tasks, o3/o4-mini for hard reasoning.
+> 
+> 🔗 Latest: https://learn.microsoft.com/azure/ai-services/openai/concepts/models`,
+      }],
+    };
+  }
+);
+
+server.tool(
+  "get_azure_pricing",
+  "AZURE AI PRICING — Estimates monthly cost for common AI solution architectures. Helps with FinOps planning and cost optimization for AI workloads.",
+  {
+    scenario: z.enum(["rag", "agent", "batch", "realtime", "custom"]).describe("Solution scenario type"),
+    scale: z.enum(["dev", "staging", "production"]).optional().describe("Scale tier (default: production)"),
+  },
+  async ({ scenario, scale = "production" }) => {
+    const estimates = {
+      rag: {
+        dev: { monthly: "$150-300", breakdown: "OpenAI: $50, AI Search: $75 (Basic), Container App: $25, Storage: $5" },
+        staging: { monthly: "$500-1,200", breakdown: "OpenAI: $200, AI Search: $250 (Standard), Container App: $100, Storage: $20, App Insights: $30" },
+        production: { monthly: "$2,000-8,000", breakdown: "OpenAI: $1,000-5,000, AI Search: $500 (Standard S2+), Container App: $200, Storage: $50, App Insights: $100, Front Door: $100" },
+      },
+      agent: {
+        dev: { monthly: "$100-250", breakdown: "OpenAI: $80, Container App: $25, Cosmos DB: $25 (serverless)" },
+        staging: { monthly: "$400-1,000", breakdown: "OpenAI: $300, Container App: $100, Cosmos DB: $100, Service Bus: $25" },
+        production: { monthly: "$1,500-6,000", breakdown: "OpenAI: $1,000-4,000, Container App: $300, Cosmos DB: $300, Service Bus: $50, App Insights: $100" },
+      },
+      batch: {
+        dev: { monthly: "$50-150", breakdown: "OpenAI (batch API -50%): $30, Storage: $10, Functions: $5" },
+        staging: { monthly: "$200-500", breakdown: "OpenAI (batch): $150, Storage: $30, Functions: $20" },
+        production: { monthly: "$500-3,000", breakdown: "OpenAI (batch -50%): $300-2,000, Storage: $100, Functions: $50, Data Factory: $50" },
+      },
+      realtime: {
+        dev: { monthly: "$200-400", breakdown: "OpenAI: $100, Communication Services: $50, Speech: $30, Container App: $25" },
+        staging: { monthly: "$600-1,500", breakdown: "OpenAI: $400, Communication Services: $150, Speech: $100, Container App: $100" },
+        production: { monthly: "$2,500-10,000", breakdown: "OpenAI: $1,500-6,000, Communication Services: $500, Speech: $300, Container App: $300, Front Door: $100" },
+      },
+      custom: {
+        dev: { monthly: "$100-300", breakdown: "Varies by architecture. Use Azure Pricing Calculator for specifics." },
+        staging: { monthly: "$300-1,000", breakdown: "Varies. Key drivers: model choice, request volume, storage." },
+        production: { monthly: "$1,000-10,000+", breakdown: "Varies. Optimize with: PTU commitments, batch API, caching, model downsizing." },
+      },
+    };
+
+    const est = estimates[scenario]?.[scale] || estimates.custom[scale];
+
+    return {
+      content: [{
+        type: "text",
+        text: `## 💰 Azure AI Cost Estimate — ${scenario.toUpperCase()} (${scale})
+
+**Estimated Monthly Cost:** ${est.monthly}
+
+### Breakdown
+${est.breakdown}
+
+### Cost Optimization Tips
+| Strategy | Savings | When to Use |
+|----------|---------|-------------|
+| Use gpt-4o-mini instead of gpt-4o | 80-90% | Simple classification, extraction, routing |
+| Batch API (async) | 50% | Non-real-time processing, nightly jobs |
+| Provisioned Throughput (PTU) | 30-60% | Predictable, high-volume production |
+| Semantic caching (APIM) | 20-40% | Repeated similar queries |
+| Prompt compression | 10-30% | Reduce input tokens with summarization |
+| Regional pricing | 5-15% | West US 2, Sweden Central often cheaper |
+
+> 🔗 Azure Pricing Calculator: https://azure.microsoft.com/pricing/calculator/
+> 🔗 FrootAI Play 14 (Cost-Optimized AI Gateway) covers advanced FinOps patterns.`,
+      }],
+    };
+  }
+);
+
+server.tool(
+  "compare_models",
+  "MODEL COMPARISON — Side-by-side comparison of AI models for a specific use case. Recommends the best model based on requirements.",
+  {
+    useCase: z.string().describe("What you're building (e.g., 'RAG chatbot', 'code review agent', 'document extraction')"),
+    priority: z.enum(["cost", "quality", "speed", "context"]).optional().describe("What matters most (default: quality)"),
+  },
+  async ({ useCase, priority = "quality" }) => {
+    const recommendations = {
+      cost: { primary: "gpt-4o-mini", secondary: "gpt-4.1-nano", reasoning: "Lowest cost per token while maintaining acceptable quality. Use mini for most tasks, nano for high-throughput classification." },
+      quality: { primary: "gpt-4o", secondary: "gpt-4.1", reasoning: "Highest quality output. Use 4o for multi-modal, 4.1 for long-context. Add o3 for tasks requiring deep reasoning." },
+      speed: { primary: "gpt-4o-mini", secondary: "gpt-4.1-nano", reasoning: "Fastest response times. Mini has best latency-to-quality ratio. Nano for sub-100ms responses." },
+      context: { primary: "gpt-4.1", secondary: "gpt-4.1-mini", reasoning: "1M token context window. Process entire codebases, long documents, or complex multi-turn conversations." },
+    };
+
+    const rec = recommendations[priority];
+
+    return {
+      content: [{
+        type: "text",
+        text: `## 🔄 Model Comparison for: "${useCase}"
+**Priority:** ${priority.toUpperCase()}
+
+### Recommendation
+| Aspect | Primary: ${rec.primary} | Alternative: ${rec.secondary} |
+|--------|----------------------|--------------------------|
+| **Why** | Best for ${priority} | Backup option |
+| **Cost** | See model catalog | See model catalog |
+
+**Reasoning:** ${rec.reasoning}
+
+### Decision Matrix
+| Model | Cost | Quality | Speed | Context | Best For |
+|-------|------|---------|-------|---------|----------|
+| gpt-4o | $$$ | ⭐⭐⭐⭐⭐ | Fast | 128K | Complex tasks, multi-modal |
+| gpt-4o-mini | $ | ⭐⭐⭐⭐ | Very Fast | 128K | High-volume, cost-sensitive |
+| gpt-4.1 | $$$ | ⭐⭐⭐⭐⭐ | Fast | 1M | Long-context, coding |
+| gpt-4.1-mini | $$ | ⭐⭐⭐⭐ | Very Fast | 1M | Balanced cost + context |
+| gpt-4.1-nano | $ | ⭐⭐⭐ | Fastest | 1M | Classification, extraction |
+| o3 | $$$$ | ⭐⭐⭐⭐⭐+ | Slow | 200K | Hard reasoning, math |
+| o4-mini | $$ | ⭐⭐⭐⭐⭐ | Medium | 200K | Reasoning at scale |
+
+### Quick Decision
+- **"I need it cheap"** → gpt-4o-mini
+- **"I need the best"** → gpt-4o or gpt-4.1
+- **"I need to think hard"** → o3 or o4-mini
+- **"I have huge documents"** → gpt-4.1 (1M context)
+- **"I need sub-second latency"** → gpt-4.1-nano
+
+> 💡 Use \`get_model_catalog\` for full pricing details.
+> 💡 Use \`get_azure_pricing\` to estimate monthly costs.`,
+      }],
+    };
+  }
+);
+
 // ── Resources: Module listing ──────────────────────────────────────
 
 server.resource(
@@ -1189,7 +1357,7 @@ The open glue that binds infrastructure, platform, and application.
 🏗️ O — Operations: Azure AI Platform, Infrastructure, Copilot
 🍎 T — Transformation: Fine-Tuning, Responsible AI, Production Patterns
 
-18 modules | 200+ AI terms | 10 tools (6 static + 4 live) | 20 solution plays
+18 modules | 200+ AI terms | 16 tools (6 static + 4 live + 3 chain + 3 AI ecosystem) | 20 solution plays
 https://gitpavleenbali.github.io/frootai/`,
       },
     ],

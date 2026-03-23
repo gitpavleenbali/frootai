@@ -1,0 +1,39 @@
+{
+  "name": "FrootAI",
+  "description": "The open glue for AI Architecture — 20 solution plays, 18 knowledge modules, 16 MCP tools, DevKit (.github Agentic OS) + TuneKit (AI fine-tuning). From the Roots to the Fruits.",
+  "categories": ["AI", "Developer Tools", "Infrastructure", "MCP"],
+  "keywords": ["AI", "GenAI", "RAG", "MCP", "Azure", "Copilot", "agents", "Bicep", "infrastructure"],
+  "repository": "https://github.com/gitpavleenbali/frootai",
+  "license": "MIT",
+  "badges": [
+    {
+      "description": "VS Code Marketplace",
+      "url": "https://img.shields.io/visual-studio-marketplace/v/pavleenbali.frootai?label=VS%20Code&color=00C853",
+      "href": "https://marketplace.visualstudio.com/items?itemName=pavleenbali.frootai"
+    },
+    {
+      "description": "npm",
+      "url": "https://img.shields.io/npm/v/frootai-mcp?label=npm&color=00C853",
+      "href": "https://www.npmjs.com/package/frootai-mcp"
+    },
+    {
+      "description": "License",
+      "url": "https://img.shields.io/github/license/gitpavleenbali/frootai?color=00C853",
+      "href": "https://github.com/gitpavleenbali/frootai/blob/main/LICENSE"
+    }
+  ],
+  "artifacts": {
+    "npm_package": "frootai-mcp@2.2.0",
+    "vscode_extension": "pavleenbali.frootai@0.9.0",
+    "website": "https://gitpavleenbali.github.io/frootai"
+  },
+  "features": [
+    "20 pre-packaged AI solution plays (RAG, agents, landing zones, observability)",
+    "DevKit: .github Agentic OS with 7 primitives (19 files per play)",
+    "TuneKit: Pre-tuned AI config (temperature, guardrails, agents, model comparison)",
+    "16-tool MCP server (6 static + 4 live + 3 agent chain + 3 AI ecosystem)",
+    "VS Code extension: standalone engine with bundled knowledge, 13 commands",
+    "18 FROOT knowledge modules covering AI architecture end-to-end",
+    "200+ AI/ML glossary terms"
+  ]
+}

@@ -1,6 +1,6 @@
 # frootai-mcp
 
-> **AI architecture knowledge + agent chain as an MCP skill.** 13 tools (6 static + 4 live + 3 agent chain), 18 modules, 200+ terms. Hybrid: works offline + fetches live Azure docs. Auto-chain: Build → Review → Tune in chat.
+> **AI architecture knowledge + agent chain as an MCP skill.** 16 tools (6 static + 4 live + 3 agent chain + 3 AI ecosystem), 18 modules, 200+ terms. Hybrid: works offline + fetches live Azure docs. Auto-chain: Build → Review → Tune in chat.
 
 ## Install & Run
 
@@ -35,7 +35,7 @@ frootai-mcp
 }
 ```
 
-## 13 Tools
+## 16 Tools
 
 ### Static Tools (bundled knowledge — works offline)
 
@@ -71,6 +71,14 @@ frootai-mcp
 3. "Validate my config" → `agent_tune` returns verdict + *"ready to deploy"*
 
 No clipboard. No commands. Pure conversation.
+
+### AI Ecosystem Tools (NEW in v2.2)
+
+| Tool | Description |
+|------|------------|
+| `get_model_catalog` | Azure AI model catalog with pricing, capabilities, and recommendations |
+| `get_azure_pricing` | Monthly cost estimates for RAG, agent, batch, realtime scenarios |
+| `compare_models` | Side-by-side model comparison for a specific use case |
 
 ## What's Inside
 
