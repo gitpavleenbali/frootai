@@ -246,7 +246,7 @@ export default function HiFaiPage(): JSX.Element {
           <div style={{ display: "inline-block", padding: "3px 14px", borderRadius: "20px", background: "linear-gradient(135deg, rgba(16,185,129,0.15), rgba(6,182,212,0.08))", border: "1px solid rgba(16,185,129,0.3)", fontSize: "0.65rem", color: "#10b981", fontWeight: 700, letterSpacing: "0.5px", textTransform: "uppercase", marginBottom: "12px" }}>
             5-Minute Quickstart
           </div>
-          <h1 style={{ fontSize: "2.4rem", fontWeight: 800, margin: "0 0 8px", background: "linear-gradient(135deg, #10b981 0%, #06b6d4 50%, #6366f1 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
+          <h1 style={{ fontSize: "2.4rem", fontWeight: 800, margin: "0 0 8px", background: "linear-gradient(135deg, #10b981 0%, #34d399 50%, #6ee7b7 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
             🖐️ Hi FAI
           </h1>
           <p style={{ color: "var(--ifm-color-emphasis-500)", fontSize: "0.92rem", margin: "0 0 6px", fontWeight: 500 }}>
