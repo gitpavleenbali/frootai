@@ -1,0 +1,14 @@
+{
+  "name": "frootai-chatbot-api",
+  "version": "1.0.0",
+  "description": "Azure Function proxy for FrootAI chatbot — connects website to Azure OpenAI GPT-4.1",
+  "main": "chat/index.js",
+  "scripts": {
+    "start": "func start",
+    "deploy": "func azure functionapp publish frootai-chatbot-api"
+  },
+  "dependencies": {},
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
