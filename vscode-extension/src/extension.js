@@ -890,97 +890,70 @@ function activate(context) {
   // ── Command: Auto-Chain Agents (Build → Review → Tune) ──
   context.subscriptions.push(
     vscode.commands.registerCommand("frootai.autoChainAgents", async () => {
-      // Step 1: Ask what to build
+      // Step 1: Ask what to build (search bar)
       const task = await vscode.window.showInputBox({
-        prompt: "🛠️ Builder Agent: What would you like to build?",
-        placeHolder: "e.g., Build me an IT ticket classification API using Logic Apps + OpenAI"
+        prompt: "🛠️ BUILDER AGENT — What would you like to build?",
+        placeHolder: "e.g., Build me an IT ticket classification API using Logic Apps + OpenAI",
+        ignoreFocusOut: true
       });
       if (!task) return;
 
-      // Check if agent.md exists in workspace
+      // Read agent.md context if available
       const wsFolder = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
       let agentContext = "";
       if (wsFolder) {
         const agentPath = path.join(wsFolder, "agent.md");
         if (fs.existsSync(agentPath)) {
-          agentContext = `\n\nContext from agent.md:\n${fs.readFileSync(agentPath, "utf-8").substring(0, 2000)}`;
+          agentContext = `\n\nContext from agent.md:\n${fs.readFileSync(agentPath, "utf-8").substring(0, 1500)}`;
         }
       }
 
-      // Step 1: BUILD — Send to Copilot Chat
-      const buildPrompt = `🛠️ **BUILDER AGENT** — You are the builder agent for this FrootAI solution play.
+      // ── STAGE 1: BUILD ──
+      const buildPrompt = `🛠️ BUILDER AGENT — ${task}\n\nRules: Use config/*.json values (never hardcode). Use Managed Identity. Include error handling + App Insights logging. Follow .github/instructions/*.instructions.md patterns.${agentContext}\n\nBuild the complete implementation.`;
 
-TASK: ${task}
-
-RULES:
-- Use values from config/*.json files — never hardcode parameters
-- Use Azure Managed Identity for authentication (no API keys)
-- Include error handling with Application Insights logging
-- Follow the patterns in .github/instructions/*.instructions.md
-- Generate production-quality code with proper comments${agentContext}
-
-Build the complete implementation now.`;
-
-      // Copy to clipboard and open Copilot Chat
       await vscode.env.clipboard.writeText(buildPrompt);
-      vscode.window.showInformationMessage(
-        "🛠️ Builder prompt copied to clipboard! Paste it in Copilot Chat (Ctrl+Shift+I → Ctrl+V).\n\nWhen done building, click 'Continue to Review' below.",
-        "Continue to Review ➡️"
-      ).then(async (choice) => {
-        if (choice === "Continue to Review ➡️") {
-          // Step 2: REVIEW
-          const reviewPrompt = `🔍 **REVIEWER AGENT** — Review the code just generated.
+      // Auto-open Copilot Chat
+      try { await vscode.commands.executeCommand("workbench.action.chat.open"); } catch {}
 
-CHECK:
-□ No hardcoded secrets, API keys, or connection strings
-□ All Azure calls use Managed Identity
-□ User inputs are validated and sanitized
-□ Error handling with retry + exponential backoff
-□ Application Insights logging with correlation IDs
-□ Config values read from config/*.json (not hardcoded)
-□ Temperature ≤ 0.3 for factual responses
-□ Source citations included where applicable
+      // Show stage prompt at search bar level
+      const stage1 = await vscode.window.showQuickPick([
+        { label: "$(paste) Paste builder prompt in chat (Ctrl+V)", description: "Prompt is on clipboard", value: "paste" },
+        { label: "$(arrow-right) Skip to Review", description: "I've already built the code", value: "review" },
+        { label: "$(close) Cancel chain", value: "cancel" },
+      ], { placeHolder: "🛠️ STAGE 1/3: BUILD — Prompt copied. Paste in Copilot Chat, then come back here.", ignoreFocusOut: true });
 
-SEVERITY:
-🔴 Critical — must fix before merge
-🟡 Warning — should fix
-🟢 Suggestion — nice to have
+      if (!stage1 || stage1.value === "cancel") return;
 
-Review the code and report findings with severity levels.`;
+      // ── STAGE 2: REVIEW ──
+      const reviewPrompt = `🔍 REVIEWER AGENT — Review the code above.\n\nCheck: No secrets in code · Managed Identity · Input validation · Error handling + retry · App Insights logging · Config from files (not hardcoded) · Temperature ≤ 0.3\n\nReport: 🔴 Critical / 🟡 Warning / 🟢 Suggestion for each finding.`;
 
-          await vscode.env.clipboard.writeText(reviewPrompt);
-          vscode.window.showInformationMessage(
-            "🔍 Reviewer prompt copied! Paste in Copilot Chat.\n\nWhen review is done, click 'Continue to Tune' below.",
-            "Continue to Tune ➡️"
-          ).then(async (choice2) => {
-            if (choice2 === "Continue to Tune ➡️") {
-              // Step 3: TUNE
-              const tunePrompt = `🎛️ **TUNER AGENT** — Validate the TuneKit configuration for production readiness.
+      await vscode.env.clipboard.writeText(reviewPrompt);
 
-CHECK:
-□ config/openai.json: temperature ≤ 0.3, max_tokens set, model specified
-□ config/guardrails.json: blocked_topics non-empty, PII filter active
-□ infra/main.bicep: valid, idempotent, all resources tagged
-□ evaluation/test-set.jsonl: has test cases
-□ All secrets in Key Vault references (not in code)
+      const stage2 = await vscode.window.showQuickPick([
+        { label: "$(paste) Paste reviewer prompt in chat (Ctrl+V)", description: "Review prompt on clipboard", value: "paste" },
+        { label: "$(arrow-right) Skip to Tune", description: "Review done, proceed to tuning", value: "tune" },
+        { label: "$(close) End chain", value: "cancel" },
+      ], { placeHolder: "🔍 STAGE 2/3: REVIEW — Prompt copied. Paste in chat to review your code.", ignoreFocusOut: true });
 
-REPORT: Is this solution READY FOR PRODUCTION or does it NEED TUNING?
-If tuning needed, specify exactly which config values to change.`;
+      if (!stage2 || stage2.value === "cancel") return;
 
-              await vscode.env.clipboard.writeText(tunePrompt);
-              vscode.window.showInformationMessage(
-                "🎛️ Tuner prompt copied! Paste in Copilot Chat.\n\n✅ Auto-chain complete: Build → Review → Tune",
-                "🚀 Deploy (/deploy)"
-              ).then((choice3) => {
-                if (choice3) {
-                  vscode.env.clipboard.writeText("Run the /deploy prompt to deploy this solution to Azure. Follow the deploy.prompt.md steps.");
-                  vscode.window.showInformationMessage("🚀 Deploy prompt copied! Paste in Copilot Chat.");
-                }
-              });
-            }
-          });
-        }
-      });
+      // ── STAGE 3: TUNE ──
+      const tunePrompt = `🎛️ TUNER AGENT — Validate TuneKit config for production.\n\nCheck: config/openai.json (temp ≤ 0.3, model set) · config/guardrails.json (PII filter, blocked topics) · infra/main.bicep (valid, tagged) · evaluation/ (test cases exist) · No secrets in code\n\nVerdict: READY FOR PRODUCTION or NEEDS TUNING (specify what to change).`;
+
+      await vscode.env.clipboard.writeText(tunePrompt);
+
+      const stage3 = await vscode.window.showQuickPick([
+        { label: "$(paste) Paste tuner prompt in chat (Ctrl+V)", description: "Tuner prompt on clipboard", value: "paste" },
+        { label: "$(rocket) Deploy! (/deploy)", description: "Ready to deploy to Azure", value: "deploy" },
+        { label: "$(check) Done — chain complete", value: "done" },
+      ], { placeHolder: "🎛️ STAGE 3/3: TUNE — Prompt copied. Paste in chat to validate production config.", ignoreFocusOut: true });
+
+      if (stage3?.value === "deploy") {
+        await vscode.env.clipboard.writeText("Run the /deploy slash command: validate Bicep → create resource group → deploy infrastructure → smoke test → verify.");
+        vscode.window.showInformationMessage("🚀 Deploy prompt copied! Paste in Copilot Chat.");
+      }
+
+      vscode.window.showInformationMessage("✅ Auto-Chain complete: Build → Review → Tune. Your solution is ready!");
     })
   );
 
