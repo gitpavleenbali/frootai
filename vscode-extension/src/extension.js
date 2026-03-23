@@ -56,23 +56,23 @@ const SOLUTION_PLAYS = [
   { id: "01", name: "Enterprise RAG Q&A", icon: "🔍", status: "Ready", dir: "01-enterprise-rag" },
   { id: "02", name: "AI Landing Zone", icon: "⛰️", status: "Ready", dir: "02-ai-landing-zone" },
   { id: "03", name: "Deterministic Agent", icon: "🎯", status: "Ready", dir: "03-deterministic-agent" },
-  { id: "04", name: "Call Center Voice AI", icon: "📞", status: "Skeleton", dir: "04-call-center-voice-ai" },
-  { id: "05", name: "IT Ticket Resolution", icon: "🎫", status: "Skeleton", dir: "05-it-ticket-resolution" },
-  { id: "06", name: "Document Intelligence", icon: "📄", status: "Skeleton", dir: "06-document-intelligence" },
-  { id: "07", name: "Multi-Agent Service", icon: "🤖", status: "Skeleton", dir: "07-multi-agent-service" },
-  { id: "08", name: "Copilot Studio Bot", icon: "💬", status: "Skeleton", dir: "08-copilot-studio-bot" },
-  { id: "09", name: "AI Search Portal", icon: "🔎", status: "Skeleton", dir: "09-ai-search-portal" },
-  { id: "10", name: "Content Moderation", icon: "🛡️", status: "Skeleton", dir: "10-content-moderation" },
-  { id: "11", name: "Landing Zone Advanced", icon: "🏔️", status: "Skeleton", dir: "11-ai-landing-zone-advanced" },
-  { id: "12", name: "Model Serving AKS", icon: "⚙️", status: "Skeleton", dir: "12-model-serving-aks" },
-  { id: "13", name: "Fine-Tuning Workflow", icon: "🔬", status: "Skeleton", dir: "13-fine-tuning-workflow" },
-  { id: "14", name: "AI Gateway", icon: "🚪", status: "Skeleton", dir: "14-cost-optimized-ai-gateway" },
-  { id: "15", name: "Multi-Modal DocProc", icon: "🖼️", status: "Skeleton", dir: "15-multi-modal-docproc" },
-  { id: "16", name: "Copilot Teams Ext", icon: "👥", status: "Skeleton", dir: "16-copilot-teams-extension" },
-  { id: "17", name: "AI Observability", icon: "📊", status: "Skeleton", dir: "17-ai-observability" },
-  { id: "18", name: "Prompt Management", icon: "📝", status: "Skeleton", dir: "18-prompt-management" },
-  { id: "19", name: "Edge AI Phi-4", icon: "📱", status: "Skeleton", dir: "19-edge-ai-phi4" },
-  { id: "20", name: "Anomaly Detection", icon: "🚨", status: "Skeleton", dir: "20-anomaly-detection" },
+  { id: "04", name: "Call Center Voice AI", icon: "📞", status: "Ready", dir: "04-call-center-voice-ai" },
+  { id: "05", name: "IT Ticket Resolution", icon: "🎫", status: "Ready", dir: "05-it-ticket-resolution" },
+  { id: "06", name: "Document Intelligence", icon: "📄", status: "Ready", dir: "06-document-intelligence" },
+  { id: "07", name: "Multi-Agent Service", icon: "🤖", status: "Ready", dir: "07-multi-agent-service" },
+  { id: "08", name: "Copilot Studio Bot", icon: "💬", status: "Ready", dir: "08-copilot-studio-bot" },
+  { id: "09", name: "AI Search Portal", icon: "🔎", status: "Ready", dir: "09-ai-search-portal" },
+  { id: "10", name: "Content Moderation", icon: "🛡️", status: "Ready", dir: "10-content-moderation" },
+  { id: "11", name: "Landing Zone Advanced", icon: "🏔️", status: "Ready", dir: "11-ai-landing-zone-advanced" },
+  { id: "12", name: "Model Serving AKS", icon: "⚙️", status: "Ready", dir: "12-model-serving-aks" },
+  { id: "13", name: "Fine-Tuning Workflow", icon: "🔬", status: "Ready", dir: "13-fine-tuning-workflow" },
+  { id: "14", name: "AI Gateway", icon: "🚪", status: "Ready", dir: "14-cost-optimized-ai-gateway" },
+  { id: "15", name: "Multi-Modal DocProc", icon: "🖼️", status: "Ready", dir: "15-multi-modal-docproc" },
+  { id: "16", name: "Copilot Teams Ext", icon: "👥", status: "Ready", dir: "16-copilot-teams-extension" },
+  { id: "17", name: "AI Observability", icon: "📊", status: "Ready", dir: "17-ai-observability" },
+  { id: "18", name: "Prompt Management", icon: "📝", status: "Ready", dir: "18-prompt-management" },
+  { id: "19", name: "Edge AI Phi-4", icon: "📱", status: "Ready", dir: "19-edge-ai-phi4" },
+  { id: "20", name: "Anomaly Detection", icon: "🚨", status: "Ready", dir: "20-anomaly-detection" },
 ];
 
 const FROOT_MODULES = [
@@ -479,6 +479,7 @@ function activate(context) {
       // Show action picker
       const action = await vscode.window.showQuickPick([
         { label: "$(book) Read Documentation", description: "View solution play README in rich panel", value: "read" },
+        { label: "$(notebook) Read User Guide", description: `Step-by-step setup guide for ${play.name}`, value: "userguide" },
         { label: "$(tools) Init DevKit", description: ".github Agentic OS (19 files) + agent.md + MCP", value: "devkit" },
         { label: "$(settings-gear) Init TuneKit", description: "config/*.json + infra/main.bicep + evaluation/", value: "tunekit" },
         { label: "$(shield) Init Hooks", description: "guardrails.json (preToolUse policy gates)", value: "hooks" },
@@ -505,6 +506,8 @@ function activate(context) {
         } catch {
           vscode.env.openExternal(vscode.Uri.parse(`https://github.com/gitpavleenbali/frootai/tree/main/solution-plays/${play.dir}`));
         }
+      } else if (action.value === "userguide") {
+        vscode.env.openExternal(vscode.Uri.parse(`https://gitpavleenbali.github.io/frootai/user-guide?play=${play.id}`));
       } else if (action.value === "devkit") {
         vscode.commands.executeCommand("frootai.initDevKit", play);
       } else if (action.value === "tunekit") {
