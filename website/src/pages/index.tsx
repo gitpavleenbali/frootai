@@ -111,14 +111,17 @@ export default function FrootAIPage(): JSX.Element {
           <p style={{ fontSize: "0.75rem", fontStyle: "italic", color: "var(--ifm-color-emphasis-400)", textAlign: "center", marginBottom: "16px" }}>Click on the cards to explore more</p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "14px", padding: "6px 0" }}>
             {[
-              { to: "/vscode-extension", icon: "💻", title: "VS Code Extension", sub: "For you (the human)", color: "#6366f1" },
-              { to: "/mcp-tooling", icon: "📦", title: "MCP Server (npm)", sub: "16 tools for your agent", color: "#10b981" },
-              { to: "/solution-plays", icon: "🎯", title: "Solution Plays", sub: "DevKit + TuneKit", color: "#7c3aed" },
               { to: "/configurator", icon: "⚙️", title: "Solution Configurator", sub: "3 questions → your play", color: "#f59e0b" },
-              { to: "/partners", icon: "🤝", title: "Partner Integrations", sub: "ServiceNow, Salesforce, SAP", color: "#06b6d4" },
+              { to: "/solution-plays", icon: "🎯", title: "Solution Plays", sub: "20 plays · DevKit + TuneKit", color: "#7c3aed" },
+              { to: "/vscode-extension", icon: "💻", title: "VS Code Extension", sub: "13 commands · Standalone", color: "#6366f1" },
+              { to: "/mcp-tooling", icon: "📦", title: "MCP Server (npm)", sub: "16 tools for your agent", color: "#10b981" },
               { to: "/marketplace", icon: "🏪", title: "Plugin Marketplace", sub: "Discover & share plugins", color: "#ec4899" },
+              { to: "/partners", icon: "🤝", title: "Partner Integrations", sub: "ServiceNow, Salesforce, SAP", color: "#06b6d4" },
               { to: "/chatbot", icon: "🤖", title: "AI Assistant", sub: "Ask which play to use", color: "#00C853" },
               { to: "/enterprise", icon: "🎓", title: "Learn & Certify", sub: "Workshops & certification", color: "#f97316" },
+              { to: "/packages", icon: "🧩", title: "FROOT Packages", sub: "Downloadable LEGO blocks", color: "#8b5cf6" },
+              { to: "/docs/", icon: "📚", title: "AI Knowledge Hub", sub: "18 modules · 200+ terms", color: "#eab308" },
+              { to: "/ecosystem", icon: "🔗", title: "Ecosystem Overview", sub: "Full platform map", color: "#0ea5e9" },
             ].map((card) => (
               <Link key={card.title} to={card.to} className={styles.glowCard} style={{ "--glow-color": card.color } as React.CSSProperties}>
                 <div style={{ fontSize: "1.8rem", marginBottom: "4px" }}>{card.icon}</div>
@@ -126,12 +129,12 @@ export default function FrootAIPage(): JSX.Element {
                 <div style={{ fontSize: "0.72rem", color: card.color }}>{card.sub}</div>
               </Link>
             ))}
-            {/* Powered by open source */}
-            <div style={{ padding: "18px", borderRadius: "14px", border: "2px dashed rgba(0, 200, 83, 0.3)", textAlign: "center", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+            {/* Open Source tile */}
+            <Link to="https://github.com/gitpavleenbali/frootai" className={styles.glowCard} style={{ "--glow-color": "#00C853" } as React.CSSProperties}>
               <div style={{ fontSize: "1.8rem", marginBottom: "4px" }}>🌱</div>
               <div style={{ fontWeight: 700, fontSize: "0.85rem" }}>100% Open Source</div>
-              <div style={{ fontSize: "0.72rem", color: "#00C853" }}>MIT License — Free Forever</div>
-            </div>
+              <div style={{ fontSize: "0.72rem", color: "#00C853" }}>MIT License — Star on GitHub</div>
+            </Link>
           </div>
         </section>
 

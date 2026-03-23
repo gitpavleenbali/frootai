@@ -540,10 +540,41 @@ article .mermaid {
     width: 80vw !important;
     max-width: 320px !important;
     height: 100vh !important;
+    height: 100dvh !important; /* Dynamic viewport height for mobile browsers */
     background: var(--ifm-background-color) !important;
     overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
     box-shadow: 8px 0 32px rgba(0,0,0,0.3) !important;
   }
+
+  /* Inner sidebar items container MUST scroll */
+  .navbar-sidebar .navbar-sidebar__items,
+  .navbar-sidebar .navbar-sidebar__item,
+  .navbar-sidebar .navbar__items,
+  .navbar-sidebar [class*="sidebarItems"],
+  .navbar-sidebar [class*="navbarSidebar"] {
+    max-height: none !important;
+    overflow-y: visible !important;
+  }
+
+  /* The main scrollable wrapper */
+  .navbar-sidebar .navbar-sidebar__items {
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    max-height: calc(100vh - 60px) !important;
+    max-height: calc(100dvh - 60px) !important;
+    padding-bottom: 80px !important; /* Extra space for thumb reach */
+  }
+
+  /* Dropdown menus inside sidebar must expand, not overflow */
+  .navbar-sidebar .dropdown__menu {
+    position: static !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding-left: 16px !important;
+    background: transparent !important;
+  }
+
   .navbar-sidebar__backdrop {
     z-index: 9998 !important;
     position: fixed !important;
