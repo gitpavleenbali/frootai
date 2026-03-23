@@ -118,6 +118,7 @@ const config: Config = {
           position: "left",
           items: [
             { to: "/dev-hub", label: "🛠️ Developer Hub" },
+            { to: "/feature-spec", label: "📋 Feature Spec (A-Z)" },
             { to: "/docs/admin-guide", label: "📋 Admin Guide" },
             { to: "/docs/user-guide-complete", label: "📖 User Guide" },
             { to: "/docs/contributor-guide", label: "🤝 Contributor Guide" },
