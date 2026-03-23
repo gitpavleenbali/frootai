@@ -2,7 +2,7 @@
   "name": "frootai",
   "displayName": "FrootAI — From the Roots to the Fruits",
   "description": "The open glue binding Infrastructure, Platform & Application teams with the GenAI ecosystem. Standalone engine: 18 modules, 200+ terms, 20 solution plays, 10 MCP tools — works from any workspace.",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "publisher": "pavleenbali",
   "engines": {
     "vscode": "^1.85.0"
@@ -50,19 +50,19 @@
       "frootai-sidebar": [
         {
           "id": "frootai.solutionPlays",
-          "name": "Solution Plays"
-        },
-        {
-          "id": "frootai.frootModules",
-          "name": "FROOT Modules"
+          "name": "🎯 Solution Plays (20)"
         },
         {
           "id": "frootai.mcpTools",
-          "name": "MCP Tools"
+          "name": "🔌 MCP Tools (10)"
+        },
+        {
+          "id": "frootai.frootModules",
+          "name": "Φ Knowledge Hub (18 modules)"
         },
         {
           "id": "frootai.glossary",
-          "name": "AI Glossary (200+ terms)"
+          "name": "📖 AI Glossary (200+ terms)"
         }
       ]
     },
@@ -131,14 +131,34 @@
       ],
       "view/item/context": [
         {
+          "command": "frootai.initDevKit",
+          "when": "view == frootai.solutionPlays",
+          "group": "1_init@1"
+        },
+        {
+          "command": "frootai.initTuneKit",
+          "when": "view == frootai.solutionPlays",
+          "group": "1_init@2"
+        },
+        {
+          "command": "frootai.initHooks",
+          "when": "view == frootai.solutionPlays",
+          "group": "1_init@3"
+        },
+        {
+          "command": "frootai.initPrompts",
+          "when": "view == frootai.solutionPlays",
+          "group": "1_init@4"
+        },
+        {
           "command": "frootai.installMcpServer",
           "when": "view == frootai.mcpTools",
-          "group": "inline"
+          "group": "1_mcp@1"
         },
         {
           "command": "frootai.startMcpServer",
           "when": "view == frootai.mcpTools",
-          "group": "inline"
+          "group": "1_mcp@2"
         }
       ]
     },

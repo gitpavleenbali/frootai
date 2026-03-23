@@ -264,7 +264,8 @@ class SolutionPlayProvider {
       return SOLUTION_PLAYS.map((p) => {
         const item = new vscode.TreeItem(`${p.icon} ${p.id} — ${p.name}`, vscode.TreeItemCollapsibleState.None);
         item.description = p.status;
-        item.tooltip = `${p.name}\nStatus: ${p.status}\nClick to view details`;
+        item.tooltip = `${p.name}\nStatus: ${p.status}\n\nRight-click for:\n• Init DevKit (.github Agentic OS)\n• Init TuneKit (config + infra + eval)\n• Init Hooks (guardrails)\n• Init Prompts (slash commands)\n\nClick to read details.`;
+        item.contextValue = "solutionPlay";
         item.command = { command: "frootai.openSolutionPlay", title: "Open", arguments: [p] };
         return item;
       });
@@ -303,7 +304,8 @@ class McpToolProvider {
     return MCP_TOOLS.map((t) => {
       const item = new vscode.TreeItem(`🔌 ${t.name}`, vscode.TreeItemCollapsibleState.None);
       item.description = t.desc;
-      item.tooltip = `MCP Tool: ${t.name}\n${t.desc}\n\nInstall: npx frootai-mcp`;
+      item.tooltip = `MCP Tool: ${t.name}\n${t.desc}\n\nRight-click for:\n• Install MCP Server (npm/npx/config)\n• Start MCP Server (terminal)\n\nnpx frootai-mcp`;
+      item.contextValue = "mcpTool";
       return item;
     });
   }
@@ -350,26 +352,47 @@ function activate(context) {
     vscode.window.registerTreeDataProvider("frootai.glossary", new GlossaryProvider());
   }
 
-  // ── Command: Open Solution Play (standalone: opens webview or website) ──
+  // ── Command: Open Solution Play (action picker) ──
   context.subscriptions.push(
     vscode.commands.registerCommand("frootai.openSolutionPlay", async (play) => {
-      // Try local first
-      if (root) {
-        const readmePath = path.join(root, "solution-plays", play.dir, "README.md");
-        if (fs.existsSync(readmePath)) {
-          const content = fs.readFileSync(readmePath, "utf-8");
-          createModuleWebview(context, play.dir, `${play.icon} ${play.name}`, content);
-          return;
+      // Show action picker
+      const action = await vscode.window.showQuickPick([
+        { label: "$(book) Read Documentation", description: "View solution play README in rich panel", value: "read" },
+        { label: "$(tools) Init DevKit", description: ".github Agentic OS (19 files) + agent.md + MCP", value: "devkit" },
+        { label: "$(settings-gear) Init TuneKit", description: "config/*.json + infra/main.bicep + evaluation/", value: "tunekit" },
+        { label: "$(shield) Init Hooks", description: "guardrails.json (preToolUse policy gates)", value: "hooks" },
+        { label: "$(terminal) Init Prompts", description: "4 slash commands (/deploy, /test, /review, /evaluate)", value: "prompts" },
+        { label: "$(github) Open on GitHub", description: `github.com/.../solution-plays/${play.dir}`, value: "github" },
+      ], { placeHolder: `${play.icon} ${play.name} — What would you like to do?` });
+
+      if (!action) return;
+
+      if (action.value === "read") {
+        // Read documentation
+        if (root) {
+          const readmePath = path.join(root, "solution-plays", play.dir, "README.md");
+          if (fs.existsSync(readmePath)) {
+            createModuleWebview(context, play.dir, `${play.icon} ${play.name}`, fs.readFileSync(readmePath, "utf-8"));
+            return;
+          }
         }
-      }
-      // Standalone: try downloading from GitHub
-      try {
-        await vscode.window.withProgress({ location: vscode.ProgressLocation.Notification, title: `Loading ${play.name}...` }, async () => {
-          const content = await downloadFromGitHub(`solution-plays/${play.dir}/README.md`);
-          createModuleWebview(context, play.dir, `${play.icon} ${play.name}`, content);
-        });
-      } catch {
-        // Final fallback: open on website
+        try {
+          await vscode.window.withProgress({ location: vscode.ProgressLocation.Notification, title: `Loading ${play.name}...` }, async () => {
+            const content = await downloadFromGitHub(`solution-plays/${play.dir}/README.md`);
+            createModuleWebview(context, play.dir, `${play.icon} ${play.name}`, content);
+          });
+        } catch {
+          vscode.env.openExternal(vscode.Uri.parse(`https://github.com/gitpavleenbali/frootai/tree/main/solution-plays/${play.dir}`));
+        }
+      } else if (action.value === "devkit") {
+        vscode.commands.executeCommand("frootai.initDevKit");
+      } else if (action.value === "tunekit") {
+        vscode.commands.executeCommand("frootai.initTuneKit");
+      } else if (action.value === "hooks") {
+        vscode.commands.executeCommand("frootai.initHooks");
+      } else if (action.value === "prompts") {
+        vscode.commands.executeCommand("frootai.initPrompts");
+      } else if (action.value === "github") {
         vscode.env.openExternal(vscode.Uri.parse(`https://github.com/gitpavleenbali/frootai/tree/main/solution-plays/${play.dir}`));
       }
     })
