@@ -129,8 +129,9 @@ const config: Config = {
         },
         {
           to: "/chatbot",
-          label: "FAI Assistant",
+          label: "✨ FAI Agent",
           position: "right",
+          className: "navbar__item--agent-glow",
         },
         {
           href: "https://github.com/gitpavleenbali/frootai",

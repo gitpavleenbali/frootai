@@ -119,10 +119,7 @@ export default function FrootAIPage(): JSX.Element {
               { to: "/mcp-tooling", icon: "📦", title: "MCP Server (npm)", sub: "16 tools for your agent", color: "#10b981" },
               { to: "/marketplace", icon: "🏪", title: "Plugin Marketplace", sub: "Discover & share plugins", color: "#ec4899" },
               { to: "/partners", icon: "🤝", title: "Partner Integrations", sub: "ServiceNow, Salesforce, SAP", color: "#06b6d4" },
-              { to: "/chatbot", icon: "🤖", title: "AI Assistant", sub: "Ask which play to use", color: "#00C853" },
               { to: "/packages", icon: "🧩", title: "FROOT Packages", sub: "Downloadable LEGO blocks", color: "#8b5cf6" },
-
-              { to: "/setup-guide", icon: "📚", title: "Setup Guide", sub: "Get started in 5 minutes", color: "#f97316" },
             ].map((card) => (
               <Link key={card.title} to={card.to} className={styles.glowCard} style={{ "--glow-color": card.color } as React.CSSProperties}>
                 <div style={{ fontSize: "1.8rem", marginBottom: "4px" }}>{card.icon}</div>
@@ -130,8 +127,8 @@ export default function FrootAIPage(): JSX.Element {
                 <div style={{ fontSize: "0.72rem", color: card.color }}>{card.sub}</div>
               </Link>
             ))}
-            {/* Open Source tile */}
-            <Link to="https://github.com/gitpavleenbali/frootai" className={styles.glowCard} style={{ "--glow-color": "#00C853" } as React.CSSProperties}>
+            {/* Open Source tile → links to /enterprise */}
+            <Link to="/enterprise" className={styles.glowCard} style={{ "--glow-color": "#00C853" } as React.CSSProperties}>
               <div style={{ fontSize: "1.8rem", marginBottom: "4px" }}>🌱</div>
               <div style={{ fontWeight: 700, fontSize: "0.85rem" }}>100% Open Source</div>
               <div style={{ fontSize: "0.72rem", color: "#00C853" }}>MIT License — Star on GitHub</div>
@@ -189,15 +186,14 @@ export default function FrootAIPage(): JSX.Element {
             </p>
             <div style={{ display: "flex", gap: "10px", justifyContent: "center", flexWrap: "wrap", padding: "6px 0" }}>
               {[
-                { label: "🎓 AI Knowledge Hub", to: "/docs/", color: "#f59e0b" },
-                { label: "🎯 Solution Plays", to: "/solution-plays", color: "#7c3aed" },
-                { label: "⚙️ Solution Configurator", to: "/configurator", color: "#10b981" },
-                { label: "🤖 AI Assistant", to: "/chatbot", color: "#00C853" },
-                { label: "🤝 Partners", to: "/partners", color: "#06b6d4" },
-                { label: "🏪 Marketplace", to: "/marketplace", color: "#ec4899" },
-                { label: "🎓 Learn & Certify", to: "/enterprise", color: "#f97316" },
-                { label: "📦 Packages", to: "/packages", color: "#6366f1" },
-                { label: "⭐ Star on GitHub", to: "https://github.com/gitpavleenbali/frootai", color: "#f59e0b" },
+                { label: "📚 FAI Learning Hub", to: "/enterprise", color: "#f59e0b" },
+                { label: "🔗 Ecosystem Overview", to: "/ecosystem", color: "#0ea5e9" },
+                { label: "💻 VS Code Extension", to: "/vscode-extension", color: "#6366f1" },
+                { label: "🔌 MCP Server", to: "/mcp-tooling", color: "#10b981" },
+                { label: "✨ FAI Agent", to: "/chatbot", color: "#f59e0b" },
+                { label: "🌱 Open Source Community", to: "/enterprise", color: "#00C853" },
+                { label: "🛠️ Developer Center", to: "/dev-hub", color: "#7c3aed" },
+                { label: "⭐ Star on GitHub", to: "https://github.com/gitpavleenbali/frootai", color: "#eab308" },
               ].map((link) => (
                 <Link key={link.label} to={link.to} className={styles.glowPill} style={{ "--pill-color": link.color } as React.CSSProperties}
                   onClick={() => setTimeout(() => window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior }), 100)}>

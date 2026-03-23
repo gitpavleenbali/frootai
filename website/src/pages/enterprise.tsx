@@ -8,6 +8,12 @@ export default function EnterprisePage(): JSX.Element {
     <Layout title="Open Source Community + FAI Learning Hub" description="FrootAI is open source, free forever. Learn, build, and grow together.">
       <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "40px 24px 80px" }}>
 
+        <div style={{ textAlign: "center", marginBottom: "12px" }}>
+          <Link href="https://github.com/gitpavleenbali/frootai" style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "6px 16px", borderRadius: "20px", background: "rgba(234, 179, 8, 0.1)", border: "1px solid rgba(234, 179, 8, 0.3)", fontSize: "0.75rem", color: "#eab308", fontWeight: 600, textDecoration: "none" }}>
+            Star on GitHub
+          </Link>
+        </div>
+
         <div style={{ textAlign: "center", marginBottom: "48px" }}>
           <h1 style={{ fontSize: "2rem", fontWeight: 800 }}>Open Source Community</h1>
           <p style={{ fontSize: "0.95rem", color: "var(--ifm-color-emphasis-500)", maxWidth: "640px", margin: "0 auto" }}>
