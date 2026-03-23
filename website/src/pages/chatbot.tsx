@@ -128,10 +128,13 @@ export default function ChatbotPage(): JSX.Element {
 
   return (
     <Layout title="FAI Agent - FrootAI" description="AI-powered architecture guide. Grounded in 20 solution plays, 16 MCP tools, 18 knowledge modules. Powered by Azure OpenAI GPT-4.1.">
-      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "48px 24px 80px", width: "100%" }}>
+      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "48px 24px 80px", width: "100%", position: "relative" }}>
+
+        {/* Subtle gold/amber radial glow behind the hero */}
+        <div style={{ position: "absolute", top: "-60px", left: "50%", transform: "translateX(-50%)", width: "700px", height: "400px", background: "radial-gradient(ellipse at 50% 40%, rgba(245,158,11,0.08) 0%, rgba(234,179,8,0.04) 40%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
 
         {/* ═══ HERO HEADER ═══ */}
-        <div style={{ textAlign: "center", marginBottom: "24px" }}>
+        <div style={{ textAlign: "center", marginBottom: "24px", position: "relative", zIndex: 1 }}>
           <div style={{ display: "inline-block", padding: "3px 14px", borderRadius: "20px", background: "linear-gradient(135deg, rgba(245,158,11,0.15), rgba(234,179,8,0.08))", border: "1px solid rgba(245,158,11,0.3)", fontSize: "0.65rem", color: "#f59e0b", fontWeight: 700, letterSpacing: "0.5px", textTransform: "uppercase", marginBottom: "12px" }}>
             Powered by Azure OpenAI GPT-4.1
           </div>
