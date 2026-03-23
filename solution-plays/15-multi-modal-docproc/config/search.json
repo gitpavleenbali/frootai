@@ -1,0 +1,46 @@
+{
+  "_comments": {
+    "purpose": "AI Search retrieval configuration for Multi-Modal Document Processing play",
+    "usage": "Configure search over multi-modal extracted content (text, tables, images)",
+    "docs": "https://learn.microsoft.com/azure/search/search-query-overview"
+  },
+  "search_type": "hybrid",
+  "semantic_configuration": "default",
+  "hybrid_weights": {
+    "keyword_weight": 0.3,
+    "vector_weight": 0.7,
+    "_comment": "Higher vector weight for multi-modal content where semantic understanding is critical"
+  },
+  "vector_search": {
+    "algorithm": "hnsw",
+    "dimensions": 1536,
+    "metric": "cosine",
+    "ef_construction": 400,
+    "ef_search": 500,
+    "m": 4
+  },
+  "multi_modal_search": {
+    "image_search_enabled": true,
+    "image_vector_dimensions": 1024,
+    "cross_modal_reranking": true,
+    "_comment": "Enable image vector search for figure/diagram queries"
+  },
+  "reranking": {
+    "enabled": true,
+    "model": "semantic",
+    "top_k": 40,
+    "final_top_k": 10
+  },
+  "relevance_thresholds": {
+    "min_score": 0.65,
+    "reranker_min_score": 1.8,
+    "_comment": "Slightly lower for multi-modal content where OCR/extraction may affect quality"
+  },
+  "query_settings": {
+    "query_type": "semantic",
+    "query_language": "en-us",
+    "speller": "lexicon",
+    "answers": "extractive|count-3",
+    "captions": "extractive|highlight-true"
+  }
+}

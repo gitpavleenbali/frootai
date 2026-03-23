@@ -1,0 +1,74 @@
+{
+  "_comments": {
+    "purpose": "Document chunking configuration for Multi-Modal Document Processing play",
+    "usage": "Configure how multi-modal documents (PDF, images, forms) are split before indexing",
+    "docs": "https://learn.microsoft.com/azure/ai-services/document-intelligence/overview"
+  },
+  "strategy": "layout",
+  "chunk_size": 512,
+  "chunk_overlap": 128,
+  "max_chunk_size": 1024,
+  "separators": ["\n## ", "\n### ", "\n\n", "\n", ". ", " "],
+  "encoding": "cl100k_base",
+  "document_types": {
+    "pdf": {
+      "strategy": "layout",
+      "use_ocr": true,
+      "extract_tables": true,
+      "extract_figures": true,
+      "extract_barcodes": true,
+      "page_by_page": false
+    },
+    "images": {
+      "strategy": "ocr",
+      "model": "prebuilt-read",
+      "language": "en",
+      "supported_formats": ["jpg", "png", "tiff", "bmp", "heif"]
+    },
+    "forms": {
+      "strategy": "layout",
+      "model": "prebuilt-document",
+      "extract_key_value_pairs": true,
+      "extract_selection_marks": true
+    },
+    "invoices": {
+      "strategy": "prebuilt",
+      "model": "prebuilt-invoice",
+      "extract_line_items": true
+    },
+    "receipts": {
+      "strategy": "prebuilt",
+      "model": "prebuilt-receipt"
+    }
+  },
+  "multi_modal_settings": {
+    "image_embedding": {
+      "enabled": true,
+      "model": "azure-ai-vision",
+      "dimensions": 1024
+    },
+    "table_extraction": {
+      "format": "markdown",
+      "include_merged_cells": true
+    },
+    "figure_extraction": {
+      "enabled": true,
+      "include_captions": true,
+      "embed_as_image": true
+    }
+  },
+  "metadata": {
+    "include_page_number": true,
+    "include_section_title": true,
+    "include_source_file": true,
+    "include_confidence_score": true,
+    "include_modality": true
+  },
+  "preprocessing": {
+    "remove_headers_footers": true,
+    "normalize_whitespace": true,
+    "remove_duplicate_chunks": true,
+    "deskew_images": true,
+    "min_chunk_length": 50
+  }
+}

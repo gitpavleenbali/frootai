@@ -1,0 +1,46 @@
+{
+  "_comments": {
+    "purpose": "AI Search retrieval configuration for AI Search Portal play",
+    "usage": "Configure hybrid search weights, reranking, and relevance thresholds",
+    "docs": "https://learn.microsoft.com/azure/search/search-query-overview"
+  },
+  "search_type": "hybrid",
+  "semantic_configuration": "default",
+  "hybrid_weights": {
+    "keyword_weight": 0.3,
+    "vector_weight": 0.7,
+    "_comment": "Higher vector weight for semantic understanding; adjust based on domain"
+  },
+  "vector_search": {
+    "algorithm": "hnsw",
+    "dimensions": 1536,
+    "metric": "cosine",
+    "ef_construction": 400,
+    "ef_search": 500,
+    "m": 4
+  },
+  "reranking": {
+    "enabled": true,
+    "model": "semantic",
+    "top_k": 50,
+    "final_top_k": 10
+  },
+  "relevance_thresholds": {
+    "min_score": 0.7,
+    "reranker_min_score": 2.0,
+    "_comment": "Documents below these thresholds are filtered out"
+  },
+  "query_settings": {
+    "query_type": "semantic",
+    "query_language": "en-us",
+    "speller": "lexicon",
+    "answers": "extractive|count-3",
+    "captions": "extractive|highlight-true"
+  },
+  "filters": {
+    "date_range_days": null,
+    "categories": [],
+    "security_trimming": true,
+    "_comment": "Set date_range_days to limit results to recent docs, categories to filter by metadata"
+  }
+}

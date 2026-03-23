@@ -1,0 +1,40 @@
+{
+  "_comments": {
+    "purpose": "AI Search retrieval configuration for Document Intelligence play",
+    "usage": "Configure search over extracted document content",
+    "docs": "https://learn.microsoft.com/azure/search/search-query-overview"
+  },
+  "search_type": "hybrid",
+  "semantic_configuration": "default",
+  "hybrid_weights": {
+    "keyword_weight": 0.4,
+    "vector_weight": 0.6,
+    "_comment": "Balanced weights — document intelligence content benefits from keyword matching"
+  },
+  "vector_search": {
+    "algorithm": "hnsw",
+    "dimensions": 1536,
+    "metric": "cosine",
+    "ef_construction": 400,
+    "ef_search": 500,
+    "m": 4
+  },
+  "reranking": {
+    "enabled": true,
+    "model": "semantic",
+    "top_k": 30,
+    "final_top_k": 10
+  },
+  "relevance_thresholds": {
+    "min_score": 0.65,
+    "reranker_min_score": 1.8,
+    "_comment": "Slightly lower thresholds for extracted document content (OCR may reduce quality)"
+  },
+  "query_settings": {
+    "query_type": "semantic",
+    "query_language": "en-us",
+    "speller": "lexicon",
+    "answers": "extractive|count-3",
+    "captions": "extractive|highlight-true"
+  }
+}

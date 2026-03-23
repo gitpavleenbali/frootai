@@ -1,0 +1,49 @@
+{
+  "_comments": {
+    "purpose": "Document chunking configuration for Document Intelligence play",
+    "usage": "Configure how documents are split before indexing/embedding",
+    "docs": "https://learn.microsoft.com/azure/ai-services/document-intelligence/overview"
+  },
+  "strategy": "semantic",
+  "chunk_size": 512,
+  "chunk_overlap": 128,
+  "max_chunk_size": 1024,
+  "separators": ["\n## ", "\n### ", "\n\n", "\n", ". ", " "],
+  "encoding": "cl100k_base",
+  "document_types": {
+    "pdf": {
+      "strategy": "layout",
+      "use_ocr": true,
+      "extract_tables": true,
+      "extract_figures": true,
+      "page_by_page": false
+    },
+    "docx": {
+      "strategy": "paragraph",
+      "preserve_headings": true,
+      "extract_tables": true
+    },
+    "images": {
+      "strategy": "ocr",
+      "model": "prebuilt-read",
+      "language": "en"
+    },
+    "forms": {
+      "strategy": "layout",
+      "model": "prebuilt-document",
+      "extract_key_value_pairs": true
+    }
+  },
+  "metadata": {
+    "include_page_number": true,
+    "include_section_title": true,
+    "include_source_file": true,
+    "include_confidence_score": true
+  },
+  "preprocessing": {
+    "remove_headers_footers": true,
+    "normalize_whitespace": true,
+    "remove_duplicate_chunks": true,
+    "min_chunk_length": 50
+  }
+}

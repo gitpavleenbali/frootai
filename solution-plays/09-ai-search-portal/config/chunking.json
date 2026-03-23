@@ -1,0 +1,53 @@
+{
+  "_comments": {
+    "purpose": "Document chunking configuration for AI Search Portal play",
+    "usage": "Configure how documents are split before indexing into AI Search",
+    "docs": "https://learn.microsoft.com/azure/search/search-how-to-chunk-documents"
+  },
+  "strategy": "semantic",
+  "chunk_size": 512,
+  "chunk_overlap": 128,
+  "max_chunk_size": 1024,
+  "separators": ["\n## ", "\n### ", "\n\n", "\n", ". ", " "],
+  "encoding": "cl100k_base",
+  "document_types": {
+    "pdf": {
+      "strategy": "layout",
+      "use_ocr": true,
+      "extract_tables": true,
+      "page_by_page": false
+    },
+    "docx": {
+      "strategy": "paragraph",
+      "preserve_headings": true,
+      "extract_tables": true
+    },
+    "html": {
+      "strategy": "semantic",
+      "strip_tags": true,
+      "preserve_links": false
+    },
+    "markdown": {
+      "strategy": "heading",
+      "split_on_headings": true
+    }
+  },
+  "indexing": {
+    "batch_size": 100,
+    "embedding_model": "text-embedding-3-large",
+    "embedding_dimensions": 1536,
+    "parallel_workers": 4
+  },
+  "metadata": {
+    "include_page_number": true,
+    "include_section_title": true,
+    "include_source_file": true,
+    "include_chunk_index": true
+  },
+  "preprocessing": {
+    "remove_headers_footers": true,
+    "normalize_whitespace": true,
+    "remove_duplicate_chunks": true,
+    "min_chunk_length": 50
+  }
+}
