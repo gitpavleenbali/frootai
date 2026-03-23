@@ -120,6 +120,8 @@ export default function FrootAIPage(): JSX.Element {
               { to: "/marketplace", icon: "🏪", title: "Plugin Marketplace", sub: "Discover & share plugins", color: "#ec4899" },
               { to: "/partners", icon: "🤝", title: "Partner Integrations", sub: "ServiceNow, Salesforce, SAP", color: "#06b6d4" },
               { to: "/packages", icon: "🧩", title: "FROOT Packages", sub: "Downloadable LEGO blocks", color: "#8b5cf6" },
+              { to: "/learning-hub", icon: "📚", title: "FAI Learning Hub", sub: "18 modules · Glossary · Workshops", color: "#f97316" },
+              { to: "/dev-hub", icon: "🛠️", title: "FAI Developer Hub", sub: "API ref · Changelog · Guides", color: "#0ea5e9" },
             ].map((card) => (
               <Link key={card.title} to={card.to} className={styles.glowCard} style={{ "--glow-color": card.color } as React.CSSProperties}>
                 <div style={{ fontSize: "1.8rem", marginBottom: "4px" }}>{card.icon}</div>
@@ -186,13 +188,19 @@ export default function FrootAIPage(): JSX.Element {
             </p>
             <div style={{ display: "flex", gap: "10px", justifyContent: "center", flexWrap: "wrap", padding: "6px 0" }}>
               {[
-                { label: "📚 FAI Learning Hub", to: "/learning-hub", color: "#f59e0b" },
+                { label: "⚙️ Solution Configurator", to: "/configurator", color: "#f59e0b" },
+                { label: "🎯 Solution Plays", to: "/solution-plays", color: "#7c3aed" },
+                { label: "🧩 FROOT Packages", to: "/packages", color: "#8b5cf6" },
                 { label: "🔗 Ecosystem Overview", to: "/ecosystem", color: "#0ea5e9" },
                 { label: "💻 VS Code Extension", to: "/vscode-extension", color: "#6366f1" },
                 { label: "🔌 MCP Server", to: "/mcp-tooling", color: "#10b981" },
-                { label: "✨ FAI Agent", to: "/chatbot", color: "#f59e0b" },
+                { label: "📖 Setup Guide", to: "/setup-guide", color: "#14b8a6" },
+                { label: "🏪 Plugin Marketplace", to: "/marketplace", color: "#ec4899" },
                 { label: "🌱 Open Source Community", to: "/community", color: "#00C853" },
-                { label: "🛠️ Developer Center", to: "/dev-hub", color: "#7c3aed" },
+                { label: "📈 FrootAI Adoption", to: "/adoption", color: "#f43f5e" },
+                { label: "📚 FAI Learning Hub", to: "/learning-hub", color: "#f97316" },
+                { label: "🛠️ FAI Developer Hub", to: "/dev-hub", color: "#0ea5e9" },
+                { label: "✨ FAI Agent", to: "/chatbot", color: "#f59e0b" },
                 { label: "⭐ Star on GitHub", to: "https://github.com/gitpavleenbali/frootai", color: "#eab308" },
               ].map((link) => (
                 <Link key={link.label} to={link.to} className={styles.glowPill} style={{ "--pill-color": link.color } as React.CSSProperties}

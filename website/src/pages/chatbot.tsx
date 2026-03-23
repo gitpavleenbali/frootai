@@ -68,7 +68,7 @@ export default function ChatbotPage(): JSX.Element {
 
   return (
     <Layout title="FAI Agent - FrootAI" description="AI-powered architecture guide. Grounded in 20 solution plays, 16 MCP tools, 18 knowledge modules. Powered by Azure OpenAI GPT-4.1.">
-      <div style={{ maxWidth: "800px", margin: "0 auto", padding: "32px 20px 60px" }}>
+      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "48px 24px 80px", width: "100%" }}>
 
         <div style={{ textAlign: "center", marginBottom: "20px" }}>
           <div style={{ display: "inline-block", padding: "3px 14px", borderRadius: "20px", background: "linear-gradient(135deg, rgba(245,158,11,0.15), rgba(234,179,8,0.08))", border: "1px solid rgba(245,158,11,0.3)", fontSize: "0.65rem", color: "#f59e0b", fontWeight: 700, letterSpacing: "0.5px", textTransform: "uppercase", marginBottom: "8px" }}>
@@ -92,7 +92,7 @@ export default function ChatbotPage(): JSX.Element {
             {loading && (
               <div style={{ display: "flex", justifyContent: "flex-start", marginBottom: "14px" }}>
                 <div style={{ padding: "12px 16px", borderRadius: "14px 14px 14px 4px", background: "rgba(99,102,241,0.08)", border: "1px solid rgba(99,102,241,0.15)", fontSize: "0.84rem" }}>
-                  <span style={{ display: "inline-block", animation: "pulse 1.5s ease-in-out infinite" }}>Thinking with GPT-4.1...</span>
+                  <span style={{ display: "inline-block", animation: "pulse 1.5s ease-in-out infinite" }}>FAI Agent processing...</span>
                 </div>
               </div>
             )}
