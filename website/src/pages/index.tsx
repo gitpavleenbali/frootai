@@ -38,9 +38,11 @@ const outcomes = [
   { icon: "🚀", title: "New to AI?", desc: "Build AI literacy from zero" },
   { icon: "🤖", title: "Build Agents", desc: "MCP, SK, Agent Framework" },
   { icon: "🏗️", title: "AI Infra Expert", desc: "Landing zones, GPU, hosting" },
-  { icon: "🎛️", title: "Fine-Tuning Pro", desc: "LoRA, evaluation, MLOps" },
+  { icon: "🏛️", title: "Solution Accelerator", desc: "Azure Verified Modules + Bicep" },
+  { icon: "🎯", title: "Full-Stack Agentic", desc: ".github Agentic OS · 7 primitives" },
+  { icon: "📊", title: "AI Cost Optimization", desc: "FinOps, caching, model selection" },
+  { icon: "🌛", title: "Fine-Tuning Pro", desc: "LoRA, evaluation, MLOps" },
   { icon: "🛡️", title: "Reliable AI", desc: "Determinism, guardrails, safety" },
-  { icon: "🔗", title: "Bridge the Gap", desc: "Infra ⇄ Platform ⇄ Apps" },
 ];
 
 // ─── Components ────────────────────────────────────────────────────
@@ -118,10 +120,9 @@ export default function FrootAIPage(): JSX.Element {
               { to: "/marketplace", icon: "🏪", title: "Plugin Marketplace", sub: "Discover & share plugins", color: "#ec4899" },
               { to: "/partners", icon: "🤝", title: "Partner Integrations", sub: "ServiceNow, Salesforce, SAP", color: "#06b6d4" },
               { to: "/chatbot", icon: "🤖", title: "AI Assistant", sub: "Ask which play to use", color: "#00C853" },
-              { to: "/enterprise", icon: "🎓", title: "Learn & Certify", sub: "Workshops & certification", color: "#f97316" },
               { to: "/packages", icon: "🧩", title: "FROOT Packages", sub: "Downloadable LEGO blocks", color: "#8b5cf6" },
-              { to: "/docs/", icon: "📚", title: "AI Knowledge Hub", sub: "18 modules · 200+ terms", color: "#eab308" },
               { to: "/ecosystem", icon: "🔗", title: "Ecosystem Overview", sub: "Full platform map", color: "#0ea5e9" },
+              { to: "/setup-guide", icon: "📚", title: "Setup Guide", sub: "Get started in 5 minutes", color: "#f97316" },
             ].map((card) => (
               <Link key={card.title} to={card.to} className={styles.glowCard} style={{ "--glow-color": card.color } as React.CSSProperties}>
                 <div style={{ fontSize: "1.8rem", marginBottom: "4px" }}>{card.icon}</div>
@@ -143,7 +144,7 @@ export default function FrootAIPage(): JSX.Element {
           {[
             { num: "18+", label: "Modules", color: "#10b981" },
             { num: "20", label: "Solution Plays", color: "#06b6d4" },
-            { num: "13", label: "MCP Tools", color: "#6366f1" },
+            { num: "16", label: "MCP Tools", color: "#6366f1" },
             { num: "200+", label: "AI Terms", color: "#7c3aed" },
           ].map((s) => (
             <div key={s.label} style={{ textAlign: "center" }}>

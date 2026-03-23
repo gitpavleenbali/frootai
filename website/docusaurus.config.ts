@@ -105,8 +105,12 @@ const config: Config = {
             { to: "/partners", label: "🤝 Partner Integrations" },
             { to: "/marketplace", label: "🏪 Plugin Marketplace" },
             { to: "/enterprise", label: "🌱 Open Source Community" },
-            { to: "/enterprise", label: "🎓 FAI Learn Hub" },
           ],
+        },
+        {
+          to: "/enterprise",
+          label: "FAI Learning Hub",
+          position: "left",
         },
         {
           to: "/chatbot",

@@ -115,7 +115,6 @@ export default function EcosystemPage(): JSX.Element {
               { to: "/chatbot", icon: "🤖", title: "AI Assistant", sub: "Ask which play to use", color: "#00C853" },
               { to: "/partners", icon: "🤝", title: "Partner Integrations", sub: "ServiceNow, Salesforce, SAP MCP", color: "#06b6d4" },
               { to: "/marketplace", icon: "🏪", title: "Plugin Marketplace", sub: "Discover & share .github plugins", color: "#ec4899" },
-              { to: "/enterprise", icon: "🎓", title: "Learn & Certify", sub: "Workshops + certification", color: "#f97316" },
             ].map((card) => (
               <Link key={card.title} to={card.to} className={styles.glowCard} style={{ "--glow-color": card.color } as React.CSSProperties}>
                 <div style={{ fontSize: "1.5rem", marginBottom: "4px" }}>{card.icon}</div>
