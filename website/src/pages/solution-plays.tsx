@@ -130,7 +130,7 @@ export default function SolutionPlaysPage(): JSX.Element {
         <div style={{ textAlign: "center", marginBottom: "32px" }}>
           <h1 style={{ fontSize: "2rem", fontWeight: 800 }}>🎯 Solution Plays</h1>
           <p style={{ fontSize: "0.92rem", color: "var(--ifm-color-emphasis-500)", maxWidth: "660px", margin: "0 auto 16px" }}>
-            Each play ships with the full <strong>.github Agentic OS</strong> (19 files, 4 layers), <strong>🛠️ DevKit</strong> (empower your coding agent), and <strong>🎛️ TuneKit</strong> (fine-tune AI for production). LEGO blocks that compose into complete solutions.
+            Each play ships with the full <strong>.github Agentic OS</strong> (19 files, 4 layers), <strong>🛠️ DevKit</strong> (empower your coding agent), <strong>🎛️ TuneKit</strong> (fine-tune AI for production), and <strong>plugin.json</strong> (Layer 4 distribution manifest). LEGO blocks that compose into complete solutions.
           </p>
         </div>
 

@@ -115,7 +115,7 @@ graph TB
 | Component | Who Uses It | What It Does |
 |-----------|------------|-------------|
 | **VS Code Extension** | You (human) | Browse plays, search terms, init DevKit from sidebar |
-| **MCP Server (npm)** | Your AI agent | Copilot/Claude calls 6 tools for architecture answers |
+| **MCP Server (npm)** | Your AI agent | Copilot/Claude calls 10 tools (6 static + 4 live) |
 | **DevKit (.github/)** | Your co-coder | 7 primitives: instructions, prompts, agents, skills, hooks, workflows |
 | **TuneKit (config/)** | Platform team | Pre-tuned AI configs + evaluation pipeline |
 
@@ -148,9 +148,10 @@ Every solution play ships with the full GitHub Copilot agentic OS — 4 layers, 
 └── workflows/                        # Layer 3: AI-driven CI
     ├── ai-review.md
     └── ai-deploy.md
+plugin.json                              # Layer 4: Distribution manifest
 ```
 
-**19 files × 20 plays = 380 agentic OS files shipped.**
+**19 .github files + plugin.json × 20 plays = 400 agentic OS files shipped.**
 
 ---
 
@@ -170,7 +171,7 @@ graph TB
 
 | Layer | Modules | What You Learn |
 |-------|---------|---------------|
-| 🌱 **F — Foundations** | F1, F2, F3 | Tokens, transformers, model selection, 200+ AI terms |
+| 🌱 **F — Foundations** | F1, F2, F3, F4 | Tokens, transformers, model selection, 200+ AI terms, .github Agentic OS |
 | 🪵 **R — Reasoning** | R1, R2, R3 | Prompts, RAG, grounding, deterministic AI |
 | 🌿 **O — Orchestration** | O1, O2, O3 | Semantic Kernel, agents, MCP, tools |
 | 🍃 **O — Operations** | O4, O5, O6 | Azure AI Foundry, GPU infra, Copilot ecosystem |
@@ -178,16 +179,27 @@ graph TB
 
 ---
 
-## MCP Server — 6 Tools
+## MCP Server — 10 Tools (v2)
+
+### Static Tools (bundled knowledge)
 
 | Tool | What It Does |
 |------|-------------|
 | `list_modules` | Browse all 18 modules by FROOT layer |
-| `get_module` | Read any module content (F1–T3) |
+| `get_module` | Read any module content (F1–T3, F4) |
 | `lookup_term` | Look up any of 200+ AI/ML terms |
 | `search_knowledge` | Full-text search across all modules |
 | `get_architecture_pattern` | 7 pre-built decision guides |
 | `get_froot_overview` | Complete FROOT framework summary |
+
+### Live Tools (network-enabled, graceful fallback)
+
+| Tool | What It Does |
+|------|-------------|
+| `fetch_azure_docs` | Search Microsoft Learn for Azure service docs |
+| `fetch_external_mcp` | Find MCP servers from public registries |
+| `list_community_plays` | List 20 solution plays from GitHub |
+| `get_github_agentic_os` | .github agentic OS guide (7 primitives) |
 
 [📖 Full MCP documentation →](./mcp-server/README.md) · [📖 Setup Guide →](https://gitpavleenbali.github.io/frootai/setup-guide)
 
