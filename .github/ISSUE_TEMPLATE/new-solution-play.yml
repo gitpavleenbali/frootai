@@ -1,0 +1,61 @@
+name: "🎯 New Solution Play Proposal"
+description: Propose a new FrootAI solution play
+title: "[Play XX] "
+labels: ["solution-play", "community"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Propose a New Solution Play
+        Thank you for contributing! Each play needs DevKit (.github Agentic OS) + TuneKit (AI config).
+  - type: input
+    id: play-name
+    attributes:
+      label: Solution Play Name
+      description: "e.g., 'Real-Time Translation Pipeline'"
+      placeholder: "XX-your-play-name"
+    validations:
+      required: true
+  - type: dropdown
+    id: complexity
+    attributes:
+      label: Complexity
+      options:
+        - Low (1-2 Azure services)
+        - Medium (3-5 Azure services)
+        - High (5+ Azure services, multi-region)
+    validations:
+      required: true
+  - type: textarea
+    id: azure-services
+    attributes:
+      label: Azure Services Used
+      description: List the Azure services this play deploys
+      placeholder: |
+        - Azure OpenAI
+        - Azure AI Search
+        - Azure Container Apps
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: What Problem Does It Solve?
+      description: Who uses it and why? (target persona + use case)
+    validations:
+      required: true
+  - type: textarea
+    id: ai-config
+    attributes:
+      label: Key AI Configuration
+      description: "What AI parameters need tuning? (e.g., temperature, chunk size, model selection)"
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: "I will provide:"
+      options:
+        - label: ".github Agentic OS (19 files)"
+        - label: "agent.md (1500+ bytes, production-quality)"
+        - label: "config/*.json with _comments"
+        - label: "infra/main.bicep + parameters.json"
+        - label: "evaluation/test-set.jsonl + eval.py"

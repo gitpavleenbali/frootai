@@ -258,16 +258,17 @@ frootai/
 │   ├── src/extension.js     13 commands, standalone engine, cached downloads
 │   ├── knowledge.json       Bundled knowledge (682 KB)
 │   └── package.json         Marketplace config
-├── website/               ← Docusaurus site
+├── website/               ← Docusaurus site (13 pages)
+│   ├── src/pages/           chatbot, configurator, partners, marketplace, enterprise + 8 core
 │   ├── docusaurus.config.ts
-│   ├── sidebars.ts
-│   └── src/
+│   └── sidebars.ts
+├── infra-registry/        ← Reusable Bicep modules (coming soon)
+├── workshops/             ← Workshop materials for conference talks
 ├── .github/workflows/     ← CI/CD pipelines
 │   ├── deploy.yml           Auto-deploy website to GitHub Pages
-│   └── validate-plays.yml   Matrix CI: validates all 20 plays (.github, DevKit, TuneKit, JSON)
+│   └── validate-plays.yml   Matrix CI: validates all 20 plays
+├── .github/ISSUE_TEMPLATE/ ← Issue templates for community contributions
 ├── marketplace/           ← Marketplace listing metadata
-│   ├── azure-listing.json   Azure Marketplace prep
-│   └── github-listing.json  GitHub Marketplace prep
 ├── CONTRIBUTING.md        ← How to contribute (full .github Agentic OS guide)
 └── .vscode/mcp.json       ← VS Code auto-connects MCP
 ```
@@ -285,6 +286,18 @@ frootai/
 | AI agents hallucinate in production | 🍎 Transformation layer — determinism, safety, production patterns |
 | Teams work in silos | 🔗 FrootAI is the open glue — shared vocabulary across teams |
 | Agents burn tokens searching the web | 🔌 MCP server — curated, pre-written, 90% cost reduction |
+
+---
+
+## 🌐 Platform Pages
+
+| Page | URL | What It Does |
+|------|-----|-------------|
+| **AI Assistant** | [/chatbot](https://gitpavleenbali.github.io/frootai/chatbot) | Ask which play to use, compare models, estimate costs |
+| **Configurator** | [/configurator](https://gitpavleenbali.github.io/frootai/configurator) | 3-question wizard → personalized play recommendation |
+| **Partners** | [/partners](https://gitpavleenbali.github.io/frootai/partners) | MCP integrations: ServiceNow, Salesforce, SAP, Datadog |
+| **Marketplace** | [/marketplace](https://gitpavleenbali.github.io/frootai/marketplace) | Decentralized plugin marketplace for .github Agentic OS |
+| **Enterprise** | [/enterprise](https://gitpavleenbali.github.io/frootai/enterprise) | Enterprise support + FrootAI Certified Architect program |
 
 ---
 

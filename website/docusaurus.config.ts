@@ -109,6 +109,17 @@ const config: Config = {
             { label: "Solution Plays", to: "/solution-plays" },
             { label: "Packages", to: "/packages" },
             { label: "Setup Guide", to: "/setup-guide" },
+            { label: "AI Assistant", to: "/chatbot" },
+            { label: "Configurator", to: "/configurator" },
+          ],
+        },
+        {
+          title: "Ecosystem",
+          items: [
+            { label: "Partner Integrations", to: "/partners" },
+            { label: "Plugin Marketplace", to: "/marketplace" },
+            { label: "Enterprise & Certification", to: "/enterprise" },
+            { label: "Workshops", href: "https://github.com/gitpavleenbali/frootai/tree/main/workshops" },
           ],
         },
         {

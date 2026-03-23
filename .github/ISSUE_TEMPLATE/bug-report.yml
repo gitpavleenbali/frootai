@@ -1,0 +1,33 @@
+name: "🐛 Bug Report"
+description: Report an issue with FrootAI
+labels: ["bug"]
+body:
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      options:
+        - Website
+        - VS Code Extension
+        - MCP Server (npm)
+        - Solution Play
+        - Knowledge Module
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What happened vs what you expected?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      placeholder: "e.g., VS Code Extension 0.9.2, MCP Server 2.2.0"
