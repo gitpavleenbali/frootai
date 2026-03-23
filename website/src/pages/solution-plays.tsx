@@ -21,6 +21,7 @@ const plays = [
     tunekitFiles: ["config/openai.json", "config/guardrails.json", "infra/main.bicep", "evaluation/"],
     guide: "Skeleton ready. DevKit + TuneKit files present. Open in VS Code → co-coder fills implementation." },
   { id: "05", name: "IT Ticket Resolution", icon: "🎫", status: "Skeleton", cx: "Medium", desc: "Auto-classify, route, and resolve IT tickets — Logic Apps + AI Foundry + ServiceNow MCP.", infra: "Logic Apps · Azure OpenAI · ServiceNow MCP · Container Apps", tune: "Classification prompts · routing rules · confidence thresholds", github: "https://github.com/gitpavleenbali/frootai/tree/main/solution-plays/05-it-ticket-resolution",
+    userGuide: "/user-guide-05",
     devkitFiles: ["agent.md", "instructions.md", "copilot-instructions.md", ".vscode/mcp.json", "mcp/index.js", "plugins/"],
     tunekitFiles: ["config/openai.json", "config/guardrails.json", "infra/main.bicep", "evaluation/"],
     guide: "Skeleton ready. DevKit + TuneKit files present. Open in VS Code → co-coder fills implementation." },
@@ -106,6 +107,9 @@ function PlayCard({ play }: { play: typeof plays[0] }): JSX.Element {
           <Link to={play.github} className="glow-btn glow-btn-github">GitHub</Link>
           <Link to={`${play.github}#-devkit--developer-velocity-ecosystem`} className="glow-btn glow-btn-devkit">🛠️ DevKit</Link>
           <Link to={`${play.github}#-tunekit--ai-fine-tuning-ecosystem`} className="glow-btn glow-btn-tunekit">🎛️ TuneKit</Link>
+          {play.userGuide && (
+            <Link to={play.userGuide} className="glow-btn glow-btn-github" style={{ background: "linear-gradient(135deg, #f59e0b, #d97706)" }}>📖 User Guide</Link>
+          )}
         </div>
       </div>
       {/* Expandable user guide */}

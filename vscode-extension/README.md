@@ -5,6 +5,19 @@
 
 ---
 
+## ⚡ NEW: Auto-Chain Agents (Build → Review → Tune)
+
+Run `Ctrl+Shift+P` → **FrootAI: Auto-Chain Agents** to start a guided workflow:
+
+1. **🛠️ Builder Agent** — describe what to build → Copilot generates solution-aware code
+2. **🔍 Reviewer Agent** — auto-reviews for security, quality, Azure best practices
+3. **🎛️ Tuner Agent** — validates TuneKit configs for production readiness
+4. **🚀 Deploy** — optional deployment walkthrough
+
+Each step prompts you to continue to the next. The full `builder → reviewer → tuner` chain in one flow.
+
+---
+
 ## 🚀 Quick Actions (Click or Right-Click)
 
 ### Solution Plays — Click any play → Action Menu appears:

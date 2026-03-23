@@ -887,6 +887,103 @@ function activate(context) {
     })
   );
 
+  // ── Command: Auto-Chain Agents (Build → Review → Tune) ──
+  context.subscriptions.push(
+    vscode.commands.registerCommand("frootai.autoChainAgents", async () => {
+      // Step 1: Ask what to build
+      const task = await vscode.window.showInputBox({
+        prompt: "🛠️ Builder Agent: What would you like to build?",
+        placeHolder: "e.g., Build me an IT ticket classification API using Logic Apps + OpenAI"
+      });
+      if (!task) return;
+
+      // Check if agent.md exists in workspace
+      const wsFolder = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
+      let agentContext = "";
+      if (wsFolder) {
+        const agentPath = path.join(wsFolder, "agent.md");
+        if (fs.existsSync(agentPath)) {
+          agentContext = `\n\nContext from agent.md:\n${fs.readFileSync(agentPath, "utf-8").substring(0, 2000)}`;
+        }
+      }
+
+      // Step 1: BUILD — Send to Copilot Chat
+      const buildPrompt = `🛠️ **BUILDER AGENT** — You are the builder agent for this FrootAI solution play.
+
+TASK: ${task}
+
+RULES:
+- Use values from config/*.json files — never hardcode parameters
+- Use Azure Managed Identity for authentication (no API keys)
+- Include error handling with Application Insights logging
+- Follow the patterns in .github/instructions/*.instructions.md
+- Generate production-quality code with proper comments${agentContext}
+
+Build the complete implementation now.`;
+
+      // Copy to clipboard and open Copilot Chat
+      await vscode.env.clipboard.writeText(buildPrompt);
+      vscode.window.showInformationMessage(
+        "🛠️ Builder prompt copied to clipboard! Paste it in Copilot Chat (Ctrl+Shift+I → Ctrl+V).\n\nWhen done building, click 'Continue to Review' below.",
+        "Continue to Review ➡️"
+      ).then(async (choice) => {
+        if (choice === "Continue to Review ➡️") {
+          // Step 2: REVIEW
+          const reviewPrompt = `🔍 **REVIEWER AGENT** — Review the code just generated.
+
+CHECK:
+□ No hardcoded secrets, API keys, or connection strings
+□ All Azure calls use Managed Identity
+□ User inputs are validated and sanitized
+□ Error handling with retry + exponential backoff
+□ Application Insights logging with correlation IDs
+□ Config values read from config/*.json (not hardcoded)
+□ Temperature ≤ 0.3 for factual responses
+□ Source citations included where applicable
+
+SEVERITY:
+🔴 Critical — must fix before merge
+🟡 Warning — should fix
+🟢 Suggestion — nice to have
+
+Review the code and report findings with severity levels.`;
+
+          await vscode.env.clipboard.writeText(reviewPrompt);
+          vscode.window.showInformationMessage(
+            "🔍 Reviewer prompt copied! Paste in Copilot Chat.\n\nWhen review is done, click 'Continue to Tune' below.",
+            "Continue to Tune ➡️"
+          ).then(async (choice2) => {
+            if (choice2 === "Continue to Tune ➡️") {
+              // Step 3: TUNE
+              const tunePrompt = `🎛️ **TUNER AGENT** — Validate the TuneKit configuration for production readiness.
+
+CHECK:
+□ config/openai.json: temperature ≤ 0.3, max_tokens set, model specified
+□ config/guardrails.json: blocked_topics non-empty, PII filter active
+□ infra/main.bicep: valid, idempotent, all resources tagged
+□ evaluation/test-set.jsonl: has test cases
+□ All secrets in Key Vault references (not in code)
+
+REPORT: Is this solution READY FOR PRODUCTION or does it NEED TUNING?
+If tuning needed, specify exactly which config values to change.`;
+
+              await vscode.env.clipboard.writeText(tunePrompt);
+              vscode.window.showInformationMessage(
+                "🎛️ Tuner prompt copied! Paste in Copilot Chat.\n\n✅ Auto-chain complete: Build → Review → Tune",
+                "🚀 Deploy (/deploy)"
+              ).then((choice3) => {
+                if (choice3) {
+                  vscode.env.clipboard.writeText("Run the /deploy prompt to deploy this solution to Azure. Follow the deploy.prompt.md steps.");
+                  vscode.window.showInformationMessage("🚀 Deploy prompt copied! Paste in Copilot Chat.");
+                }
+              });
+            }
+          });
+        }
+      });
+    })
+  );
+
   // ── Status Bar ──
   const statusBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
   statusBar.text = "$(tree-view-icon) FrootAI";
