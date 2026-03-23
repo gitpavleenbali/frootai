@@ -49,6 +49,7 @@ const FROOT_MAP = {
       F1: { file: "GenAI-Foundations.md", title: "GenAI Foundations" },
       F2: { file: "LLM-Landscape.md", title: "LLM Landscape & Model Selection" },
       F3: { file: "F3-AI-Glossary-AZ.md", title: "AI Glossary A–Z" },
+      F4: { file: "F4-GitHub-Agentic-OS.md", title: ".github Agentic OS — 7 Primitives" },
     },
   },
   R: {

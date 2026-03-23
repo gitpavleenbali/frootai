@@ -9,7 +9,7 @@ const categories = [
   {
     icon: "🌱",
     name: "Foundations",
-    count: 3,
+    count: 4,
     desc: "Tokens, models, vocabulary — the roots of AI literacy",
     color: "#f59e0b",
   },
@@ -80,6 +80,15 @@ const allPackages = [
     docsLink: "/docs/F3-AI-Glossary-AZ",
     githubLink: "https://github.com/gitpavleenbali/frootai/blob/main/docs/F3-AI-Glossary-AZ.md",
     rawLink: "https://raw.githubusercontent.com/gitpavleenbali/frootai/main/docs/F3-AI-Glossary-AZ.md",
+  },
+  {
+    id: "F4", name: ".github Agentic OS — 7 Primitives", category: "Foundations",
+    desc: "The .github folder evolved into a full agentic OS. 7 primitives, 4 layers: instructions, prompts, agents, skills, hooks, workflows, plugins",
+    file: "F4-GitHub-Agentic-OS.md", size: "18 KB", updated: "March 2026",
+    tags: ["foundation", "github", "agentic-os", "copilot", "agents", "skills", "hooks"],
+    docsLink: "/docs/F4-GitHub-Agentic-OS",
+    githubLink: "https://github.com/gitpavleenbali/frootai/blob/main/docs/F4-GitHub-Agentic-OS.md",
+    rawLink: "https://raw.githubusercontent.com/gitpavleenbali/frootai/main/docs/F4-GitHub-Agentic-OS.md",
   },
   // Reasoning
   {
@@ -223,7 +232,7 @@ const allPackages = [
   },
   {
     id: "MCP4", name: "search_knowledge", category: "MCP Tools",
-    desc: "Full-text search across all 17 modules. Returns ranked sections matching your query with module references",
+    desc: "Full-text search across all 18 modules. Returns ranked sections matching your query with module references",
     file: "mcp-server/index.js", size: "MCP Tool", updated: "March 2026",
     tags: ["mcp", "tool", "search", "knowledge"],
     docsLink: "/docs/O3-MCP-Tools-Functions",

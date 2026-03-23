@@ -34,7 +34,7 @@ export default function VSCodeExtensionPage(): JSX.Element {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "12px", marginBottom: "32px" }}>
           {[
             { icon: "📋", title: "Solution Plays", desc: "Browse all 20 plays in the sidebar. Click to open README or folder." },
-            { icon: "📖", title: "FROOT Modules", desc: "17 modules grouped by layer. Click to open and read." },
+            { icon: "📖", title: "FROOT Modules", desc: "18 modules grouped by layer. Click to open and read." },
             { icon: "🔌", title: "MCP Tools", desc: "See all 6 MCP tools at a glance. Know what your agent can do." },
           ].map((f) => (
             <div key={f.title} style={{ padding: "16px", borderRadius: "12px", border: "1px solid var(--ifm-color-emphasis-200)", textAlign: "center" }}>
@@ -50,7 +50,7 @@ export default function VSCodeExtensionPage(): JSX.Element {
         <div style={{ marginBottom: "32px" }}>
           {[
             { cmd: "FrootAI: Look Up AI Term", desc: "Type any AI/ML term → jumps to definition in glossary" },
-            { cmd: "FrootAI: Search Knowledge Base", desc: "Full-text search across all 17 docs → QuickPick results" },
+            { cmd: "FrootAI: Search Knowledge Base", desc: "Full-text search across all 18 docs → QuickPick results" },
             { cmd: "FrootAI: Initialize DevKit", desc: "Select a solution play → copies agent.md, instructions, MCP config to your project" },
             { cmd: "FrootAI: Open Solution Play", desc: "Opens a play's README. Offers to open the full folder" },
             { cmd: "FrootAI: Show Architecture Pattern", desc: "Pick from 7 patterns: RAG, agents, hosting, cost, etc." },

@@ -17,7 +17,7 @@
 | | What | For Whom |
 |---|------|----------|
 | 🎯 | **Solution Plays** — pre-tuned, deployable AI solutions (RAG, agents, landing zones) | Infra & platform engineers |
-| 📖 | **17 knowledge modules** covering AI architecture end-to-end | Cloud Architects, CSAs |
+| 📖 | **18 knowledge modules** covering AI architecture end-to-end | Cloud Architects, CSAs |
 | 🔌 | **MCP Server** — 6 tools, add to any AI agent as a callable skill set | Agent builders, developers |
 | 🔗 | **The open glue** — removes silos between infra, platform, and app teams | Everyone |
 
@@ -182,7 +182,7 @@ graph TB
 
 | Tool | What It Does |
 |------|-------------|
-| `list_modules` | Browse all 17 modules by FROOT layer |
+| `list_modules` | Browse all 18 modules by FROOT layer |
 | `get_module` | Read any module content (F1–T3) |
 | `lookup_term` | Look up any of 200+ AI/ML terms |
 | `search_knowledge` | Full-text search across all modules |
@@ -214,11 +214,11 @@ Pre-tuned, deployable AI solutions — infra + AI config + agent instructions + 
 
 ```
 frootai/
-├── docs/                  ← 17 knowledge modules (markdown)
+├── docs/                  ← 18 knowledge modules (markdown)
 │   ├── README.md           FROOT framework overview
 │   ├── GenAI-Foundations.md  F1
 │   ├── LLM-Landscape.md     F2
-│   ├── ...                   (all 17 modules)
+│   ├── ...                   (all 18 modules)
 │   └── T3-Production-Patterns.md  T3
 ├── mcp-server/            ← MCP server (npm-publishable)
 │   ├── index.js             Server entry point

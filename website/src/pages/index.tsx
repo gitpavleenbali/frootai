@@ -10,6 +10,7 @@ const layers = [
     { id: "F1", name: "GenAI Foundations", link: "/docs/GenAI-Foundations" },
     { id: "F2", name: "LLM Landscape", link: "/docs/LLM-Landscape" },
     { id: "F3", name: "AI Glossary A–Z", link: "/docs/F3-AI-Glossary-AZ" },
+    { id: "F4", name: ".github Agentic OS", link: "/docs/F4-GitHub-Agentic-OS" },
   ]},
   { id: "R", icon: "🪵", title: "Reasoning", color: "#10b981", modules: [
     { id: "R1", name: "Prompt Engineering", link: "/docs/Prompt-Engineering" },
@@ -133,7 +134,7 @@ export default function FrootAIPage(): JSX.Element {
         {/* ═══ 3. STATS ═══ */}
         <div style={{ display: "flex", justifyContent: "center", gap: "32px", padding: "12px 0 20px", flexWrap: "wrap" }}>
           {[
-            { num: "17+", label: "Modules", color: "#10b981" },
+            { num: "18+", label: "Modules", color: "#10b981" },
             { num: "20", label: "Solution Plays", color: "#06b6d4" },
             { num: "6", label: "MCP Tools", color: "#6366f1" },
             { num: "200+", label: "AI Terms", color: "#7c3aed" },
@@ -148,7 +149,7 @@ export default function FrootAIPage(): JSX.Element {
         {/* ═══ 4. FROOT Framework ═══ */}
         <section className={styles.lensSection}>
           <h2 className={styles.sectionTitle}>The FROOT Framework</h2>
-          <p className={styles.sectionSub}>AI Knowledge Hub — 5 layers, 17 modules. Click to expand, then click modules to learn.</p>
+          <p className={styles.sectionSub}>AI Knowledge Hub — 5 layers, 18 modules. Click to expand, then click modules to learn.</p>
           {layers.map((l) => <ExpandableLayer key={l.id} layer={l} />)}
         </section>
 

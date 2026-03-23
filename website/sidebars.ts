@@ -16,6 +16,7 @@ const sidebars: SidebarsConfig = {
             "GenAI-Foundations",
             "LLM-Landscape",
             "F3-AI-Glossary-AZ",
+            "F4-GitHub-Agentic-OS",
           ],
         },
         {

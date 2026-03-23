@@ -5,7 +5,7 @@ import styles from "./index.module.css";
 
 export default function MCPToolingPage(): JSX.Element {
   return (
-    <Layout title="MCP Tooling — FrootAI" description="Add FrootAI to your AI agent. 6 tools, 17 modules, 200+ terms. npx frootai-mcp.">
+    <Layout title="MCP Tooling — FrootAI" description="Add FrootAI to your AI agent. 6 tools, 18 modules, 200+ terms. npx frootai-mcp.">
       <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "40px 24px 80px" }}>
         <div style={{ textAlign: "center", marginBottom: "32px" }}>
           <h1 style={{ fontSize: "2rem", fontWeight: 800 }}>🔌 FrootAI MCP Server</h1>
@@ -80,7 +80,7 @@ export default function MCPToolingPage(): JSX.Element {
         <h2 style={{ fontSize: "1.2rem", fontWeight: 700, textAlign: "center", marginBottom: "16px" }}>Tools Agent Receives</h2>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: "12px", marginBottom: "32px" }}>
           {[
-            { name: "list_modules", desc: "Browse 17 modules by FROOT layer", icon: "📋" },
+            { name: "list_modules", desc: "Browse 18 modules by FROOT layer", icon: "📋" },
             { name: "get_module", desc: "Read any module content (F1–T3)", icon: "📖" },
             { name: "lookup_term", desc: "200+ AI/ML term definitions", icon: "🔍" },
             { name: "search_knowledge", desc: "Full-text search all modules", icon: "🔎" },
