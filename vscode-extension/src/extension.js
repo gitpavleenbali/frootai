@@ -105,16 +105,32 @@ const FROOT_MODULES = [
 ];
 
 const MCP_TOOLS = [
-  { name: "list_modules", desc: "Browse 18 modules by FROOT layer" },
-  { name: "get_module", desc: "Read any module (F1–T3, F4)" },
-  { name: "lookup_term", desc: "200+ AI/ML term definitions" },
-  { name: "search_knowledge", desc: "Full-text search all modules" },
-  { name: "get_architecture_pattern", desc: "7 decision guides" },
-  { name: "get_froot_overview", desc: "Complete FROOT summary" },
-  { name: "fetch_azure_docs", desc: "⛅ Live — Search Azure docs" },
-  { name: "fetch_external_mcp", desc: "⛅ Live — Find MCP servers" },
-  { name: "list_community_plays", desc: "⛅ Live — List plays from GitHub" },
-  { name: "get_github_agentic_os", desc: "⛅ Live — .github OS guide" },
+  { name: "list_modules", desc: "Browse 18 modules by FROOT layer", type: "static",
+    docs: "Returns all 18 FROOT knowledge modules organized by layer (Foundations, Reasoning, Orchestration, Operations, Transformation). Each module includes ID, name, and description. Use this to discover what knowledge is available.\n\n**Input:** none\n**Output:** Array of layers with modules\n**Example:** `list_modules` → [{layer: 'Foundations', modules: [{id: 'F1', name: 'GenAI Foundations'}, ...]}]" },
+  { name: "get_module", desc: "Read any module (F1–T3, F4)", type: "static",
+    docs: "Returns the full content of any FROOT knowledge module by ID. Supports F1-F4, R1-R3, O1-O3, O4-O6, T1-T3 (18 modules total).\n\n**Input:** `moduleId` (string) — e.g., 'F1', 'R2', 'T3'\n**Output:** Full markdown content of the module\n**Example:** `get_module({moduleId: 'F4'})` → Full GitHub Agentic OS guide" },
+  { name: "lookup_term", desc: "200+ AI/ML term definitions", type: "static",
+    docs: "Searches the AI Glossary (200+ terms) for a specific term or phrase. Returns the definition, related terms, and category. Fuzzy matching supported.\n\n**Input:** `term` (string) — e.g., 'RAG', 'temperature', 'embeddings'\n**Output:** Term definition with metadata\n**Example:** `lookup_term({term: 'RAG'})` → {term: 'RAG', definition: 'Retrieval-Augmented Generation...'}" },
+  { name: "search_knowledge", desc: "Full-text search all modules", type: "static",
+    docs: "Performs full-text search across all 18 knowledge modules. Returns matching excerpts with module IDs and context. Great for finding specific patterns, services, or concepts.\n\n**Input:** `query` (string) — search text\n**Output:** Array of matches with module, context, and relevance\n**Example:** `search_knowledge({query: 'vector database'})` → matches from RAG, AI Search modules" },
+  { name: "get_architecture_pattern", desc: "7 decision guides", type: "static",
+    docs: "Returns architecture decision guides for common AI patterns. Covers: RAG vs Fine-tuning, Agent frameworks, Model selection, Hosting options, Search strategies, Orchestration choices, Cost optimization.\n\n**Input:** `pattern` (string, optional) — specific pattern name\n**Output:** Decision matrix with pros/cons/when-to-use" },
+  { name: "get_froot_overview", desc: "Complete FROOT summary", type: "static",
+    docs: "Returns the complete FrootAI platform overview: mission, 6 layers, 20 solution plays list, DevKit/TuneKit model, and getting started guide.\n\n**Input:** none\n**Output:** Platform overview markdown" },
+  { name: "fetch_azure_docs", desc: "⛅ Live — Search Azure docs", type: "live",
+    docs: "Fetches documentation from Azure Learn. Queries the Azure documentation API for service-specific guidance. Falls back gracefully if offline.\n\n**Input:** `query` (string) — Azure service or topic\n**Output:** Documentation excerpts from learn.microsoft.com\n**Example:** `fetch_azure_docs({query: 'AI Search hybrid'})` → Azure AI Search hybrid query docs" },
+  { name: "fetch_external_mcp", desc: "⛅ Live — Find MCP servers", type: "live",
+    docs: "Queries external MCP server registries to find available MCP servers for specific tools or domains. Helps discover community MCP servers.\n\n**Input:** `query` (string) — tool or domain name\n**Output:** List of matching MCP servers with install instructions" },
+  { name: "list_community_plays", desc: "⛅ Live — List plays from GitHub", type: "live",
+    docs: "Fetches the list of solution plays from the FrootAI GitHub repository. Returns play names, statuses, and file counts. Useful for discovering what's available.\n\n**Input:** none\n**Output:** Array of 20 solution plays with metadata" },
+  { name: "get_github_agentic_os", desc: "⛅ Live — .github OS guide", type: "live",
+    docs: "Returns the complete .github Agentic OS implementation guide: 7 primitives, 4 layers, file structure, and how to implement per solution play.\n\n**Input:** none\n**Output:** Full .github Agentic OS guide" },
+  { name: "agent_build", desc: "🔗 Chain — Builder agent guidance", type: "chain",
+    docs: "Invokes the Builder agent persona. Returns structured guidance for building a solution: architecture decisions, service selection, code patterns, and implementation steps. Automatically suggests calling agent_review next.\n\n**Input:** `task` (string) — what to build\n**Output:** Builder guidance + suggestion to call agent_review\n**Example:** `agent_build({task: 'RAG pipeline with Azure AI Search'})` → architecture + code patterns + 'Now call agent_review'" },
+  { name: "agent_review", desc: "🔗 Chain — Reviewer agent guidance", type: "chain",
+    docs: "Invokes the Reviewer agent persona. Reviews architecture and code for: security, performance, cost, compliance, and best practices. Suggests calling agent_tune next.\n\n**Input:** `context` (string) — what to review\n**Output:** Review findings + suggestion to call agent_tune" },
+  { name: "agent_tune", desc: "🔗 Chain — Tuner agent guidance", type: "chain",
+    docs: "Invokes the Tuner agent persona. Provides AI parameter tuning guidance: temperature, top-k, chunk sizes, model selection, guardrails configuration. Terminal step in the agent chain.\n\n**Input:** `context` (string) — what to tune\n**Output:** Tuning recommendations for production" },
 ];
 
 // ─── Webview Panel: Render Modules as Rich HTML ────────────────────
@@ -232,9 +248,47 @@ function markdownToHtml(markdown, title) {
 </html>`;
 }
 
-// ─── GitHub Download Helper ────────────────────────────────────────
+// ─── GitHub Download Helper with Cache ─────────────────────────────
+
+let _cacheDir = null; // Set in activate() from context.globalStorageUri
+const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
+
+function getCachePath(repoPath) {
+  if (!_cacheDir) return null;
+  // Flatten path separators for filesystem safety
+  return path.join(_cacheDir, "downloads", repoPath.replace(/\//g, "__"));
+}
+
+function readFromCache(repoPath) {
+  const cachePath = getCachePath(repoPath);
+  if (!cachePath) return null;
+  try {
+    if (fs.existsSync(cachePath)) {
+      const stats = fs.statSync(cachePath);
+      const ageMs = Date.now() - stats.mtimeMs;
+      if (ageMs < CACHE_TTL_MS) {
+        return fs.readFileSync(cachePath, "utf-8");
+      }
+    }
+  } catch { /* cache miss is fine */ }
+  return null;
+}
+
+function writeToCache(repoPath, content) {
+  const cachePath = getCachePath(repoPath);
+  if (!cachePath) return;
+  try {
+    const dir = path.dirname(cachePath);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(cachePath, content, "utf-8");
+  } catch { /* cache write failure is non-critical */ }
+}
 
 function downloadFromGitHub(repoPath) {
+  // Check cache first
+  const cached = readFromCache(repoPath);
+  if (cached) return Promise.resolve(cached);
+
   return new Promise((resolve, reject) => {
     const url = `https://raw.githubusercontent.com/gitpavleenbali/frootai/main/${repoPath}`;
     https.get(url, { headers: { "User-Agent": "FrootAI-VSCode" } }, (res) => {
@@ -242,14 +296,14 @@ function downloadFromGitHub(repoPath) {
         https.get(res.headers.location, (res2) => {
           let data = "";
           res2.on("data", (chunk) => data += chunk);
-          res2.on("end", () => resolve(data));
+          res2.on("end", () => { writeToCache(repoPath, data); resolve(data); });
         }).on("error", reject);
         return;
       }
       if (res.statusCode !== 200) { reject(new Error(`HTTP ${res.statusCode}`)); return; }
       let data = "";
       res.on("data", (chunk) => data += chunk);
-      res.on("end", () => resolve(data));
+      res.on("end", () => { writeToCache(repoPath, data); resolve(data); });
     }).on("error", reject);
   });
 }
@@ -274,6 +328,14 @@ class SolutionPlayProvider {
   }
 }
 
+const LAYER_DESCRIPTIONS = {
+  "🌱 Foundations": "Core AI concepts, glossary, .github Agentic OS",
+  "🪵 Reasoning": "Prompt engineering, RAG, deterministic patterns",
+  "🌿 Orchestration": "Semantic Kernel, agents, MCP tools",
+  "🍃 Operations": "Azure AI platform, infrastructure, Copilot",
+  "🍎 Transformation": "Fine-tuning, responsible AI, production",
+};
+
 class FrootModuleProvider {
   getTreeItem(element) { return element; }
   getChildren(element) {
@@ -282,6 +344,8 @@ class FrootModuleProvider {
         const item = new vscode.TreeItem(layer.layer, vscode.TreeItemCollapsibleState.Expanded);
         item.contextValue = "layer";
         item.description = `${layer.modules.length} modules`;
+        item.tooltip = `${layer.layer}\n${LAYER_DESCRIPTIONS[layer.layer] || ""}\n\nColor: ${layer.color}\nModules: ${layer.modules.map(m => m.id + " " + m.name).join(", ")}`;
+        item.iconPath = new vscode.ThemeIcon("symbol-folder", new vscode.ThemeColor(getLayerThemeColor(layer.color)));
         return item;
       });
     }
@@ -289,7 +353,9 @@ class FrootModuleProvider {
     if (layerData) {
       return layerData.modules.map((m) => {
         const item = new vscode.TreeItem(`${m.id}: ${m.name}`, vscode.TreeItemCollapsibleState.None);
-        item.tooltip = `Click to read ${m.name} in a rich panel`;
+        item.description = getModuleDescription(m.id);
+        item.tooltip = `${m.id}: ${m.name}\n${getModuleDescription(m.id)}\n\nClick to read in a rich panel`;
+        item.iconPath = new vscode.ThemeIcon("book", new vscode.ThemeColor(getLayerThemeColor(layerData.color)));
         item.command = { command: "frootai.openModule", title: "Open", arguments: [m] };
         return item;
       });
@@ -298,17 +364,65 @@ class FrootModuleProvider {
   }
 }
 
+function getLayerThemeColor(hexColor) {
+  // Map our hex colors to VS Code theme color IDs
+  const map = {
+    "#f59e0b": "charts.yellow",   // Foundations
+    "#10b981": "charts.green",    // Reasoning
+    "#06b6d4": "charts.blue",     // Orchestration
+    "#6366f1": "charts.purple",   // Operations
+    "#7c3aed": "charts.purple",   // Transformation
+  };
+  return map[hexColor] || "foreground";
+}
+
+function getModuleDescription(moduleId) {
+  const descriptions = {
+    "F1": "Core GenAI concepts & terminology",
+    "F2": "GPT-4o, Claude, Llama, Phi — model comparison",
+    "F3": "200+ AI/ML terms with definitions",
+    "F4": "7 primitives, 4 layers — .github folder evolution",
+    "R1": "System prompts, few-shot, chain-of-thought",
+    "R2": "Retrieval-Augmented Generation patterns",
+    "R3": "temp=0, JSON schema, verification loops",
+    "O1": "Plugins, planners, memory, agents",
+    "O2": "Supervisor, handoffs, multi-agent systems",
+    "O3": "MCP protocol, tool calling, function patterns",
+    "O4": "Foundry, endpoints, deployments, RBAC",
+    "O5": "GPU, networking, landing zones, scaling",
+    "O6": "Copilot Studio, extensions, M365 integration",
+    "T1": "LoRA, QLoRA, data prep, MLOps pipelines",
+    "T2": "Safety, content filtering, red teaming",
+    "T3": "Caching, load balancing, cost optimization",
+  };
+  return descriptions[moduleId] || "";
+}
+
 class McpToolProvider {
   getTreeItem(element) { return element; }
   getChildren() {
-    return MCP_TOOLS.map((t) => {
-      const item = new vscode.TreeItem(`🔌 ${t.name}`, vscode.TreeItemCollapsibleState.None);
-      item.description = t.desc;
-      item.tooltip = `MCP Tool: ${t.name}\n${t.desc}\n\nLeft-click: action menu\nRight-click: Install / Start / Configure`;
-      item.contextValue = "mcpTool";
-      item.command = { command: "frootai.mcpToolAction", title: "MCP Action", arguments: [t] };
-      return item;
-    });
+    // Group by type
+    const groups = [
+      { label: "📦 Static Tools (6)", type: "static", icon: "database" },
+      { label: "⛅ Live Tools (4)", type: "live", icon: "cloud" },
+      { label: "🔗 Agent Chain (3)", type: "chain", icon: "link" },
+    ];
+    const items = [];
+    for (const g of groups) {
+      const header = new vscode.TreeItem(g.label, vscode.TreeItemCollapsibleState.None);
+      header.description = "";
+      header.iconPath = new vscode.ThemeIcon(g.icon);
+      items.push(header);
+      for (const t of MCP_TOOLS.filter(t => t.type === g.type)) {
+        const item = new vscode.TreeItem(`  ${t.name}`, vscode.TreeItemCollapsibleState.None);
+        item.description = t.desc;
+        item.tooltip = `MCP Tool: ${t.name}\nType: ${t.type}\n${t.desc}\n\nClick for actions (docs, install, start)`;
+        item.contextValue = "mcpTool";
+        item.command = { command: "frootai.mcpToolAction", title: "MCP Action", arguments: [t] };
+        items.push(item);
+      }
+    }
+    return items;
   }
 }
 
@@ -335,6 +449,12 @@ class GlossaryProvider {
 
 function activate(context) {
   console.log("FrootAI v3 Standalone Engine activated");
+
+  // B1: Initialize cache directory for offline downloaded plays
+  _cacheDir = context.globalStorageUri.fsPath;
+  if (!fs.existsSync(_cacheDir)) {
+    fs.mkdirSync(_cacheDir, { recursive: true });
+  }
 
   // Load bundled knowledge — works without any repo clone
   const knowledgeLoaded = loadBundledKnowledge();
@@ -866,17 +986,34 @@ function activate(context) {
   // ── Command: MCP Tool Action (left-click action picker) ──
   context.subscriptions.push(
     vscode.commands.registerCommand("frootai.mcpToolAction", async (tool) => {
-      const action = await vscode.window.showQuickPick([
+      const picks = [
+        { label: "$(info) View Tool Documentation", description: `Read ${tool.name} docs in VS Code`, value: "docs" },
         { label: "$(package) Install MCP Server globally", description: "npm install -g frootai-mcp", value: "install" },
         { label: "$(play) Start MCP Server (npx)", description: "Launch in terminal — 13 tools ready", value: "start" },
         { label: "$(gear) Configure MCP for this workspace", description: "Add .vscode/mcp.json — auto-connects", value: "config" },
         { label: "$(globe) Open npm page", description: "npmjs.com/package/frootai-mcp", value: "npm" },
         { label: "$(book) Open setup guide", description: "Full MCP setup documentation", value: "guide" },
-      ], { placeHolder: `🔌 ${tool.name} — ${tool.desc}` });
+      ];
+      const action = await vscode.window.showQuickPick(picks, { placeHolder: `🔌 ${tool.name} — ${tool.desc}` });
 
       if (!action) return;
 
-      if (action.value === "install") {
+      if (action.value === "docs") {
+        // B3: Render tool documentation in a VS Code webview panel
+        const typeLabel = { static: "📦 Static", live: "⛅ Live", chain: "🔗 Agent Chain" };
+        const docsHtml = `
+          <h2>🔌 ${tool.name}</h2>
+          <p style="opacity:0.7;">${typeLabel[tool.type] || tool.type} Tool</p>
+          <p><strong>${tool.desc}</strong></p>
+          <hr/>
+          <div style="white-space:pre-wrap;line-height:1.6;">${(tool.docs || "No documentation available.").replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>").replace(/`([^`]+)`/g, "<code style='background:#333;padding:2px 6px;border-radius:3px;'>$1</code>").replace(/\n/g, "<br/>")}</div>
+          <hr/>
+          <p style="opacity:0.5;">Part of <strong>frootai-mcp@2.1.1</strong> — 13 tools (6 static + 4 live + 3 agent chain)</p>
+          <p style="opacity:0.5;">Install: <code>npm install -g frootai-mcp</code> | Run: <code>npx frootai-mcp</code></p>
+        `;
+        const panel = vscode.window.createWebviewPanel("frootai.mcpDocs", `MCP: ${tool.name}`, vscode.ViewColumn.One, {});
+        panel.webview.html = `<!DOCTYPE html><html><head><style>body{font-family:var(--vscode-font-family,system-ui);color:#e0e0e0;background:#1a1a2e;padding:24px;max-width:700px;}h2{color:#00C853;}code{font-family:var(--vscode-editor-font-family,monospace);}hr{border:none;border-top:1px solid #333;margin:16px 0;}strong{color:#4fc3f7;}</style></head><body>${docsHtml}</body></html>`;
+      } else if (action.value === "install") {
         vscode.commands.executeCommand("frootai.installMcpServer");
       } else if (action.value === "start") {
         vscode.commands.executeCommand("frootai.startMcpServer");
