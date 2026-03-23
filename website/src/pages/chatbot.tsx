@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import Layout from "@theme/Layout";
 import Link from "@docusaurus/Link";
-import useBaseUrl from "@docusaurus/useBaseUrl";
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import styles from "./index.module.css";
 
 const CHAT_API_URL = "https://frootai-chatbot-api.azurewebsites.net/api/chat";
@@ -56,24 +57,57 @@ export default function ChatbotPage(): JSX.Element {
   const endRef = useRef<HTMLDivElement>(null);
   useEffect(() => { endRef.current?.scrollIntoView({ behavior: "smooth" }); }, [history]);
 
-  // Markdown to HTML — fixes links by prepending /frootai base path
-  const renderMd = (text: string) => {
-    let html = text
-      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\[([^\]]+)\]\((\/[^)]+)\)/g, (_, label, path) => {
-        const href = path.startsWith("/frootai") ? path : `${BASE}${path}`;
-        return `<a href="${href}" style="color:#f59e0b;text-decoration:underline;">${label}</a>`;
-      })
-      .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" style="color:#f59e0b;text-decoration:underline;" target="_blank" rel="noopener">$1</a>')
-      .replace(/`([^`]+)`/g, '<code style="background:rgba(245,158,11,0.1);padding:2px 6px;border-radius:4px;font-size:0.8rem;">$1</code>')
-      .replace(/^### (.+)$/gm, '<h4 style="margin:8px 0 4px;font-size:0.9rem;font-weight:700;">$1</h4>')
-      .replace(/^## (.+)$/gm, '<h3 style="margin:10px 0 4px;font-size:0.95rem;font-weight:700;">$1</h3>')
-      .replace(/\| .+\|/g, (match) => `<span style="font-size:0.78rem;font-family:monospace;">${match}</span>`)
-      .replace(/^- (.+)$/gm, '• $1')
-      .replace(/^(\d+)\. (.+)$/gm, '$1. $2')
-      .replace(/\n/g, '<br/>');
-    return <span dangerouslySetInnerHTML={{ __html: html }} />;
+  // Fix relative links by prepending base path
+  const fixHref = (href: string) => {
+    if (!href) return href;
+    if (href.startsWith("http")) return href;
+    if (href.startsWith("/") && !href.startsWith("/frootai")) return `${BASE}${href}`;
+    return href;
   };
+
+  // Custom react-markdown components styled for FrootAI gold/indigo theme
+  const mdComponents: Record<string, React.FC<any>> = {
+    a: ({ href, children }) => (
+      <a href={fixHref(href || "")} style={{ color: "#f59e0b", textDecoration: "underline", fontWeight: 500 }}
+        {...(href?.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}>{children}</a>
+    ),
+    strong: ({ children }) => <strong style={{ color: "#fbbf24" }}>{children}</strong>,
+    h2: ({ children }) => <h3 style={{ margin: "14px 0 6px", fontSize: "1rem", fontWeight: 700, color: "#f59e0b", borderBottom: "1px solid rgba(245,158,11,0.15)", paddingBottom: "4px" }}>{children}</h3>,
+    h3: ({ children }) => <h4 style={{ margin: "10px 0 4px", fontSize: "0.92rem", fontWeight: 700, color: "#eab308" }}>{children}</h4>,
+    h4: ({ children }) => <h5 style={{ margin: "8px 0 4px", fontSize: "0.86rem", fontWeight: 600, color: "#d4d4d8" }}>{children}</h5>,
+    p: ({ children }) => <p style={{ margin: "6px 0", lineHeight: 1.7 }}>{children}</p>,
+    ul: ({ children }) => <ul style={{ margin: "4px 0", paddingLeft: "18px", listStyleType: "disc" }}>{children}</ul>,
+    ol: ({ children }) => <ol style={{ margin: "4px 0", paddingLeft: "18px" }}>{children}</ol>,
+    li: ({ children }) => <li style={{ margin: "2px 0", lineHeight: 1.6, fontSize: "0.83rem" }}>{children}</li>,
+    code: ({ children, className }) => {
+      const isBlock = className?.includes("language-");
+      return isBlock ? (
+        <pre style={{ background: "rgba(0,0,0,0.4)", border: "1px solid rgba(245,158,11,0.15)", borderRadius: "8px", padding: "12px 14px", margin: "8px 0", overflowX: "auto", fontSize: "0.78rem", lineHeight: 1.5 }}>
+          <code>{children}</code>
+        </pre>
+      ) : (
+        <code style={{ background: "rgba(245,158,11,0.1)", padding: "1px 6px", borderRadius: "4px", fontSize: "0.8rem", color: "#fbbf24" }}>{children}</code>
+      );
+    },
+    pre: ({ children }) => <>{children}</>,
+    table: ({ children }) => (
+      <div style={{ overflowX: "auto", margin: "8px 0" }}>
+        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.78rem", lineHeight: 1.5 }}>{children}</table>
+      </div>
+    ),
+    thead: ({ children }) => <thead style={{ borderBottom: "2px solid rgba(245,158,11,0.3)" }}>{children}</thead>,
+    th: ({ children }) => <th style={{ padding: "6px 10px", textAlign: "left", fontWeight: 700, color: "#f59e0b", fontSize: "0.76rem", textTransform: "uppercase", letterSpacing: "0.03em" }}>{children}</th>,
+    td: ({ children }) => <td style={{ padding: "5px 10px", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>{children}</td>,
+    blockquote: ({ children }) => (
+      <blockquote style={{ margin: "8px 0", borderLeft: "3px solid #f59e0b", paddingLeft: "12px", color: "var(--ifm-color-emphasis-500)", fontStyle: "italic" }}>{children}</blockquote>
+    ),
+    hr: () => <hr style={{ border: "none", borderTop: "1px solid rgba(245,158,11,0.15)", margin: "12px 0" }} />,
+  };
+
+  // Render markdown with react-markdown + GFM (tables, strikethrough)
+  const renderMd = (text: string) => (
+    <Markdown remarkPlugins={[remarkGfm]} components={mdComponents}>{text}</Markdown>
+  );
 
   const send = async (text?: string) => {
     const message = text || msg;

@@ -103,7 +103,7 @@ const config: Config = {
         },
         {
           type: "dropdown",
-          label: "FAI Learning Center",
+          label: "FAI Learning Hub",
           position: "left",
           items: [
             { to: "/learning-hub", label: "📚 FAI Learning Center" },
