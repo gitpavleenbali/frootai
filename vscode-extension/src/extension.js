@@ -943,20 +943,20 @@ function activate(context) {
   context.subscriptions.push(
     vscode.commands.registerCommand("frootai.installMcpServer", async () => {
       const choice = await vscode.window.showQuickPick([
-        { label: "$(package) Install globally", description: "npm install -g frootai-mcp", value: "global" },
-        { label: "$(play) Run directly (npx)", description: "npx frootai-mcp — zero install", value: "npx" },
+        { label: "$(package) Install globally", description: "npm install -g frootai-mcp@latest", value: "global" },
+        { label: "$(play) Run directly (npx)", description: "npx frootai-mcp@latest — always fresh", value: "npx" },
         { label: "$(gear) Add to .vscode/mcp.json", description: "Configure MCP for this workspace", value: "config" },
       ], { placeHolder: "How do you want to set up the FrootAI MCP Server?" });
       if (!choice) return;
 
       if (choice.value === "global") {
         const terminal = vscode.window.createTerminal("FrootAI MCP Install");
-        terminal.sendText("npm install -g frootai-mcp");
+        terminal.sendText("npm install -g frootai-mcp@latest");
         terminal.show();
-        vscode.window.showInformationMessage("Installing frootai-mcp globally. After install, run: frootai-mcp");
+        vscode.window.showInformationMessage("Installing frootai-mcp@latest globally. After install, run: frootai-mcp");
       } else if (choice.value === "npx") {
         const terminal = vscode.window.createTerminal("FrootAI MCP Server");
-        terminal.sendText("npx frootai-mcp");
+        terminal.sendText("npx --yes frootai-mcp@latest");
         terminal.show();
       } else if (choice.value === "config") {
         const wsFolder = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
@@ -966,7 +966,7 @@ function activate(context) {
             frootai: {
               type: "stdio",
               command: "npx",
-              args: ["frootai-mcp"]
+              args: ["--yes", "frootai-mcp@latest"]
             }
           }
         };
@@ -982,7 +982,7 @@ function activate(context) {
   context.subscriptions.push(
     vscode.commands.registerCommand("frootai.startMcpServer", () => {
       const terminal = vscode.window.createTerminal("FrootAI MCP Server");
-      terminal.sendText("npx frootai-mcp");
+      terminal.sendText("npx --yes frootai-mcp@latest");
       terminal.show();
       vscode.window.showInformationMessage("🔌 FrootAI MCP Server starting... 22 tools (6 static + 4 live + 3 chain + 3 ecosystem + 6 compute).");
     })
@@ -1034,8 +1034,8 @@ function activate(context) {
           <hr/>
           <div style="white-space:pre-wrap;line-height:1.6;">${(tool.docs || "No documentation available.").replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>").replace(/`([^`]+)`/g, "<code style='background:#333;padding:2px 6px;border-radius:3px;'>$1</code>").replace(/\n/g, "<br/>")}</div>
           <hr/>
-          <p style="opacity:0.5;">Part of <strong>frootai-mcp@3.0.1</strong> — 22 tools (6 static + 4 live + 3 chain + 3 ecosystem + 6 compute)</p>
-          <p style="opacity:0.5;">Install: <code>npm install -g frootai-mcp</code> | Run: <code>npx frootai-mcp</code></p>
+          <p style="opacity:0.5;">Part of <strong>frootai-mcp@3.0.2</strong> — 22 tools (6 static + 4 live + 3 chain + 3 ecosystem + 6 compute)</p>
+          <p style="opacity:0.5;">Install: <code>npm install -g frootai-mcp@latest</code> | Run: <code>npx frootai-mcp@latest</code></p>
         `;
         const panel = vscode.window.createWebviewPanel("frootai.mcpDocs", `MCP: ${tool.name}`, vscode.ViewColumn.One, {});
         panel.webview.html = `<!DOCTYPE html><html><head><style>body{font-family:var(--vscode-font-family,system-ui);color:#e0e0e0;background:#1a1a2e;padding:24px;max-width:700px;}h2{color:#00C853;}code{font-family:var(--vscode-editor-font-family,monospace);}hr{border:none;border-top:1px solid #333;margin:16px 0;}strong{color:#4fc3f7;}</style></head><body>${docsHtml}</body></html>`;
