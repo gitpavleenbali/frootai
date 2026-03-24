@@ -1498,6 +1498,108 @@ server.tool(
   }
 );
 
+// ═══════════════════════════════════════════════════════════════════
+// Phase 8B — compare_plays + generate_architecture_diagram
+// ═══════════════════════════════════════════════════════════════════
+
+// ── Tool: compare_plays ────────────────────────────────────────────
+
+server.tool(
+  "compare_plays",
+  "PLAY COMPARISON — Side-by-side comparison of 2-3 solution plays showing services, cost, complexity, team size, deployment time, and pros/cons.",
+  {
+    plays: z.string().describe("Comma-separated play numbers to compare (e.g., '01,03' or '01,07,14')"),
+  },
+  async ({ plays }) => {
+    const nums = plays.split(",").map(p => p.trim().padStart(2, "0")).slice(0, 3);
+    const selected = nums.map(n => PLAY_DATA.find(p => p.id === n)).filter(Boolean);
+    if (selected.length < 2) return { content: [{ type: "text", text: "❌ Need at least 2 valid play numbers (01-20), comma-separated." }] };
+
+    const teamSize = { Low: "1 dev", Medium: "1-2 devs", High: "2-3 devs", Foundation: "1 infra eng" };
+    const deployTime = { Low: "1 day", Medium: "2-3 days", High: "1-2 weeks", Foundation: "1-2 days" };
+    const headers = ["Aspect", ...selected.map(p => `**Play ${p.id}**`)];
+    const rows = [
+      ["Name", ...selected.map(p => p.name)],
+      ["Complexity", ...selected.map(p => p.cx)],
+      ["Azure Services", ...selected.map(p => p.services.join(", "))],
+      ["Dev Cost/mo", ...selected.map(p => { let t=0; p.services.forEach(s => { const pr=PRICING[s]; if(pr) t+=pr.dev; }); return `$${t}`; })],
+      ["Prod Cost/mo", ...selected.map(p => { let t=0; p.services.forEach(s => { const pr=PRICING[s]; if(pr) t+=pr.prod; }); return `$${t}`; })],
+      ["Team Size", ...selected.map(p => teamSize[p.cx] || "1-2 devs")],
+      ["Deploy Time", ...selected.map(p => deployTime[p.cx] || "2-3 days")],
+      ["Best For", ...selected.map(p => p.pattern.split(" ").slice(0, 5).join(", "))],
+    ];
+    const table = `| ${headers.join(" | ")} |\n|${headers.map(() => "---").join("|")}|\n${rows.map(r => `| ${r.join(" | ")} |`).join("\n")}`;
+
+    return { content: [{ type: "text", text: `## 🔄 Play Comparison\n\n${table}\n\n### 💡 Recommendation\n${selected.length === 2 ? `- Choose **Play ${selected[0].id}** if you prioritize ${selected[0].cx === "Low" || selected[0].cx === "Medium" ? "simplicity and fast deployment" : "advanced capabilities"}\n- Choose **Play ${selected[1].id}** if you prioritize ${selected[1].cx === "Low" || selected[1].cx === "Medium" ? "simplicity and fast deployment" : "scalability and enterprise features"}` : "Compare the complexity vs. cost tradeoff for your team's capacity."}\n\n> Use \`estimate_cost\` for detailed per-service pricing.\n> Use \`semantic_search_plays\` to find plays by scenario.` }] };
+  }
+);
+
+// ── Tool: generate_architecture_diagram ────────────────────────────
+
+const PLAY_DIAGRAMS = {
+  "01": "graph LR\\n  User[User] -->|Query| App[Container App]\\n  App -->|Search| AIS[AI Search]\\n  App -->|Generate| OAI[Azure OpenAI]\\n  AIS -->|Index| Blob[Blob Storage]\\n  App -->|Chunks| AIS\\n  style OAI fill:#f59e0b22,stroke:#f59e0b\\n  style AIS fill:#10b98122,stroke:#10b981\\n  style App fill:#6366f122,stroke:#6366f1",
+  "02": "graph TB\\n  subgraph Hub[Hub VNet]\\n    FW[Firewall]\\n    KV[Key Vault]\\n  end\\n  subgraph Spoke[Spoke VNet]\\n    PE[Private Endpoints]\\n    AI[AI Services]\\n  end\\n  Hub --> Spoke\\n  style Hub fill:#f59e0b22,stroke:#f59e0b\\n  style Spoke fill:#10b98122,stroke:#10b981",
+  "03": "graph LR\\n  User -->|Request| Agent[Container App]\\n  Agent -->|temp=0| OAI[OpenAI]\\n  Agent -->|Check| CS[Content Safety]\\n  OAI -->|Deterministic| Agent\\n  style Agent fill:#6366f122,stroke:#6366f1\\n  style CS fill:#f43f5e22,stroke:#f43f5e",
+  "04": "graph LR\\n  Phone[Phone Call] -->|Audio| ACS[Comm Services]\\n  ACS -->|Stream| STT[Speech-to-Text]\\n  STT -->|Text| OAI[OpenAI]\\n  OAI -->|Response| TTS[Text-to-Speech]\\n  TTS -->|Audio| ACS\\n  style STT fill:#06b6d422,stroke:#06b6d4\\n  style OAI fill:#f59e0b22,stroke:#f59e0b",
+  "05": "graph LR\\n  Ticket[IT Ticket] -->|Event| SB[Service Bus]\\n  SB -->|Trigger| LA[Logic App]\\n  LA -->|Analyze| OAI[OpenAI]\\n  LA -->|Resolve| Ticket\\n  style LA fill:#10b98122,stroke:#10b981\\n  style OAI fill:#f59e0b22,stroke:#f59e0b",
+  "06": "graph LR\\n  Doc[Documents] -->|Upload| Blob[Blob Storage]\\n  Blob -->|Extract| DI[Doc Intelligence]\\n  DI -->|Structured| OAI[OpenAI]\\n  OAI -->|JSON| Output[Structured Output]\\n  style DI fill:#7c3aed22,stroke:#7c3aed",
+  "07": "graph TB\\n  User -->|Request| Coord[Coordinator Agent]\\n  Coord -->|Delegate| Builder[Builder Agent]\\n  Coord -->|Delegate| Reviewer[Reviewer Agent]\\n  Builder -->|State| DB[(Cosmos DB)]\\n  Reviewer -->|State| DB\\n  Builder -->|Generate| OAI[OpenAI]\\n  style Coord fill:#f59e0b22,stroke:#f59e0b",
+  "14": "graph LR\\n  Clients -->|API| APIM[API Management]\\n  APIM -->|Cache Hit| Redis[Redis Cache]\\n  APIM -->|Cache Miss| OAI[OpenAI]\\n  APIM -->|Meter| Logs[Token Metrics]\\n  style APIM fill:#10b98122,stroke:#10b981\\n  style Redis fill:#06b6d422,stroke:#06b6d4",
+  "17": "graph TB\\n  Apps[Applications] -->|Telemetry| AI[App Insights]\\n  AI -->|Logs| LA[Log Analytics]\\n  LA -->|KQL| Dash[Dashboard]\\n  LA -->|Rules| Alerts[Alert Rules]\\n  style AI fill:#6366f122,stroke:#6366f1\\n  style Dash fill:#10b98122,stroke:#10b981",
+  "19": "graph LR\\n  Cloud[Cloud] -->|Deploy| IoT[IoT Hub]\\n  IoT -->|Model| Device[Edge Device]\\n  Device -->|Phi-4| Inference[Local Inference]\\n  Inference -->|Results| IoT\\n  style Device fill:#7c3aed22,stroke:#7c3aed\\n  style Inference fill:#10b98122,stroke:#10b981",
+  "20": "graph LR\\n  Sensors -->|Events| EH[Event Hub]\\n  EH -->|Stream| SA[Stream Analytics]\\n  SA -->|Anomaly| OAI[OpenAI]\\n  SA -->|Store| DB[(Cosmos DB)]\\n  OAI -->|Alert| Alert[Notification]\\n  style SA fill:#06b6d422,stroke:#06b6d4\\n  style EH fill:#f59e0b22,stroke:#f59e0b",
+};
+
+server.tool(
+  "generate_architecture_diagram",
+  "ARCHITECTURE DIAGRAM — Generate a Mermaid.js architecture diagram for any solution play. Paste the output into any Mermaid renderer to visualize.",
+  {
+    play: z.string().describe("Play number: 01-20"),
+  },
+  async ({ play }) => {
+    const num = play.padStart(2, "0");
+    const pd = PLAY_DATA.find(p => p.id === num);
+    if (!pd) return { content: [{ type: "text", text: "❌ Play not found. Use 01-20." }] };
+
+    const diagram = PLAY_DIAGRAMS[num];
+    if (!diagram) {
+      // Generate a generic diagram for plays without a custom template
+      const svcs = pd.services.map((s, i) => `  S${i}[${s}]`).join("\\n");
+      const flows = pd.services.map((_, i) => i > 0 ? `  S0 --> S${i}` : "").filter(Boolean).join("\\n");
+      const generic = `graph LR\\n  User[User] --> S0[${pd.services[0]}]\\n${svcs}\\n${flows}`;
+      return { content: [{ type: "text", text: `## 🏗️ Architecture: Play ${num} — ${pd.name}\n\n\`\`\`mermaid\n${generic.replace(/\\n/g, "\n")}\n\`\`\`\n\n**Services**: ${pd.services.join(", ")}\n\n> 📋 Generic diagram. Paste into [Mermaid Live Editor](https://mermaid.live) to visualize.` }] };
+    }
+
+    return { content: [{ type: "text", text: `## 🏗️ Architecture: Play ${num} — ${pd.name}\n\n\`\`\`mermaid\n${diagram.replace(/\\n/g, "\n")}\n\`\`\`\n\n**Services**: ${pd.services.join(", ")}\n**Complexity**: ${pd.cx}\n\n> 📋 Paste into [Mermaid Live Editor](https://mermaid.live) or any Markdown renderer that supports Mermaid.\n> Use \`estimate_cost\` for pricing details.` }] };
+  }
+);
+
+// ═══════════════════════════════════════════════════════════════════
+// Phase 8C — embedding_playground (lite — no Azure OpenAI required)
+// ═══════════════════════════════════════════════════════════════════
+
+server.tool(
+  "embedding_playground",
+  "EMBEDDING EXPLORER — Compare two texts for semantic similarity using keyword-based approximation. Educational tool for learning about embeddings and RAG concepts.",
+  {
+    text1: z.string().describe("First text to compare"),
+    text2: z.string().describe("Second text to compare"),
+  },
+  async ({ text1, text2 }) => {
+    // Tokenize and compute Jaccard-like similarity
+    const tokenize = (t) => [...new Set(t.toLowerCase().replace(/[^a-z0-9\s]/g, "").split(/\s+/).filter(w => w.length >= 3))];
+    const t1 = tokenize(text1);
+    const t2 = tokenize(text2);
+    const intersection = t1.filter(w => t2.includes(w));
+    const union = [...new Set([...t1, ...t2])];
+    const similarity = union.length > 0 ? intersection.length / union.length : 0;
+
+    const simLabel = similarity > 0.5 ? "🟢 High" : similarity > 0.2 ? "🟡 Medium" : "🔴 Low";
+
+    return { content: [{ type: "text", text: `## 🔬 Embedding Playground\n\n| Metric | Value |\n|--------|-------|\n| **Similarity** | ${simLabel} (${(similarity * 100).toFixed(1)}%) |\n| **Text 1 tokens** | ${t1.length} unique words |\n| **Text 2 tokens** | ${t2.length} unique words |\n| **Overlap** | ${intersection.length} shared words |\n| **Union** | ${union.length} total unique words |\n\n### 🔍 Shared Terms\n${intersection.length > 0 ? intersection.map(w => `\`${w}\``).join(", ") : "_No shared terms_"}\n\n### 💡 What This Means for RAG\n- **High similarity** (>50%): Documents would cluster together in vector search\n- **Medium** (20-50%): Partial overlap — may appear in broader searches\n- **Low** (<20%): Different topics — unlikely to match in semantic search\n\n> ⚠️ This uses keyword overlap (Jaccard similarity). Real embeddings use 1536-dimensional vectors for richer semantic understanding.\n> For production RAG, use Azure OpenAI text-embedding-3-small.` }] };
+  }
+);
+
 // ── Resources: Module listing ──────────────────────────────────────
 
 server.resource(
