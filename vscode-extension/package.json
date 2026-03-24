@@ -2,7 +2,7 @@
   "name": "frootai",
   "displayName": "FrootAI — From the Roots to the Fruits",
   "description": "The open glue binding Infrastructure, Platform & Application teams with the GenAI ecosystem. Standalone engine: 18 modules, 200+ terms, 20 solution plays, 22 MCP tools — works from any workspace.",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "publisher": "pavleenbali",
   "engines": {
     "vscode": "^1.85.0"
@@ -59,17 +59,17 @@
         {
           "id": "frootai.mcpTools",
           "name": "🔌 MCP Tools (22)",
-          "visibility": "collapsed"
+          "visibility": "visible"
         },
         {
           "id": "frootai.frootModules",
           "name": "FAI Knowledge Hub (18 modules)",
-          "visibility": "collapsed"
+          "visibility": "visible"
         },
         {
           "id": "frootai.glossary",
           "name": "📖 AI Glossary (200+ terms)",
-          "visibility": "collapsed"
+          "visibility": "visible"
         }
       ]
     },
