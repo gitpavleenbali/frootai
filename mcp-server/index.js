@@ -1338,6 +1338,166 @@ server.tool(
   }
 );
 
+// ═══════════════════════════════════════════════════════════════════
+// COMPUTE TOOLS (Phase 8A) — Real computation, not just knowledge
+// ═══════════════════════════════════════════════════════════════════
+
+// ── Play metadata for compute tools ────────────────────────────────
+
+const PLAY_DATA = [
+  { id: "01", name: "Enterprise RAG Q&A", services: ["AI Search", "OpenAI (gpt-4o)", "Container App", "Blob Storage"], pattern: "RAG hybrid search chunking semantic reranking retrieval augmented generation document qa question answering knowledge base", cx: "Medium" },
+  { id: "02", name: "AI Landing Zone", services: ["VNet + PE", "Key Vault"], pattern: "landing zone infrastructure network security private endpoints rbac governance hub spoke foundation baseline", cx: "Foundation" },
+  { id: "03", name: "Deterministic Agent", services: ["Container App", "OpenAI (gpt-4o)", "Content Safety"], pattern: "deterministic agent zero temperature reliable reproducible content safety guardrails filtering consistent", cx: "Medium" },
+  { id: "04", name: "Call Center Voice AI", services: ["Communication Services", "Speech Service", "OpenAI (gpt-4o)", "App Service (B1)"], pattern: "voice call center speech to text text to speech stt tts real time audio phone ivr customer service", cx: "High" },
+  { id: "05", name: "IT Ticket Resolution", services: ["OpenAI (gpt-4o-mini)", "App Service (B1)"], pattern: "ticket resolution automation helpdesk it service management event driven async message queue workflow", cx: "Medium" },
+  { id: "06", name: "Document Intelligence", services: ["Document Intelligence", "OpenAI (gpt-4o)", "Blob Storage"], pattern: "document extraction ocr form recognizer invoice receipt structured output pdf image processing", cx: "Medium" },
+  { id: "07", name: "Multi-Agent Service", services: ["OpenAI (gpt-4o)", "Container App", "Cosmos DB"], pattern: "multi agent collaboration handoff orchestration coordinator specialist a2a agent to agent supervisor", cx: "High" },
+  { id: "08", name: "Copilot Studio Bot", services: ["AI Search", "OpenAI (gpt-4o-mini)", "Blob Storage"], pattern: "copilot studio low code bot chatbot generative answers knowledge grounding power platform", cx: "Low" },
+  { id: "09", name: "AI Search Portal", services: ["AI Search", "OpenAI (gpt-4o)", "App Service (B1)"], pattern: "search portal semantic hybrid keyword vector enterprise search faceted filtering web application", cx: "Medium" },
+  { id: "10", name: "Content Moderation", services: ["Content Safety", "OpenAI (gpt-4o-mini)", "APIM"], pattern: "content moderation safety filtering toxic harmful block severity scoring content policy gateway", cx: "Low" },
+  { id: "11", name: "Landing Zone Advanced", services: ["VNet + PE", "Firewall", "Key Vault", "NAT Gateway"], pattern: "advanced landing zone enterprise network segmentation firewall nsg nat gateway dns private dns zone", cx: "High" },
+  { id: "12", name: "Model Serving AKS", services: ["AKS (GPU)", "ACR", "OpenAI (gpt-4o)"], pattern: "model serving kubernetes aks gpu cluster custom model hosting autoscale container registry inference", cx: "High" },
+  { id: "13", name: "Fine-Tuning Workflow", services: ["ML Workspace", "OpenAI (gpt-4o)", "Blob Storage"], pattern: "fine tuning lora qlora training dataset preparation model versioning mlops evaluation custom model", cx: "High" },
+  { id: "14", name: "Cost-Optimized AI Gateway", services: ["APIM", "OpenAI (gpt-4o)", "Redis Cache"], pattern: "cost optimization finops gateway caching semantic cache token metering rate limiting api management budget", cx: "Medium" },
+  { id: "15", name: "Multi-Modal DocProc", services: ["Document Intelligence", "OpenAI (gpt-4o)", "Cosmos DB"], pattern: "multi modal document processing images tables text extraction structured data vision ocr", cx: "Medium" },
+  { id: "16", name: "Copilot Teams Extension", services: ["OpenAI (gpt-4o)", "App Service (B1)"], pattern: "teams bot copilot extension adaptive cards microsoft teams messaging collaboration enterprise chat", cx: "Medium" },
+  { id: "17", name: "AI Observability", services: ["Log Analytics", "App Insights"], pattern: "observability monitoring telemetry kql dashboards alerts application insights log analytics metrics", cx: "Medium" },
+  { id: "18", name: "Prompt Management", services: ["OpenAI (gpt-4o)", "Cosmos DB", "App Service (B1)"], pattern: "prompt management versioning ab testing rollback template registry prompt engineering lifecycle", cx: "Medium" },
+  { id: "19", name: "Edge AI Phi-4", services: ["IoT Hub", "ACR", "Blob Storage"], pattern: "edge ai phi small language model iot offline inference device deployment lightweight mobile embedded", cx: "High" },
+  { id: "20", name: "Anomaly Detection", services: ["Event Hub", "Stream Analytics", "OpenAI (gpt-4o)", "Cosmos DB"], pattern: "anomaly detection streaming real time event processing alert iot sensor time series", cx: "High" },
+];
+
+const PRICING = {
+  "AI Search": { dev: 75, prod: 500, unit: "Basic/Standard S1" },
+  "OpenAI (gpt-4o)": { dev: 50, prod: 2000, unit: "~100K/1M req/mo" },
+  "OpenAI (gpt-4o-mini)": { dev: 10, prod: 200, unit: "~100K/1M req/mo" },
+  "Container App": { dev: 15, prod: 150, unit: "1vCPU/4vCPU" },
+  "App Service (B1)": { dev: 13, prod: 55, unit: "B1/S1" },
+  "Cosmos DB": { dev: 25, prod: 300, unit: "400/4000 RU/s" },
+  "AKS (GPU)": { dev: 200, prod: 2000, unit: "NC6s/NC12s" },
+  "ML Workspace": { dev: 50, prod: 500, unit: "Compute+storage" },
+  "VNet + PE": { dev: 10, prod: 50, unit: "PE+NSG" },
+  "Firewall": { dev: 0, prod: 500, unit: "Premium" },
+  "Key Vault": { dev: 1, prod: 5, unit: "Standard" },
+  "APIM": { dev: 50, prod: 300, unit: "Dev/Standard" },
+  "Redis Cache": { dev: 15, prod: 100, unit: "C1/C3" },
+  "Event Hub": { dev: 10, prod: 150, unit: "Basic/Standard" },
+  "Stream Analytics": { dev: 50, prod: 300, unit: "1/6 SU" },
+  "Log Analytics": { dev: 10, prod: 100, unit: "5/50 GB/day" },
+  "App Insights": { dev: 5, prod: 50, unit: "Basic" },
+  "Blob Storage": { dev: 5, prod: 50, unit: "LRS Hot" },
+  "Communication Services": { dev: 20, prod: 500, unit: "Voice+SMS" },
+  "Speech Service": { dev: 15, prod: 200, unit: "S0" },
+  "Document Intelligence": { dev: 15, prod: 150, unit: "S0" },
+  "Content Safety": { dev: 10, prod: 50, unit: "S0" },
+  "IoT Hub": { dev: 10, prod: 100, unit: "S1" },
+  "ACR": { dev: 5, prod: 50, unit: "Basic/Standard" },
+  "NAT Gateway": { dev: 0, prod: 30, unit: "Standard" },
+};
+
+// ── Tool: semantic_search_plays ────────────────────────────────────
+
+function computeSimilarity(query, text) {
+  const qt = query.toLowerCase().split(/\s+/).filter(w => w.length >= 3);
+  const tt = text.toLowerCase().split(/\s+/);
+  if (qt.length === 0) return 0;
+  let hits = 0;
+  for (const q of qt) { for (const t of tt) { if (t.includes(q) || q.includes(t)) { hits++; break; } } }
+  return hits / qt.length;
+}
+
+server.tool(
+  "semantic_search_plays",
+  "SMART PLAY SEARCH — Describe what you want to build in natural language, get top matching solution plays ranked by relevance with confidence scores.",
+  {
+    query: z.string().describe("Describe what you want to build (e.g., 'process invoices', 'RAG chatbot', 'edge AI on IoT')"),
+    top_k: z.number().optional().describe("Number of results (default: 3, max: 5)"),
+  },
+  async ({ query, top_k = 3 }) => {
+    const k = Math.min(Math.max(top_k, 1), 5);
+    const scored = PLAY_DATA.map(p => ({
+      ...p, score: computeSimilarity(query, `${p.name} ${p.pattern} ${p.services.join(" ")}`)
+    })).sort((a, b) => b.score - a.score).slice(0, k);
+
+    const results = scored.map((p, i) => {
+      const conf = p.score > 0.5 ? "🟢 High" : p.score > 0.25 ? "🟡 Medium" : "🔴 Low";
+      return `### ${i + 1}. Play ${p.id}: ${p.name}\n- **Confidence**: ${conf} (${(p.score * 100).toFixed(0)}%)\n- **Complexity**: ${p.cx}\n- **Services**: ${p.services.join(", ")}\n- **Guide**: /user-guide?play=${p.id}`;
+    }).join("\n\n");
+
+    return { content: [{ type: "text", text: `## 🔍 Smart Play Search\n**Query**: "${query}"\n\n${results}\n\n---\n> 💡 Use the [Configurator](https://frootai.dev/configurator) for guided selection.` }] };
+  }
+);
+
+// ── Tool: estimate_cost ────────────────────────────────────────────
+
+server.tool(
+  "estimate_cost",
+  "AZURE COST ESTIMATOR — Calculate itemized monthly Azure costs for any solution play at dev or production scale.",
+  {
+    play: z.string().describe("Play number: 01-20"),
+    scale: z.enum(["dev", "prod"]).optional().describe("Scale: 'dev' (default) or 'prod'"),
+  },
+  async ({ play, scale = "dev" }) => {
+    const num = play.padStart(2, "0");
+    const pd = PLAY_DATA.find(p => p.id === num);
+    if (!pd) return { content: [{ type: "text", text: `❌ Play ${play} not found. Use 01-20.` }] };
+
+    let total = 0;
+    const rows = pd.services.map(svc => {
+      const pr = PRICING[svc] || { dev: 0, prod: 0, unit: "?" };
+      const cost = scale === "prod" ? pr.prod : pr.dev;
+      total += cost;
+      return `| ${svc} | $${cost}/mo | ${pr.unit} |`;
+    });
+
+    return { content: [{ type: "text", text: `## 💰 Cost Estimate: Play ${num} — ${pd.name}\n**Scale**: ${scale === "prod" ? "🏭 Production" : "🧪 Dev/Test"}\n\n| Service | Cost | Tier |\n|---------|------|------|\n${rows.join("\n")}\n| **TOTAL** | **$${total}/mo** | |\n\n### 💡 Tips\n${scale === "prod" ? "- Use Play 14 (AI Gateway) for caching — saves 30-50%\n- Use gpt-4o-mini for classification ($0.15/M vs $2.50/M)\n- Consider reserved capacity for 20-40% savings" : "- Use free tiers where available\n- Use gpt-4o-mini during dev\n- Use serverless Container Apps"}\n\n> ⚠️ Estimates based on Azure retail pricing. Actual costs vary.` }] };
+  }
+);
+
+// ── Tool: validate_config ──────────────────────────────────────────
+
+server.tool(
+  "validate_config",
+  "CONFIG VALIDATOR — Validate TuneKit config files (openai.json, guardrails.json) against best practices and play-specific rules.",
+  {
+    config_type: z.enum(["openai.json", "guardrails.json", "agents.json"]).describe("Config file type"),
+    config_content: z.string().describe("JSON content of the config file"),
+    play: z.string().optional().describe("Play number for play-specific rules"),
+  },
+  async ({ config_type, config_content, play }) => {
+    let config;
+    try { config = JSON.parse(config_content); }
+    catch (e) { return { content: [{ type: "text", text: `## 🔴 Invalid JSON\n\`\`\`\n${e.message}\n\`\`\`` }] }; }
+
+    const issues = [], passes = [];
+    const rules = {
+      "openai.json": [
+        ["model", true, (v) => !v ? "🔴 Missing model" : null],
+        ["temperature", true, (v) => v === undefined ? "🔴 Missing temperature" : v > 1 ? "🔴 temperature > 1.0 — too random" : v < 0 ? "🔴 Negative temperature" : play === "03" && v > 0 ? "⚠️ Play 03 should use temperature=0" : null],
+        ["max_tokens", true, (v) => v === undefined ? "🔴 Missing max_tokens" : v > 4096 ? "⚠️ max_tokens > 4096 — may increase costs" : v < 50 ? "⚠️ max_tokens < 50 — responses will truncate" : null],
+      ],
+      "guardrails.json": [
+        ["blockedTopics", true, (v) => !v ? "🔴 Missing blockedTopics" : Array.isArray(v) && v.length === 0 ? "⚠️ No blocked topics for production" : null],
+        ["maxTokensPerRequest", false, (v) => v > 10000 ? "⚠️ Very high token limit" : null],
+        ["piiFilter", false, (v) => v === false ? "⚠️ PII filter disabled" : null],
+      ],
+      "agents.json": [
+        ["agents", true, (v) => !v ? "🔴 Missing agents array" : Array.isArray(v) && v.length === 0 ? "⚠️ No agents defined" : null],
+      ],
+    };
+
+    for (const [field, required, check] of (rules[config_type] || [])) {
+      const val = config[field];
+      const issue = check(val);
+      if (issue) issues.push(issue);
+      else if (val !== undefined) passes.push(`✅ \`${field}\` OK`);
+      else if (required) issues.push(`🔴 Missing \`${field}\``);
+    }
+
+    return { content: [{ type: "text", text: `## 🔧 Validate: ${config_type}${play ? ` (Play ${play})` : ""}\n**Status**: ${issues.length === 0 ? "✅ All good" : `⚠️ ${issues.length} issue(s)`}\n\n${passes.join("\n")}\n${issues.length > 0 ? "\n### Issues\n" + issues.join("\n") : ""}\n\n> Use \`get_architecture_pattern\` for design guidance.` }] };
+  }
+);
+
 // ── Resources: Module listing ──────────────────────────────────────
 
 server.resource(
