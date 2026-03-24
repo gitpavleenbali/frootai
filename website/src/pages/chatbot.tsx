@@ -57,16 +57,27 @@ export default function ChatbotPage(): JSX.Element {
   ]);
   const endRef = useRef<HTMLDivElement>(null);
   const chatRef = useRef<HTMLDivElement>(null);
+  const [autoScroll, setAutoScroll] = useState(true);
+
+  // Auto-scroll to bottom when new messages arrive (if auto-scroll is enabled)
   useEffect(() => {
     const el = chatRef.current;
-    if (el) {
-      // Only auto-scroll if user is near the bottom (within 150px)
-      const isNearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 150;
-      if (isNearBottom) {
-        el.scrollTop = el.scrollHeight;
-      }
+    if (el && autoScroll) {
+      el.scrollTop = el.scrollHeight;
     }
-  }, [history]);
+  }, [history, autoScroll]);
+
+  // Detect user manually scrolling up → pause auto-scroll; scrolling to bottom → resume
+  useEffect(() => {
+    const el = chatRef.current;
+    if (!el) return;
+    const handleScroll = () => {
+      const isAtBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+      setAutoScroll(isAtBottom);
+    };
+    el.addEventListener("scroll", handleScroll);
+    return () => el.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // Fix relative links by prepending base path
   const fixHref = (href: string) => {
@@ -125,6 +136,7 @@ export default function ChatbotPage(): JSX.Element {
     if (!message.trim() || loading) return;
     const newH = [...history, { role: "user", text: message }];
     setHistory(newH); setMsg(""); setLoading(true);
+    setAutoScroll(true); // Always scroll to show new response
 
     // ═══ COMPUTE AUGMENTATION — call MCP-like endpoints before GPT ═══
     let computeContext = "";
