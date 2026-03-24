@@ -126,15 +126,47 @@ export default function ChatbotPage(): JSX.Element {
     const newH = [...history, { role: "user", text: message }];
     setHistory(newH); setMsg(""); setLoading(true);
 
+    // ═══ COMPUTE AUGMENTATION — call MCP-like endpoints before GPT ═══
+    let computeContext = "";
+    const q = message.toLowerCase();
+    try {
+      // Detect cost questions
+      const costMatch = q.match(/(?:cost|price|pricing|how much|estimate|budget).*(?:play|solution)?\s*(\d{1,2})/);
+      if (costMatch || q.includes("cost") || q.includes("pricing") || q.includes("how much")) {
+        const playNum = costMatch?.[1] || "01";
+        const scale = q.includes("prod") || q.includes("production") ? "prod" : "dev";
+        const r = await fetch(CHAT_API_URL.replace("/api/chat", "/api/estimate-cost"), {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ play: playNum, scale }),
+        });
+        if (r.ok) {
+          const data = await r.json();
+          computeContext = `\n\n[COMPUTED DATA — use this in your response]\nCost estimate for Play ${data.play.id} (${data.play.name}) at ${data.scale} scale:\n${data.items.map((i: any) => `- ${i.service}: $${i.cost}/mo`).join("\n")}\nTotal: $${data.total}/mo\n[END COMPUTED DATA]`;
+        }
+      }
+      // Detect play search questions
+      else if (q.includes("which play") || q.includes("what play") || q.includes("recommend") || q.includes("find a play") || q.includes("suggest")) {
+        const r = await fetch(CHAT_API_URL.replace("/api/chat", "/api/search-plays"), {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query: message }),
+        });
+        if (r.ok) {
+          const data = await r.json();
+          computeContext = `\n\n[COMPUTED DATA — use this in your response]\nSemantic play search results for "${message}":\n${data.results.map((p: any) => `- Play ${p.id}: ${p.name} (${(p.score * 100).toFixed(0)}% match) — ${p.services.join(", ")}`).join("\n")}\n[END COMPUTED DATA]`;
+        }
+      }
+    } catch { /* compute augmentation is optional — GPT works without it */ }
+
     // Add placeholder for streaming assistant message
     const streamH = [...newH, { role: "assistant", text: "" }];
     setHistory(streamH);
 
     try {
+      const msgWithContext = computeContext ? message + computeContext : message;
       const res = await fetch(STREAM_API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message, history: newH.slice(-10).map(m => ({ role: m.role, content: m.text })) }),
+        body: JSON.stringify({ message: msgWithContext, history: newH.slice(-10).map(m => ({ role: m.role, content: m.text })) }),
       });
 
       if (!res.ok || !res.body) throw new Error("API " + res.status);
