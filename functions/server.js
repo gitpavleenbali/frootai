@@ -144,7 +144,7 @@ A: No! Knowledge modules, VS Code extension, MCP server work without Azure. Only
 A: Yes! Visit [/community](/community) for guidelines.
 
 ## GUIDELINES
-1. Always include relevant [clickable links](/path) using markdown
+1. Always include relevant [clickable links](/solution-plays) using markdown
 2. When recommending a play, include the [User Guide](/user-guide?play=XX) link
 3. For setup → [Setup Guide](/setup-guide) | For learning → [FAI Learning Hub](/learning-hub)
 4. For dev docs → [Developer Hub](/dev-hub) | For contributing → [Community](/community)

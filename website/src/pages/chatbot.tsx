@@ -70,7 +70,7 @@ export default function ChatbotPage(): JSX.Element {
   const mdComponents: Record<string, React.FC<any>> = {
     a: ({ href, children }) => (
       <a href={fixHref(href || "")} style={{ color: "#f59e0b", textDecoration: "underline", fontWeight: 500 }}
-        {...(href?.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}>{children}</a>
+        target="_blank" rel="noopener noreferrer">{children}</a>
     ),
     strong: ({ children }) => <strong style={{ color: "#fbbf24" }}>{children}</strong>,
     h2: ({ children }) => <h3 style={{ margin: "14px 0 6px", fontSize: "1rem", fontWeight: 700, color: "#f59e0b", borderBottom: "1px solid rgba(245,158,11,0.15)", paddingBottom: "4px" }}>{children}</h3>,
@@ -165,7 +165,23 @@ export default function ChatbotPage(): JSX.Element {
   const followUps = lastAssistant ? getFollowUps(lastAssistant.text) : [];
 
   return (
-    <Layout title="FAI Agent - FrootAI" description="AI-powered architecture guide. Grounded in 20 solution plays, 16 MCP tools, 18 knowledge modules. Powered by Azure OpenAI GPT-4.1.">
+    <Layout title="FAI Agent - FrootAI" description="AI-powered architecture guide. Grounded in 20 solution plays, 16 MCP tools, 18 knowledge modules.">
+      {/* Bouncing dots + streaming cursor animations */}
+      <style>{`
+        @keyframes bounceDot {
+          0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+          40% { transform: translateY(-8px); opacity: 1; }
+        }
+        @keyframes blink {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0; }
+        }
+        .bounce-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #f59e0b; animation: bounceDot 1.4s ease-in-out infinite; }
+        .bounce-dot:nth-child(1) { animation-delay: 0s; }
+        .bounce-dot:nth-child(2) { animation-delay: 0.2s; }
+        .bounce-dot:nth-child(3) { animation-delay: 0.4s; }
+        .streaming-cursor::after { content: '\u258C'; animation: blink 0.8s step-end infinite; color: #f59e0b; font-weight: 300; }
+      `}</style>
       <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "48px 24px 80px", width: "100%", position: "relative" }}>
 
         {/* Subtle gold/amber radial glow behind the hero */}
@@ -198,19 +214,21 @@ export default function ChatbotPage(): JSX.Element {
                   <div style={{ width: "28px", height: "28px", borderRadius: "50%", background: "linear-gradient(135deg, rgba(245,158,11,0.2), rgba(99,102,241,0.15))", border: "1px solid rgba(245,158,11,0.3)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.75rem", flexShrink: 0, marginTop: "2px" }}>✨</div>
                 )}
                 <div style={{ maxWidth: "85%", padding: "14px 18px", borderRadius: m.role === "user" ? "16px 16px 4px 16px" : "16px 16px 16px 4px", background: m.role === "user" ? "rgba(245,158,11,0.08)" : "rgba(255,255,255,0.03)", border: `1px solid ${m.role === "user" ? "rgba(245,158,11,0.15)" : "rgba(255,255,255,0.06)"}`, backdropFilter: "blur(8px)", fontSize: "0.84rem", lineHeight: 1.7 }}>
-                  {m.role === "assistant" ? renderMd(m.text) : m.text}
+                  <div className={loading && i === history.length - 1 && m.role === "assistant" ? "streaming-cursor" : ""}>
+                    {m.role === "assistant" ? renderMd(m.text) : m.text}
+                  </div>
                 </div>
               </div>
             ))}
-            {loading && (
+            {loading && history[history.length - 1]?.text === "" && (
               <div style={{ display: "flex", justifyContent: "flex-start", alignItems: "flex-start", gap: "10px", marginBottom: "16px" }}>
-                <div style={{ width: "28px", height: "28px", borderRadius: "50%", background: "linear-gradient(135deg, rgba(245,158,11,0.2), rgba(99,102,241,0.15))", border: "1px solid rgba(245,158,11,0.3)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.75rem", flexShrink: 0, animation: "pulse 1.5s ease-in-out infinite" }}>✨</div>
-                <div style={{ padding: "14px 18px", borderRadius: "16px 16px 16px 4px", background: "linear-gradient(135deg, rgba(99,102,241,0.08), rgba(124,58,237,0.04))", border: "1px solid rgba(99,102,241,0.15)", fontSize: "0.84rem" }}>
-                  <span style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
-                    <span style={{ display: "inline-block", width: "6px", height: "6px", borderRadius: "50%", background: "#f59e0b", animation: "pulse 1s ease-in-out infinite" }} />
-                    <span style={{ display: "inline-block", width: "6px", height: "6px", borderRadius: "50%", background: "#f59e0b", animation: "pulse 1s ease-in-out 0.2s infinite" }} />
-                    <span style={{ display: "inline-block", width: "6px", height: "6px", borderRadius: "50%", background: "#f59e0b", animation: "pulse 1s ease-in-out 0.4s infinite" }} />
-                    <span style={{ color: "var(--ifm-color-emphasis-400)", marginLeft: "4px" }}>FAI Agent processing</span>
+                <div style={{ width: "28px", height: "28px", borderRadius: "50%", background: "linear-gradient(135deg, rgba(245,158,11,0.2), rgba(99,102,241,0.15))", border: "1px solid rgba(245,158,11,0.3)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.75rem", flexShrink: 0 }}>✨</div>
+                <div style={{ padding: "14px 18px", borderRadius: "16px 16px 16px 4px", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", backdropFilter: "blur(8px)" }}>
+                  <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                    <span className="bounce-dot" />
+                    <span className="bounce-dot" />
+                    <span className="bounce-dot" />
+                    <span style={{ color: "var(--ifm-color-emphasis-400)", marginLeft: "6px", fontSize: "0.8rem" }}>FAI Agent is thinking</span>
                   </span>
                 </div>
               </div>
@@ -233,7 +251,7 @@ export default function ChatbotPage(): JSX.Element {
 
           {/* Input */}
           <div style={{ padding: "16px 20px", borderTop: "1px solid rgba(255,255,255,0.04)", display: "flex", gap: "10px", alignItems: "flex-end" }}>
-            <textarea value={msg} onChange={e => setMsg(e.target.value)} onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } }} placeholder="Ask anything..." rows={1} style={{ flex: 1, padding: "14px 18px", borderRadius: "14px", border: "1px solid rgba(255,255,255,0.08)", background: "rgba(255,255,255,0.04)", backdropFilter: "blur(8px)", color: "#e0e0e0", fontSize: "0.85rem", outline: "none", transition: "border-color 0.2s, background 0.2s", resize: "none", overflow: "hidden", minHeight: "48px", maxHeight: "160px", lineHeight: "1.5", fontFamily: "inherit" }} disabled={loading}
+            <textarea value={msg} onChange={e => setMsg(e.target.value)} onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } }} placeholder="Ask anything... (Shift+Enter for new line)" rows={1} style={{ flex: 1, padding: "14px 18px", borderRadius: "14px", border: "1px solid rgba(255,255,255,0.08)", background: "rgba(255,255,255,0.04)", backdropFilter: "blur(8px)", color: "#e0e0e0", fontSize: "0.85rem", outline: "none", transition: "border-color 0.2s, background 0.2s", resize: "none", overflow: "hidden", minHeight: "48px", maxHeight: "160px", lineHeight: "1.5", fontFamily: "inherit" }} disabled={loading}
               onFocus={e => { e.currentTarget.style.borderColor = "rgba(245,158,11,0.3)"; e.currentTarget.style.background = "rgba(255,255,255,0.06)"; }}
               onBlur={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"; e.currentTarget.style.background = "rgba(255,255,255,0.04)"; }}
               onInput={e => { const t = e.currentTarget; t.style.height = "auto"; t.style.height = Math.min(t.scrollHeight, 160) + "px"; }} />
