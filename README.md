@@ -324,7 +324,9 @@ PR template included — CI runs `validate-plays.yml` on every pull request.
 
 ## License
 
-MIT — use it, extend it, embed it, ship it.
+MIT — use it, extend it, embed it, ship it. See [LICENSE](./LICENSE).
+
+"FrootAI" name and logo are created by Pavleen Bali.
 
 ---
 

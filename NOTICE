@@ -1,0 +1,16 @@
+FrootAI — From the Roots to the Fruits 🌳
+Copyright (c) 2025-2026 Pavleen Bali
+
+This project is open source under the MIT License.
+Everyone is welcome to use, modify, and contribute!
+
+See LICENSE for the full license text.
+See CONTRIBUTING.md for how to get involved.
+
+---
+
+Third-party software used in this project:
+- Docusaurus (Meta) — MIT License
+- React (Meta) — MIT License
+- MCP SDK (Anthropic) — MIT License
+- remark-gfm — MIT License

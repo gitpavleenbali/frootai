@@ -116,3 +116,9 @@ Before submitting, verify your contribution:
 - Focus on the infra/platform audience
 - Quality over quantity — one deeply customized play beats ten skeletons
 - MIT License — all contributions are MIT-licensed
+
+---
+
+## Contribution License
+
+By submitting a pull request, you agree that your contribution is licensed under the [MIT License](./LICENSE) and may be incorporated into FrootAI. You retain credit for your work — we celebrate contributors! 🎉
