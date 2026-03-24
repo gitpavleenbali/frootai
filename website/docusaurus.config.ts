@@ -36,7 +36,7 @@ const config: Config = {
         language: ["en"],
         docsRouteBasePath: "/docs",
         indexBlog: false,
-        searchBarShortcutHint: true,
+        searchBarShortcutHint: false,
         searchBarPosition: "right",
       },
     ],
@@ -202,18 +202,27 @@ const config: Config = {
           ],
         },
         {
+          title: "Community",
+          items: [
+            { label: "Partner Integrations", to: "/partners" },
+            { label: "Plugin Marketplace", to: "/marketplace" },
+            { label: "Enterprise", to: "/enterprise" },
+            { label: "Workshops", href: "https://github.com/gitpavleenbali/frootai/tree/main/workshops" },
+          ],
+        },
+        {
           title: "Install",
           items: [
             { label: "MCP Server (npm)", href: "https://www.npmjs.com/package/frootai-mcp" },
             { label: "VS Code Extension", href: "https://marketplace.visualstudio.com/items?itemName=pavleenbali.frootai" },
-            { label: "GitHub", href: "https://github.com/gitpavleenbali/frootai" },
+            { label: "Docker Image", href: "https://github.com/gitpavleenbali/frootai/pkgs/container/frootai-mcp" },
           ],
         },
         {
           title: "Connect",
           items: [
             { label: "LinkedIn", href: "https://linkedin.com/in/pavleenbali" },
-            { label: "Website", href: "https://frootai.dev" },
+            { label: "GitHub", href: "https://github.com/gitpavleenbali/frootai" },
             { label: "Newsletter", href: "https://www.linkedin.com/build-relation/newsletter-follow?entityUrn=7001119707667832832" },
           ],
         },

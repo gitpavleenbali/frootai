@@ -88,59 +88,84 @@ article p {
 /*  NAVBAR — Glassmorphism like Anthropic                              */
 /* ================================================================== */
 
-/* Search bar: icon-only lens, opens modal on click */
+/* Search: small glow pill matching Hi FAI / FAI Agent style (purple) */
 .navbar .DocSearch-Button,
-.navbar [class*="searchBar"] {
-  background: rgba(124, 58, 237, 0.15) !important;
-  border: 1px solid rgba(124, 58, 237, 0.3) !important;
-  border-radius: 8px !important;
-  width: 36px !important;
-  min-width: 36px !important;
-  max-width: 36px !important;
-  height: 32px !important;
-  padding: 0 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  cursor: pointer;
-  transition: all 0.2s ease;
+.navbar [class*="searchBar"],
+.navbar [class*="searchBar"] > button {
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.15), rgba(167, 139, 250, 0.08)) !important;
+  border: 1px solid rgba(124, 58, 237, 0.4) !important;
+  border-radius: 10px !important;
+  padding: 6px 12px !important;
+  font-weight: 700 !important;
+  color: #a78bfa !important;
+  transition: all 0.3s ease !important;
+  text-shadow: 0 0 8px rgba(124, 58, 237, 0.2);
+  width: auto !important;
+  min-width: unset !important;
+  max-width: unset !important;
+  height: auto !important;
+  font-size: 0.82rem !important;
+  gap: 4px !important;
 }
 .navbar .DocSearch-Button:hover,
-.navbar [class*="searchBar"]:hover {
-  background: rgba(124, 58, 237, 0.25) !important;
-  border-color: rgba(124, 58, 237, 0.5) !important;
+.navbar [class*="searchBar"]:hover,
+.navbar [class*="searchBar"] > button:hover {
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.25), rgba(167, 139, 250, 0.15)) !important;
+  border-color: rgba(124, 58, 237, 0.6) !important;
+  box-shadow: 0 0 20px rgba(124, 58, 237, 0.3), 0 0 40px rgba(124, 58, 237, 0.1) !important;
+  color: #c4b5fd !important;
+  transform: translateY(-1px);
+  text-shadow: 0 0 12px rgba(124, 58, 237, 0.4);
 }
-/* Hide the search text, keep only the icon */
-.navbar .DocSearch-Button .DocSearch-Button-Placeholder,
+/* Hide Ctrl+K badge and placeholder text — show only 🔍 icon */
 .navbar .DocSearch-Button .DocSearch-Button-Keys,
-.navbar [class*="searchBar"] input,
-.navbar [class*="searchBar"] [class*="searchBarContainer"] input {
+.navbar .DocSearch-Button .DocSearch-Button-Placeholder,
+.navbar [class*="searchBar"] input[type="search"],
+.navbar [class*="searchBar"] [class*="searchHintContainer"],
+.navbar [class*="searchBar"] .aa-DetachedSearchButtonPlaceholder {
   display: none !important;
-  width: 0 !important;
 }
-.navbar .DocSearch-Button .DocSearch-Search-Icon,
-.navbar [class*="searchBar"] svg,
-.navbar [class*="searchBar"] button {
+.navbar .DocSearch-Button .DocSearch-Search-Icon {
   color: #a78bfa !important;
-  width: 16px !important;
-  height: 16px !important;
+  width: 14px !important;
+  height: 14px !important;
 }
-/* Search modal placeholder */
-.DocSearch-Modal .DocSearch-Input::placeholder {
-  color: #666 !important;
-  font-style: italic;
+/* For local-search plugin: hide input, show only button */
+.navbar [class*="searchBar"] input {
+  width: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  background: none !important;
 }
 
-/* Footer: 2-column grid for Explore section */
-.footer__links .footer__items {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0 24px;
+/* Footer: compact, smaller font, clean columns */
+.footer {
+  padding: 2rem 0 1rem !important;
 }
-@media (max-width: 600px) {
-  .footer__links .footer__items {
-    grid-template-columns: 1fr;
-  }
+.footer__title {
+  font-size: 0.75rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  opacity: 0.6 !important;
+  margin-bottom: 0.5rem !important;
+}
+.footer__item {
+  margin-bottom: 0.25rem !important;
+}
+.footer__link-item {
+  font-size: 0.8rem !important;
+  opacity: 0.8;
+}
+.footer__link-item:hover {
+  opacity: 1;
+}
+.footer__col {
+  padding: 0 1rem !important;
+}
+.footer__copyright {
+  font-size: 0.72rem !important;
+  opacity: 0.5 !important;
+  margin-top: 1.5rem !important;
 }
 
 .navbar {
