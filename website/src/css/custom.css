@@ -88,21 +88,58 @@ article p {
 /*  NAVBAR — Glassmorphism like Anthropic                              */
 /* ================================================================== */
 
-/* Search bar: compact, doesn't push nav items */
+/* Search bar: icon-only lens, opens modal on click */
 .navbar .DocSearch-Button,
 .navbar [class*="searchBar"] {
-  max-width: 180px;
-  padding: 0 8px;
+  background: rgba(124, 58, 237, 0.15) !important;
+  border: 1px solid rgba(124, 58, 237, 0.3) !important;
+  border-radius: 8px !important;
+  width: 36px !important;
+  min-width: 36px !important;
+  max-width: 36px !important;
+  height: 32px !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
-.navbar [class*="searchBar"] input {
-  width: 140px;
-  font-size: 0.82rem;
+.navbar .DocSearch-Button:hover,
+.navbar [class*="searchBar"]:hover {
+  background: rgba(124, 58, 237, 0.25) !important;
+  border-color: rgba(124, 58, 237, 0.5) !important;
 }
-@media (max-width: 996px) {
-  .navbar .DocSearch-Button,
-  .navbar [class*="searchBar"] {
-    max-width: 36px;
-    overflow: hidden;
+/* Hide the search text, keep only the icon */
+.navbar .DocSearch-Button .DocSearch-Button-Placeholder,
+.navbar .DocSearch-Button .DocSearch-Button-Keys,
+.navbar [class*="searchBar"] input,
+.navbar [class*="searchBar"] [class*="searchBarContainer"] input {
+  display: none !important;
+  width: 0 !important;
+}
+.navbar .DocSearch-Button .DocSearch-Search-Icon,
+.navbar [class*="searchBar"] svg,
+.navbar [class*="searchBar"] button {
+  color: #a78bfa !important;
+  width: 16px !important;
+  height: 16px !important;
+}
+/* Search modal placeholder */
+.DocSearch-Modal .DocSearch-Input::placeholder {
+  color: #666 !important;
+  font-style: italic;
+}
+
+/* Footer: 2-column grid for Explore section */
+.footer__links .footer__items {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 24px;
+}
+@media (max-width: 600px) {
+  .footer__links .footer__items {
+    grid-template-columns: 1fr;
   }
 }
 

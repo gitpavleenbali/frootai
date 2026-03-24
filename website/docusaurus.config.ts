@@ -190,20 +190,15 @@ const config: Config = {
       style: "dark",
       links: [
         {
-          title: "Platform",
+          title: "Explore",
           items: [
             { label: "Solution Plays", to: "/solution-plays" },
             { label: "Ecosystem", to: "/ecosystem" },
-            { label: "Setup Guide", to: "/setup-guide" },
-            { label: "FAI Agent", to: "/chatbot" },
-          ],
-        },
-        {
-          title: "Learn",
-          items: [
             { label: "Knowledge Hub", to: "/docs/" },
             { label: "Packages", to: "/packages" },
-            { label: "Workshops", href: "https://github.com/gitpavleenbali/frootai/tree/main/workshops" },
+            { label: "Setup Guide", to: "/setup-guide" },
+            { label: "FAI Agent", to: "/chatbot" },
+            { label: "Configurator", to: "/configurator" },
           ],
         },
         {
