@@ -7,8 +7,8 @@ const config: Config = {
   tagline: "The open glue — from root to fruit. Binding infrastructure, platform, and application for AI architecture.",
   favicon: "img/favicon.ico",
 
-  url: "https://gitpavleenbali.github.io",
-  baseUrl: "/frootai/",
+  url: "https://frootai.dev",
+  baseUrl: "/",
 
   organizationName: "gitpavleenbali",
   projectName: "frootai",
@@ -55,7 +55,7 @@ const config: Config = {
     announcementBar: {
       id: "frootai_mcp",
       content:
-        '🌱 <b>FrootAI Developer Kit</b> (MCP Server + VS Code Extension) — Add <b style="color:#10b981">Infra</b>, <b style="color:#06b6d4">Platform</b> &amp; <b style="color:#7c3aed">App</b> knowledge to your development ecosystem <a href="/frootai/setup-guide" style="color:#f59e0b;font-weight:700;text-decoration:none">→ Setup Guide</a>',
+        '🌱 <b>FrootAI Developer Kit</b> (MCP Server + VS Code Extension) — Add <b style="color:#10b981">Infra</b>, <b style="color:#06b6d4">Platform</b> &amp; <b style="color:#7c3aed">App</b> knowledge to your development ecosystem <a href="/setup-guide" style="color:#f59e0b;font-weight:700;text-decoration:none">→ Setup Guide</a>',
       backgroundColor: "#0a0a0f",
       textColor: "#e0e0e0",
       isCloseable: true,
@@ -66,7 +66,7 @@ const config: Config = {
       logo: {
         alt: "FrootAI",
         src: "img/aifroot-logo.svg",
-        href: "/frootai/",
+        href: "/",
       },
       items: [
         {

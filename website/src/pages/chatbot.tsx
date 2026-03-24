@@ -7,7 +7,7 @@ import styles from "./index.module.css";
 
 const CHAT_API_URL = "https://frootai-chatbot-api.azurewebsites.net/api/chat";
 const STREAM_API_URL = "https://frootai-chatbot-api.azurewebsites.net/api/chat/stream";
-const BASE = "/frootai"; // GitHub Pages base path
+const BASE = ""; // Custom domain — no base path needed
 const USE_FALLBACK = true;
 
 const SUGGESTIONS = [
@@ -62,7 +62,7 @@ export default function ChatbotPage(): JSX.Element {
   const fixHref = (href: string) => {
     if (!href) return href;
     if (href.startsWith("http")) return href;
-    if (href.startsWith("/") && !href.startsWith("/frootai")) return `${BASE}${href}`;
+    if (href.startsWith("/")) return href;
     return href;
   };
 
