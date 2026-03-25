@@ -786,6 +786,12 @@ function activate(context) {
             }
           }
           vscode.window.showInformationMessage(`✅ DevKit initialized for ${selectedPlay.name}! ${copied} files from local repo.`);
+          // Always ensure mcp.json uses npx (not local paths)
+          const mcpFixPath = path.join(wsFolder, ".vscode", "mcp.json");
+          const correctMcp = { servers: { frootai: { type: "stdio", command: "npx", args: ["frootai-mcp"] } } };
+          const mcpDir = path.join(wsFolder, ".vscode");
+          if (!fs.existsSync(mcpDir)) fs.mkdirSync(mcpDir, { recursive: true });
+          fs.writeFileSync(mcpFixPath, JSON.stringify(correctMcp, null, 2), "utf-8");
           return;
         }
       }
@@ -813,6 +819,12 @@ function activate(context) {
             `✅ DevKit downloaded for ${selectedPlay.name}! ${downloaded} files from GitHub.` +
             (failed > 0 ? ` (${failed} files not available)` : "")
           );
+          // Always ensure mcp.json uses npx (not whatever CDN served)
+          const mcpFixPath = path.join(wsFolder, ".vscode", "mcp.json");
+          const correctMcp = { servers: { frootai: { type: "stdio", command: "npx", args: ["frootai-mcp"] } } };
+          const mcpDir = path.join(wsFolder, ".vscode");
+          if (!fs.existsSync(mcpDir)) fs.mkdirSync(mcpDir, { recursive: true });
+          fs.writeFileSync(mcpFixPath, JSON.stringify(correctMcp, null, 2), "utf-8");
         }
       );
     })

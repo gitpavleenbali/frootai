@@ -1,51 +1,95 @@
 # frootai-mcp
 
-> **22-tool MCP server for AI architecture.** Knowledge + compute + agent chain  works offline, fetches live, chains in chat.
+> **The AI architecture knowledge engine for your coding agent.**
+> 22 tools. 18 modules. 682KB of curated knowledge. Zero hallucination.
 
 [![npm](https://img.shields.io/npm/v/frootai-mcp)](https://www.npmjs.com/package/frootai-mcp) [![license](https://img.shields.io/npm/l/frootai-mcp)](LICENSE)
+
+**FrootAI** — From the Roots to the Fruits. The open glue for GenAI architecture.
 
 ---
 
 ## Quick Start
 
-**npm** (recommended):
 ```bash
 npx frootai-mcp@latest
 ```
+
+<details>
+<summary><b>Other install methods</b></summary>
 
 **Install globally:**
 ```bash
 npm i -g frootai-mcp@latest && frootai-mcp
 ```
 
-**Docker:**
+**Docker (no Node.js needed):**
 ```bash
 docker run -i ghcr.io/gitpavleenbali/frootai-mcp
 ```
 
-### Connect to Your AI Agent
-
-**VS Code** (`.vscode/mcp.json`):
-```json
-{ "servers": { "frootai": { "type": "stdio", "command": "npx", "args": ["frootai-mcp"] } } }
-```
-
-**Claude Desktop / Cursor**:
-```json
-{ "mcpServers": { "frootai": { "command": "npx", "args": ["frootai-mcp@latest"] } } }
-```
-
-**Docker** (`.vscode/mcp.json`):
-```json
-{ "servers": { "frootai": { "type": "stdio", "command": "docker", "args": ["run", "-i", "ghcr.io/gitpavleenbali/frootai-mcp"] } } }
-```
-```
+</details>
 
 ---
 
-## 22 Tools
+## Connect to Your AI Agent
 
-### Static (6)  Bundled knowledge, works offline
+<details open>
+<summary><b>VS Code / GitHub Copilot</b> — <code>.vscode/mcp.json</code></summary>
+
+```json
+{
+  "servers": {
+    "frootai": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["frootai-mcp"]
+    }
+  }
+}
+```
+
+</details>
+
+<details>
+<summary><b>Claude Desktop / Cursor</b></summary>
+
+```json
+{
+  "mcpServers": {
+    "frootai": {
+      "command": "npx",
+      "args": ["frootai-mcp@latest"]
+    }
+  }
+}
+```
+
+</details>
+
+<details>
+<summary><b>Docker</b> — <code>.vscode/mcp.json</code></summary>
+
+```json
+{
+  "servers": {
+    "frootai": {
+      "type": "stdio",
+      "command": "docker",
+      "args": ["run", "-i", "ghcr.io/gitpavleenbali/frootai-mcp"]
+    }
+  }
+}
+```
+
+</details>
+
+---
+
+## 22 Tools at a Glance
+
+<details open>
+<summary><b>Static (6)</b> — Bundled knowledge, works offline</summary>
 
 | Tool | What it does |
 |------|-------------|
@@ -56,7 +100,10 @@ docker run -i ghcr.io/gitpavleenbali/frootai-mcp
 | `get_architecture_pattern` | 7 decision guides (RAG vs fine-tuning, model selection, etc.) |
 | `get_froot_overview` | Complete framework summary |
 
-### Live (4)  Network-enabled, graceful offline fallback
+</details>
+
+<details>
+<summary><b>Live (4)</b> — Network-enabled, graceful offline fallback</summary>
 
 | Tool | What it does |
 |------|-------------|
@@ -65,7 +112,10 @@ docker run -i ghcr.io/gitpavleenbali/frootai-mcp
 | `list_community_plays` | List 20 solution plays from GitHub |
 | `get_github_agentic_os` | .github Agentic OS guide (7 primitives) |
 
-### Agent Chain (3)  Build > Review > Tune in conversation
+</details>
+
+<details>
+<summary><b>Agent Chain (3)</b> — Build → Review → Tune in conversation</summary>
 
 | Tool | What it does |
 |------|-------------|
@@ -73,9 +123,12 @@ docker run -i ghcr.io/gitpavleenbali/frootai-mcp
 | `agent_review` | Security + quality checklist, suggests tuning |
 | `agent_tune` | Production readiness validation, suggests deploy |
 
-Just talk: *"Build me an IT ticket API"* then *"Review this"* then *"Validate my config"*. Each tool hands off to the next.
+Just talk: *"Build me an IT ticket API"* → *"Review this"* → *"Validate my config"*. Each tool hands off to the next.
 
-### Ecosystem (3)  Azure AI model intelligence
+</details>
+
+<details>
+<summary><b>Ecosystem (3)</b> — Azure AI model intelligence</summary>
 
 | Tool | What it does |
 |------|-------------|
@@ -83,7 +136,10 @@ Just talk: *"Build me an IT ticket API"* then *"Review this"* then *"Validate my
 | `get_azure_pricing` | Monthly cost estimates for 25+ Azure services |
 | `compare_models` | Side-by-side model comparison for your use case |
 
-### Compute (6)  Real calculations, not just lookups
+</details>
+
+<details>
+<summary><b>Compute (6)</b> — Real calculations, not just lookups</summary>
 
 | Tool | What it does |
 |------|-------------|
@@ -94,15 +150,18 @@ Just talk: *"Build me an IT ticket API"* then *"Review this"* then *"Validate my
 | `generate_architecture_diagram` | Mermaid architecture diagrams for any play |
 | `embedding_playground` | Cosine similarity between texts (educational) |
 
+</details>
+
 ---
 
-## What is Bundled
+## What's Bundled
 
-- **18 FROOT modules**  Foundations, Reasoning, Orchestration, Operations, Transformation
-- **200+ glossary terms**  from ablation to zero-shot
-- **20 solution plays**  each with .github Agentic OS (19 files per play)
-- **7 architecture decision guides**  RAG, agents, hosting, cost, deterministic AI
-- **682KB knowledge bundle**  curated, verified, zero hallucination
+| Content | Size |
+|---------|------|
+| 18 FROOT modules (F·R·O·O·T) | 682KB |
+| 200+ glossary terms | A-Z |
+| 20 solution plays | .github Agentic OS |
+| 7 architecture decision guides | RAG, agents, hosting, cost |
 
 ---
 
@@ -111,10 +170,10 @@ Just talk: *"Build me an IT ticket API"* then *"Review this"* then *"Validate my
 | | |
 |---|---|
 | **Website** | [frootai.dev](https://frootai.dev) |
-| **VS Code** | [marketplace.visualstudio.com](https://marketplace.visualstudio.com/items?itemName=pavleenbali.frootai) |
+| **VS Code Extension** | [marketplace.visualstudio.com](https://marketplace.visualstudio.com/items?itemName=pavleenbali.frootai) |
 | **GitHub** | [github.com/gitpavleenbali/frootai](https://github.com/gitpavleenbali/frootai) |
 | **Setup Guide** | [frootai.dev/setup-guide](https://frootai.dev/setup-guide) |
 
 ---
 
-**FrootAI**  From the Roots to the Fruits. The open glue for GenAI.
+© 2026 FrootAI · MIT License
