@@ -88,84 +88,116 @@ article p {
 /*  NAVBAR — Glassmorphism like Anthropic                              */
 /* ================================================================== */
 
-/* Search: small glow pill matching Hi FAI / FAI Agent style (purple) */
-.navbar .DocSearch-Button,
-.navbar [class*="searchBar"],
-.navbar [class*="searchBar"] > button {
+/* ================================================================== */
+/*  SEARCH — Purple glow pill with 🔍 emoji, between FAI Agent & GitHub */
+/* ================================================================== */
+
+/* The search container: make it a compact glow pill */
+.navbar [class*="searchBar"] {
   background: linear-gradient(135deg, rgba(124, 58, 237, 0.15), rgba(167, 139, 250, 0.08)) !important;
   border: 1px solid rgba(124, 58, 237, 0.4) !important;
   border-radius: 10px !important;
-  padding: 6px 12px !important;
-  font-weight: 700 !important;
-  color: #a78bfa !important;
+  padding: 5px 14px !important;
   transition: all 0.3s ease !important;
-  text-shadow: 0 0 8px rgba(124, 58, 237, 0.2);
-  width: auto !important;
-  min-width: unset !important;
-  max-width: unset !important;
-  height: auto !important;
-  font-size: 0.82rem !important;
-  gap: 4px !important;
+  cursor: pointer !important;
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  height: 34px !important;
+  min-width: 34px !important;
+  max-width: 34px !important;
+  overflow: hidden !important;
+  margin: 0 4px !important;
 }
-.navbar .DocSearch-Button:hover,
-.navbar [class*="searchBar"]:hover,
-.navbar [class*="searchBar"] > button:hover {
+.navbar [class*="searchBar"]:hover {
   background: linear-gradient(135deg, rgba(124, 58, 237, 0.25), rgba(167, 139, 250, 0.15)) !important;
   border-color: rgba(124, 58, 237, 0.6) !important;
-  box-shadow: 0 0 20px rgba(124, 58, 237, 0.3), 0 0 40px rgba(124, 58, 237, 0.1) !important;
-  color: #c4b5fd !important;
+  box-shadow: 0 0 16px rgba(124, 58, 237, 0.3), 0 0 32px rgba(124, 58, 237, 0.1) !important;
   transform: translateY(-1px);
-  text-shadow: 0 0 12px rgba(124, 58, 237, 0.4);
 }
-/* Hide Ctrl+K badge and placeholder text — show only 🔍 icon */
-.navbar .DocSearch-Button .DocSearch-Button-Keys,
-.navbar .DocSearch-Button .DocSearch-Button-Placeholder,
-.navbar [class*="searchBar"] input[type="search"],
-.navbar [class*="searchBar"] [class*="searchHintContainer"],
-.navbar [class*="searchBar"] .aa-DetachedSearchButtonPlaceholder {
-  display: none !important;
+/* Add 🔍 lens emoji via ::before */
+.navbar [class*="searchBar"]::before {
+  content: "🔍" !important;
+  font-size: 14px !important;
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: 2 !important;
+  pointer-events: none !important;
 }
-.navbar .DocSearch-Button .DocSearch-Search-Icon {
-  color: #a78bfa !important;
-  width: 14px !important;
-  height: 14px !important;
-}
-/* For local-search plugin: hide input, show only button */
-.navbar [class*="searchBar"] input {
+/* Hide ALL search plugin internals — input, icons, hints, buttons */
+.navbar [class*="searchBar"] input,
+.navbar [class*="searchBar"] button,
+.navbar [class*="searchBar"] svg,
+.navbar [class*="searchBar"] [class*="searchHint"],
+.navbar [class*="searchBar"] [class*="searchIcon"],
+.navbar [class*="searchBar"] [class*="Placeholder"],
+.navbar [class*="searchBar"] span {
+  opacity: 0 !important;
   width: 0 !important;
+  height: 0 !important;
   padding: 0 !important;
+  margin: 0 !important;
   border: none !important;
-  background: none !important;
+  position: absolute !important;
+}
+/* But keep input clickable for focus trigger */
+.navbar [class*="searchBar"] input {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  opacity: 0 !important;
+  cursor: pointer !important;
+  z-index: 3 !important;
 }
 
-/* Footer: compact, smaller font, clean columns */
-.footer {
-  padding: 2rem 0 1rem !important;
+/* Mobile: keep search + Hi FAI + FAI Agent visible outside hamburger */
+@media (max-width: 996px) {
+  .navbar [class*="searchBar"] {
+    order: -1 !important;
+    margin-right: 4px !important;
+  }
+}
+
+/* ================================================================== */
+/*  FOOTER — Compact, dark, modern (inspired by Vercel/Supabase)       */
+/* ================================================================== */
+.footer--dark {
+  background: #08080d !important;
+  border-top: 1px solid rgba(255,255,255,0.04) !important;
+  padding: 2.5rem 0 1.2rem !important;
 }
 .footer__title {
-  font-size: 0.75rem !important;
+  font-size: 0.68rem !important;
   text-transform: uppercase !important;
-  letter-spacing: 0.08em !important;
-  opacity: 0.6 !important;
-  margin-bottom: 0.5rem !important;
+  letter-spacing: 0.1em !important;
+  color: rgba(255,255,255,0.35) !important;
+  margin-bottom: 0.6rem !important;
+  font-weight: 600 !important;
 }
 .footer__item {
-  margin-bottom: 0.25rem !important;
+  margin-bottom: 0.2rem !important;
 }
 .footer__link-item {
-  font-size: 0.8rem !important;
-  opacity: 0.8;
+  font-size: 0.78rem !important;
+  color: rgba(255,255,255,0.55) !important;
+  transition: color 0.2s ease !important;
 }
 .footer__link-item:hover {
-  opacity: 1;
+  color: rgba(255,255,255,0.9) !important;
+  text-decoration: none !important;
 }
 .footer__col {
-  padding: 0 1rem !important;
+  padding: 0 0.8rem !important;
 }
 .footer__copyright {
-  font-size: 0.72rem !important;
-  opacity: 0.5 !important;
-  margin-top: 1.5rem !important;
+  font-size: 0.68rem !important;
+  color: rgba(255,255,255,0.2) !important;
+  margin-top: 2rem !important;
+  padding-top: 1rem !important;
+  border-top: 1px solid rgba(255,255,255,0.04) !important;
 }
 
 .navbar {
