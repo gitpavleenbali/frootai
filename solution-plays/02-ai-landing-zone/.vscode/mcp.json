@@ -2,8 +2,8 @@
   "servers": {
     "frootai": {
       "type": "stdio",
-      "command": "node",
-      "args": ["${workspaceFolder}/../../mcp-server/index.js"]
+      "command": "npx",
+      "args": ["frootai-mcp@latest"]
     }
   }
 }

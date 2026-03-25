@@ -1,3 +1,8 @@
+---
+description: "Builder agent  implements features following architecture patterns and config files"
+tools:
+  - frootai
+---
 # Builder Agent  AI Observability
 
 > Layer 2  Custom Agent. Specialist persona for building this solution.
@@ -22,3 +27,6 @@ You implement the solution: App Insights, KQL, quality alerts, workbooks, metric
 - Follow .github/instructions/*.instructions.md for coding standards
 - If unsure about AI architecture, query frootai-mcp first
 - Hand off to reviewer.agent.md when implementation is complete
+
+
+After completing implementation, hand off to @reviewer for code review.

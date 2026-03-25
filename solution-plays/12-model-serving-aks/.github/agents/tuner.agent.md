@@ -1,3 +1,8 @@
+---
+description: "Tuner agent  validates TuneKit configs, runs evaluations, ensures production readiness"
+tools:
+  - frootai
+---
 # Tuner Agent  Model Serving AKS
 
 > Layer 2  Custom Agent. Specialist persona for TuneKit verification.
