@@ -20,50 +20,108 @@ export default function SearchBarWrapper() {
   const btnRef = useRef(null);
   const [dropPos, setDropPos] = useState({ top: 0, right: 0 });
 
-  // Load search index on first open
+  // Load search index on first open — parse all 5 sections into flat searchable docs
   const loadIndex = useCallback(async () => {
     if (searchIndex) return searchIndex;
     setLoading(true);
     try {
       const resp = await fetch('/search-index.json');
-      const data = await resp.json();
-      setSearchIndex(data);
+      const raw = await resp.json();
+      // raw is an array of sections: [pages, headers, descriptions, empty, content]
+      // Build a flat array of searchable documents with proper URLs
+      const pages = {};   // id → page-level doc (for parent lookups)
+      const docs = [];
+      const seen = new Set();
+
+      // Section 0 — page-level (title + breadcrumbs)
+      if (raw[0]?.documents) {
+        for (const d of raw[0].documents) {
+          pages[d.i] = d;
+          const url = d.u || '';
+          if (!seen.has(url)) {
+            seen.add(url);
+            docs.push({ title: d.t || '', url, breadcrumbs: Array.isArray(d.b) ? d.b.join(' › ') : '', body: '' });
+          }
+        }
+      }
+
+      // Section 1 — headers/subheaders (with #hash anchors)
+      if (raw[1]?.documents) {
+        for (const d of raw[1].documents) {
+          const url = (d.u || '') + (d.h || '');
+          const parent = pages[d.p];
+          if (!seen.has(url)) {
+            seen.add(url);
+            docs.push({ title: d.t || '', url, breadcrumbs: parent ? (parent.t || '') : '', body: '' });
+          }
+        }
+      }
+
+      // Section 4 — body content (with #hash anchors)
+      if (raw[4]?.documents) {
+        for (const d of raw[4].documents) {
+          const url = (d.u || '') + (d.h || '');
+          // Attach body text to existing header entry or create new
+          const existing = docs.find(e => e.url === url);
+          if (existing) {
+            existing.body = (existing.body ? existing.body + ' ' : '') + (d.t || '');
+          } else {
+            docs.push({ title: d.s || '', url, breadcrumbs: '', body: d.t || '' });
+          }
+        }
+      }
+
+      setSearchIndex(docs);
       setLoading(false);
-      return data;
+      return docs;
     } catch {
       setLoading(false);
       return null;
     }
   }, [searchIndex]);
 
-  // Search function
+  // Search function — searches titles, breadcrumbs, and body content
   const doSearch = useCallback((q, index) => {
     if (!q || !index) return [];
     const lower = q.toLowerCase();
-    const matches = [];
+    const words = lower.split(/\s+/).filter(Boolean);
+    const scored = [];
     for (const doc of index) {
-      const title = (doc.t || doc.title || '').toLowerCase();
-      const content = (doc.b || doc.body || doc.content || '').toLowerCase();
-      const url = doc.u || doc.url || '';
-      if (title.includes(lower) || content.includes(lower)) {
-        matches.push({
-          title: doc.t || doc.title || 'Untitled',
-          url: url,
-          excerpt: (doc.b || doc.body || doc.content || '').substring(0, 120),
-        });
+      const title = (doc.title || '').toLowerCase();
+      const body = (doc.body || '').toLowerCase();
+      const crumbs = (doc.breadcrumbs || '').toLowerCase();
+      let score = 0;
+      for (const w of words) {
+        if (title.includes(w)) score += 10;
+        if (crumbs.includes(w)) score += 3;
+        if (body.includes(w)) score += 1;
       }
-      if (matches.length >= 8) break;
+      if (score > 0) {
+        // Build excerpt from body around the first match
+        let excerpt = '';
+        if (body) {
+          const idx = body.indexOf(words[0]);
+          if (idx >= 0) {
+            const start = Math.max(0, idx - 40);
+            excerpt = (start > 0 ? '...' : '') + doc.body.substring(start, start + 140) + '...';
+          } else {
+            excerpt = doc.body.substring(0, 120) + '...';
+          }
+        }
+        scored.push({ title: doc.title, url: doc.url, excerpt, score });
+      }
     }
-    return matches;
+    scored.sort((a, b) => b.score - a.score);
+    return scored.slice(0, 10);
   }, []);
 
-  // Handle pill click
+  // Handle pill click — position dropdown just below the pill button, tight gap
   const handleOpen = useCallback(async () => {
     if (btnRef.current) {
       const rect = btnRef.current.getBoundingClientRect();
       setDropPos({
-        top: rect.bottom + 8,
-        right: window.innerWidth - rect.right,
+        top: rect.bottom + 3,
+        right: 8,
       });
     }
     setIsOpen(true);
@@ -116,13 +174,14 @@ export default function SearchBarWrapper() {
           background: 'linear-gradient(135deg, rgba(124,58,237,0.15), rgba(167,139,250,0.08))',
           border: '1px solid rgba(124,58,237,0.4)',
           borderRadius: '10px',
-          padding: '6px 14px',
+          padding: '6px 16px',
           cursor: 'pointer',
-          display: 'flex',
+          display: 'inline-flex',
           alignItems: 'center',
-          gap: '4px',
+          justifyContent: 'center',
+          gap: '6px',
           fontWeight: 700,
-          fontSize: '0.85rem',
+          fontSize: '0.78rem',
           color: '#a78bfa',
           transition: 'all 0.3s ease',
           textShadow: '0 0 8px rgba(124,58,237,0.2)',
