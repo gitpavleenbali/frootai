@@ -955,27 +955,51 @@ function activate(context) {
   context.subscriptions.push(
     vscode.commands.registerCommand("frootai.installMcpServer", async () => {
       const choice = await vscode.window.showQuickPick([
+        { label: "$(gear) Configure MCP (.vscode/mcp.json)", description: "⭐ Recommended — enables Copilot Agent mode", value: "config" },
+        { label: "$(play) Run directly (npx)", description: "npx frootai-mcp@latest — zero install, always fresh", value: "npx" },
         { label: "$(package) Install globally (npm)", description: "npm install -g frootai-mcp@latest", value: "global" },
-        { label: "$(play) Run directly (npx)", description: "npx frootai-mcp@latest — always fresh", value: "npx" },
         { label: "$(symbol-container) Docker", description: "docker run -i ghcr.io/gitpavleenbali/frootai-mcp", value: "docker" },
-        { label: "$(gear) Add to .vscode/mcp.json", description: "Configure MCP for this workspace", value: "config" },
       ], { placeHolder: "How do you want to set up the FrootAI MCP Server?" });
       if (!choice) return;
+
+      // Helper: auto-create .vscode/mcp.json for any install method
+      const autoCreateMcpJson = () => {
+        const wsFolder = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
+        if (!wsFolder) return;
+        const configDir = path.join(wsFolder, ".vscode");
+        const configPath = path.join(configDir, "mcp.json");
+        if (fs.existsSync(configPath)) return; // Don't overwrite existing
+        if (!fs.existsSync(configDir)) fs.mkdirSync(configDir, { recursive: true });
+        const mcpConfig = {
+          servers: {
+            frootai: {
+              type: "stdio",
+              command: "npx",
+              args: ["frootai-mcp"]
+            }
+          }
+        };
+        fs.writeFileSync(configPath, JSON.stringify(mcpConfig, null, 2), "utf-8");
+        vscode.window.showInformationMessage("✅ Also created .vscode/mcp.json so Copilot can use MCP tools.");
+      };
 
       if (choice.value === "global") {
         const terminal = vscode.window.createTerminal("FrootAI MCP Install");
         terminal.sendText("npm install -g frootai-mcp@latest");
         terminal.show();
         vscode.window.showInformationMessage("Installing frootai-mcp@latest globally. After install, run: frootai-mcp");
+        autoCreateMcpJson();
       } else if (choice.value === "npx") {
         const terminal = vscode.window.createTerminal("FrootAI MCP Server");
         terminal.sendText("npx --yes frootai-mcp@latest");
         terminal.show();
+        autoCreateMcpJson();
       } else if (choice.value === "docker") {
         const terminal = vscode.window.createTerminal("FrootAI MCP Docker");
         terminal.sendText("docker run -i ghcr.io/gitpavleenbali/frootai-mcp");
         terminal.show();
         vscode.window.showInformationMessage("🐳 Starting FrootAI MCP via Docker. 22 tools ready.");
+        autoCreateMcpJson();
       } else if (choice.value === "config") {
         const wsFolder = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
         if (!wsFolder) { vscode.window.showWarningMessage("Open a folder first."); return; }
@@ -984,14 +1008,14 @@ function activate(context) {
             frootai: {
               type: "stdio",
               command: "npx",
-              args: ["--yes", "frootai-mcp@latest"]
+              args: ["frootai-mcp"]
             }
           }
         };
         const configDir = path.join(wsFolder, ".vscode");
         if (!fs.existsSync(configDir)) fs.mkdirSync(configDir, { recursive: true });
         fs.writeFileSync(path.join(configDir, "mcp.json"), JSON.stringify(mcpConfig, null, 2), "utf-8");
-        vscode.window.showInformationMessage("✅ MCP config added to .vscode/mcp.json. Reload VS Code to activate.");
+        vscode.window.showInformationMessage("✅ MCP config added to .vscode/mcp.json. Reload VS Code to activate Copilot Agent mode.");
       }
     })
   );

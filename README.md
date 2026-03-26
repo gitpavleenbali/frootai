@@ -6,7 +6,9 @@
 [![VS Code Installs](https://img.shields.io/visual-studio-marketplace/i/pavleenbali.frootai?style=for-the-badge&logo=visualstudiocode&label=VS%20Code)](https://marketplace.visualstudio.com/items?itemName=pavleenbali.frootai)
 [![npm Downloads](https://img.shields.io/npm/dw/frootai-mcp?style=for-the-badge&logo=npm&label=npm)](https://www.npmjs.com/package/frootai-mcp)
 [![GitHub Stars](https://img.shields.io/github/stars/gitpavleenbali/frootai?style=for-the-badge&logo=github)](https://github.com/gitpavleenbali/frootai)
-[![Build](https://img.shields.io/github/actions/workflow/status/gitpavleenbali/frootai/deploy.yml?style=for-the-badge&label=Build)](https://github.com/gitpavleenbali/frootai/actions)
+[![Build](https://img.shields.io/github/actions/workflow/status/gitpavleenbali/frootai/deploy.yml?style=for-the-badge&label=Website)](https://github.com/gitpavleenbali/frootai/actions/workflows/deploy.yml)
+[![Docker](https://img.shields.io/github/actions/workflow/status/gitpavleenbali/frootai/docker-publish.yml?style=for-the-badge&label=Docker&logo=docker)](https://github.com/gitpavleenbali/frootai/actions/workflows/docker-publish.yml)
+[![npm Version](https://img.shields.io/npm/v/frootai-mcp?style=for-the-badge&logo=npm&label=MCP)](https://www.npmjs.com/package/frootai-mcp)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](./LICENSE)
 
 ---
