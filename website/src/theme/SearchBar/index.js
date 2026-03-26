@@ -9,8 +9,22 @@ const SUGGESTIONS = [
   'DevKit setup',
 ];
 
+/* ── Detect mobile (≤996px) using matchMedia ── */
+function useIsMobile(breakpoint = 996) {
+  const [mobile, setMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${breakpoint}px)`);
+    setMobile(mq.matches);
+    const handler = (e) => setMobile(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, [breakpoint]);
+  return mobile;
+}
+
 export default function SearchBarWrapper() {
   const [isOpen, setIsOpen] = useState(false);
+  const [mode, setMode] = useState('menu'); // 'menu' | 'search'
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [searchIndex, setSearchIndex] = useState(null);
@@ -19,6 +33,7 @@ export default function SearchBarWrapper() {
   const inputRef = useRef(null);
   const btnRef = useRef(null);
   const [dropPos, setDropPos] = useState({ top: 0, right: 0 });
+  const isMobile = useIsMobile();
 
   // Load search index on first open — parse all 5 sections into flat searchable docs
   const loadIndex = useCallback(async () => {
@@ -115,18 +130,28 @@ export default function SearchBarWrapper() {
     return scored.slice(0, 10);
   }, []);
 
-  // Handle pill click — position dropdown just below the pill button, tight gap
-  const handleOpen = useCallback(async () => {
+  // Handle pill click — toggle on/off
+  const handleOpen = useCallback(async (openMode = 'search') => {
+    // If already open, close it (toggle behavior)
+    if (isOpen) {
+      setIsOpen(false);
+      return;
+    }
     if (btnRef.current) {
       const rect = btnRef.current.getBoundingClientRect();
+      const mobile = window.innerWidth <= 996;
       setDropPos({
-        top: rect.bottom + 3,
-        right: 8,
+        top: rect.bottom + 6,
+        right: mobile ? 8 : 8,
+        width: mobile ? Math.min(280, window.innerWidth - 16) : 340,
       });
     }
+    setMode(openMode);
     setIsOpen(true);
-    const idx = await loadIndex();
-    setTimeout(() => inputRef.current?.focus(), 100);
+    if (openMode === 'search') {
+      const idx = await loadIndex();
+      setTimeout(() => inputRef.current?.focus(), 100);
+    }
   }, [loadIndex]);
 
   // Handle typing
@@ -160,16 +185,23 @@ export default function SearchBarWrapper() {
 
   // Reset on close
   useEffect(() => {
-    if (!isOpen) { setQuery(''); setResults([]); }
+    if (!isOpen) { setQuery(''); setResults([]); setMode('menu'); }
   }, [isOpen]);
+
+  // Switch to search mode from the menu
+  const openSearch = useCallback(async () => {
+    setMode('search');
+    const idx = await loadIndex();
+    setTimeout(() => inputRef.current?.focus(), 100);
+  }, [loadIndex]);
 
   return (
     <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', order: 5 }}>
-      {/* Purple pill button */}
+      {/* Single pill button — on mobile shows ⚡, on desktop shows 🔍 */}
       <button
         ref={btnRef}
-        onClick={handleOpen}
-        aria-label="Search"
+        onClick={() => handleOpen(isMobile ? 'menu' : 'search')}
+        aria-label={isMobile ? 'FAI Menu' : 'Search'}
         style={{
           background: 'linear-gradient(135deg, rgba(124,58,237,0.15), rgba(167,139,250,0.08))',
           border: '1px solid rgba(124,58,237,0.4)',
@@ -200,7 +232,7 @@ export default function SearchBarWrapper() {
           e.currentTarget.style.transform = 'none';
         }}
       >
-        🔍
+        {isMobile ? '⚡' : '🔍'}
       </button>
 
       {/* Dropdown panel */}
@@ -211,8 +243,9 @@ export default function SearchBarWrapper() {
             position: 'fixed',
             top: dropPos.top,
             right: dropPos.right,
-            width: '340px',
-            maxHeight: '420px',
+            width: dropPos.width || 340,
+            maxWidth: 'calc(100vw - 16px)',
+            maxHeight: '460px',
             background: 'rgba(10,10,22,0.97)',
             border: '1px solid rgba(124,58,237,0.3)',
             borderRadius: '12px',
@@ -223,101 +256,160 @@ export default function SearchBarWrapper() {
             animation: 'searchDropIn 0.15s ease-out',
           }}
         >
-          {/* Search input */}
-          <div style={{ padding: '12px 14px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-            <input
-              ref={inputRef}
-              type="text"
-              value={query}
-              onChange={handleInput}
-              placeholder="Search FrootAI..."
-              style={{
-                width: '100%',
-                background: 'rgba(255,255,255,0.05)',
-                border: '1px solid rgba(124,58,237,0.25)',
-                borderRadius: '8px',
-                padding: '10px 12px',
-                color: '#e0e0e0',
-                fontSize: '0.88rem',
-                outline: 'none',
-                caretColor: '#a78bfa',
-              }}
-              onFocus={(e) => { e.target.style.borderColor = 'rgba(124,58,237,0.5)'; }}
-              onBlur={(e) => { e.target.style.borderColor = 'rgba(124,58,237,0.25)'; }}
-            />
-          </div>
-
-          {/* Content area */}
-          <div style={{ maxHeight: '340px', overflowY: 'auto', padding: '8px 0' }}>
-            {loading && (
-              <div style={{ padding: '20px', textAlign: 'center', color: 'rgba(167,139,250,0.5)', fontSize: '0.82rem' }}>
-                Loading search index...
-              </div>
-            )}
-
-            {/* Suggestions when empty */}
-            {!loading && query.length === 0 && (
-              <div style={{ padding: '8px 14px' }}>
-                <div style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '8px' }}>
-                  Try searching for
-                </div>
-                {SUGGESTIONS.map((s) => (
-                  <button
-                    key={s}
-                    onClick={() => { setQuery(s); if (searchIndex) setResults(doSearch(s, searchIndex)); }}
-                    style={{
-                      display: 'block',
-                      width: '100%',
-                      textAlign: 'left',
-                      background: 'none',
-                      border: 'none',
-                      padding: '8px 10px',
-                      color: 'rgba(167,139,250,0.6)',
-                      fontSize: '0.84rem',
-                      cursor: 'pointer',
-                      borderRadius: '6px',
-                      transition: 'background 0.15s',
-                    }}
-                    onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(124,58,237,0.1)'; e.currentTarget.style.color = '#c4b5fd'; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.background = 'none'; e.currentTarget.style.color = 'rgba(167,139,250,0.6)'; }}
-                  >
-                    🔍 {s}
-                  </button>
-                ))}
-              </div>
-            )}
-
-            {/* Results */}
-            {!loading && query.length > 0 && results.length > 0 && results.map((r, i) => (
+          {/* ── Mobile menu mode ── */}
+          {isMobile && mode === 'menu' && (
+            <div style={{ padding: '10px 10px' }}>
+              {/* Quick actions */}
               <a
-                key={i}
-                href={r.url}
+                href="/hi-fai"
                 onClick={() => setIsOpen(false)}
                 style={{
-                  display: 'block',
-                  padding: '10px 14px',
-                  color: '#e0e0e0',
-                  textDecoration: 'none',
-                  borderBottom: '1px solid rgba(255,255,255,0.04)',
-                  transition: 'background 0.15s',
+                  display: 'flex', alignItems: 'center', gap: '10px',
+                  padding: '12px 14px', borderRadius: '10px', marginBottom: '6px',
+                  background: 'linear-gradient(135deg, rgba(16,185,129,0.12), rgba(6,182,212,0.06))',
+                  border: '1px solid rgba(16,185,129,0.3)',
+                  color: '#10b981', fontWeight: 700, fontSize: '0.88rem',
+                  textDecoration: 'none', transition: 'all 0.2s',
                 }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(124,58,237,0.1)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = 'none'; }}
               >
-                <div style={{ fontWeight: 600, fontSize: '0.85rem', marginBottom: '2px' }}>{r.title}</div>
-                <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.4)', lineHeight: '1.3' }}>
-                  {r.excerpt}...
-                </div>
+                <span style={{ fontSize: '1.2rem' }}>👋</span> Hi FAI
               </a>
-            ))}
+              <a
+                href="/chatbot"
+                onClick={() => setIsOpen(false)}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: '10px',
+                  padding: '12px 14px', borderRadius: '10px', marginBottom: '6px',
+                  background: 'linear-gradient(135deg, rgba(245,158,11,0.12), rgba(234,179,8,0.06))',
+                  border: '1px solid rgba(245,158,11,0.3)',
+                  color: '#f59e0b', fontWeight: 700, fontSize: '0.88rem',
+                  textDecoration: 'none', transition: 'all 0.2s',
+                }}
+              >
+                <span style={{ fontSize: '1.2rem' }}>✨</span> FAI Agent
+              </a>
+              <button
+                onClick={openSearch}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: '10px', width: '100%',
+                  padding: '12px 14px', borderRadius: '10px',
+                  background: 'linear-gradient(135deg, rgba(124,58,237,0.12), rgba(167,139,250,0.06))',
+                  border: '1px solid rgba(124,58,237,0.3)',
+                  color: '#a78bfa', fontWeight: 700, fontSize: '0.88rem',
+                  cursor: 'pointer', textAlign: 'left',
+                }}
+              >
+                <span style={{ fontSize: '1.2rem' }}>🔍</span> Search FrootAI
+              </button>
+            </div>
+          )}
 
-            {/* No results (only when typing) */}
-            {!loading && query.length > 0 && results.length === 0 && (
-              <div style={{ padding: '20px 14px', textAlign: 'center', color: 'rgba(255,255,255,0.3)', fontSize: '0.84rem' }}>
-                No results for "{query}"
+          {/* ── Search mode (desktop always, mobile when selected) ── */}
+          {(mode === 'search') && (
+            <>
+              {/* Back button on mobile */}
+              {isMobile && (
+                <button
+                  onClick={() => setMode('menu')}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: '6px',
+                    padding: '8px 14px', background: 'none', border: 'none',
+                    borderBottom: '1px solid rgba(255,255,255,0.06)',
+                    color: 'rgba(167,139,250,0.6)', fontSize: '0.78rem',
+                    cursor: 'pointer', width: '100%',
+                  }}
+                >
+                  ← Back to menu
+                </button>
+              )}
+              {/* Search input */}
+              <div style={{ padding: '12px 14px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={query}
+                  onChange={handleInput}
+                  placeholder="Search FrootAI..."
+                  style={{
+                    width: '100%',
+                    background: 'rgba(255,255,255,0.05)',
+                    border: '1px solid rgba(124,58,237,0.25)',
+                    borderRadius: '8px',
+                    padding: '10px 12px',
+                    color: '#e0e0e0',
+                    fontSize: '0.88rem',
+                    outline: 'none',
+                    caretColor: '#a78bfa',
+                    boxSizing: 'border-box',
+                  }}
+                  onFocus={(e) => { e.target.style.borderColor = 'rgba(124,58,237,0.5)'; }}
+                  onBlur={(e) => { e.target.style.borderColor = 'rgba(124,58,237,0.25)'; }}
+                />
               </div>
-            )}
-          </div>
+
+              {/* Content area */}
+              <div style={{ maxHeight: '300px', overflowY: 'auto', padding: '8px 0' }}>
+                {loading && (
+                  <div style={{ padding: '20px', textAlign: 'center', color: 'rgba(167,139,250,0.5)', fontSize: '0.82rem' }}>
+                    Loading search index...
+                  </div>
+                )}
+
+                {/* Suggestions when empty */}
+                {!loading && query.length === 0 && (
+                  <div style={{ padding: '8px 14px' }}>
+                    <div style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '8px' }}>
+                      Try searching for
+                    </div>
+                    {SUGGESTIONS.map((s) => (
+                      <button
+                        key={s}
+                        onClick={() => { setQuery(s); if (searchIndex) setResults(doSearch(s, searchIndex)); }}
+                        style={{
+                          display: 'block', width: '100%', textAlign: 'left',
+                          background: 'none', border: 'none', padding: '8px 10px',
+                          color: 'rgba(167,139,250,0.6)', fontSize: '0.84rem',
+                          cursor: 'pointer', borderRadius: '6px', transition: 'background 0.15s',
+                        }}
+                        onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(124,58,237,0.1)'; e.currentTarget.style.color = '#c4b5fd'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.background = 'none'; e.currentTarget.style.color = 'rgba(167,139,250,0.6)'; }}
+                      >
+                        🔍 {s}
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {/* Results */}
+                {!loading && query.length > 0 && results.length > 0 && results.map((r, i) => (
+                  <a
+                    key={i}
+                    href={r.url}
+                    onClick={() => setIsOpen(false)}
+                    style={{
+                      display: 'block', padding: '10px 14px', color: '#e0e0e0',
+                      textDecoration: 'none', borderBottom: '1px solid rgba(255,255,255,0.04)',
+                      transition: 'background 0.15s',
+                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(124,58,237,0.1)'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.background = 'none'; }}
+                  >
+                    <div style={{ fontWeight: 600, fontSize: '0.85rem', marginBottom: '2px' }}>{r.title}</div>
+                    <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.4)', lineHeight: '1.3' }}>
+                      {r.excerpt}...
+                    </div>
+                  </a>
+                ))}
+
+                {/* No results */}
+                {!loading && query.length > 0 && results.length === 0 && (
+                  <div style={{ padding: '20px 14px', textAlign: 'center', color: 'rgba(255,255,255,0.3)', fontSize: '0.84rem' }}>
+                    No results for "{query}"
+                  </div>
+                )}
+              </div>
+            </>
+          )}
         </div>
       )}
 

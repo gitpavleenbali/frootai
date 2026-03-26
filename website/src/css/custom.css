@@ -569,6 +569,33 @@ article .mermaid {
 }
 
 /* ================================================================== */
+/*  MOBILE SIDEBAR — header alignment fix                              */
+/* ================================================================== */
+
+/* Align logo, title, color toggle and X button on the same line */
+.navbar-sidebar__brand {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 12px 16px !important;
+}
+
+/* Color mode toggle hidden everywhere — dark theme only */
+[class*="colorMode"],
+[class*="toggle"][class*="color"],
+button[class*="Toggle"][class*="color"],
+div[class*="colorMode"],
+.navbar__items--right > [class*="toggle"] {
+  display: none !important;
+}
+
+/* Close button (X) stays right-aligned */
+.navbar-sidebar__close {
+  margin-left: auto !important;
+  flex-shrink: 0 !important;
+}
+
+/* ================================================================== */
 /*  MOBILE SIDEBAR FIX — ensure sidebar sits above content             */
 /* ================================================================== */
 
@@ -964,4 +991,167 @@ div[style] {
   color: #fbbf24 !important;
   transform: translateY(-1px);
   text-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+}
+
+/* ================================================================== */
+/*  MOBILE: Hi FAI & FAI Agent — equal sizing, never overflow          */
+/* ================================================================== */
+
+/* Desktop: both buttons same minimum width for consistency */
+.navbar__item--hifai-glow,
+.navbar__item--agent-glow {
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* ================================================================== */
+/*  NAVBAR LAYOUT — rock-solid flexbox at every breakpoint             */
+/* ================================================================== */
+
+.navbar__inner {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  max-width: 100% !important;
+}
+
+/* Left section: hamburger + logo — shrinks to give room to right */
+.navbar__items:not(.navbar__items--right) {
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Right section: pills — NEVER shrinks, NEVER wraps */
+.navbar__items--right {
+  flex: 0 0 auto !important;
+  flex-wrap: nowrap !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding-left: 8px !important;
+}
+
+/* Every item on the right is rigid */
+.navbar__items--right > * {
+  flex-shrink: 0 !important;
+}
+
+/* ================================================================== */
+/*  MOBILE ≤996px: emoji pills + hide non-essential right items        */
+/* ================================================================== */
+
+@media (max-width: 996px) {
+
+  /* ── HIDE Hi FAI, FAI Agent, GitHub, color toggle from top bar ── */
+  /* All accessible via ⚡ menu (SearchBar) or hamburger sidebar    */
+  .navbar__items--right > .navbar__item--hifai-glow,
+  .navbar__items--right > .navbar__item--agent-glow,
+  .navbar__items--right > a[href*="github"],
+  .navbar__items--right > [class*="colorMode"],
+  .navbar__items--right > [class*="toggle"],
+  .navbar__items--right > button[class*="Toggle"],
+  .navbar__items--right > div[class*="colorMode"] {
+    display: none !important;
+  }
+
+  /* ── RIGHT SIDE: only the ⚡ FAI menu pill remains ── */
+  .navbar__items--right {
+    gap: 0 !important;
+    padding-right: 4px !important;
+  }
+
+  /* ── SIDEBAR: full text, equal-width buttons ── */
+  .navbar-sidebar .navbar__item--hifai-glow,
+  .navbar-sidebar .navbar__item--agent-glow {
+    overflow: visible !important;
+    text-indent: 0 !important;
+    width: 160px !important;
+    min-width: 160px !important;
+    max-width: 180px !important;
+    height: auto !important;
+    padding: 8px 16px !important;
+    font-size: 0.85rem !important;
+    font-weight: 700 !important;
+    border-radius: 10px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 4px 12px !important;
+    white-space: nowrap !important;
+    position: relative !important;
+  }
+
+  .navbar-sidebar .navbar__item--hifai-glow::after,
+  .navbar-sidebar .navbar__item--agent-glow::after {
+    display: none !important;
+  }
+
+  /* ── SIDEBAR cleanup ── */
+  .navbar-sidebar__back {
+    display: none !important;
+  }
+  .navbar-sidebar .navbar-sidebar__items--show-secondary {
+    transform: none !important;
+  }
+  .navbar-sidebar .navbar-sidebar__item--secondary {
+    display: none !important;
+  }
+}
+
+/* ── Extra-small phones: no special overrides needed ── */
+/* Hi FAI & FAI Agent are in ⚡ menu, only 1 pill on navbar */
+
+/* Navbar brand + title should never shrink */
+.navbar__brand {
+  flex-shrink: 0 !important;
+  margin-right: 8px !important;
+}
+
+.navbar__link {
+  white-space: nowrap !important;
+}
+
+.dropdown > .navbar__link::after {
+  margin-left: 4px !important;
+}
+
+/* ================================================================== */
+/*  SEARCH: Dropdown positioned closer to navbar on mobile             */
+/* ================================================================== */
+
+@media (max-width: 768px) {
+  .navbar__items--right [style*="position: fixed"][style*="z-index: 9999"] {
+    top: calc(var(--ifm-navbar-height) + 8px) !important;
+    right: 8px !important;
+    left: 8px !important;
+    width: auto !important;
+    max-width: calc(100vw - 16px) !important;
+  }
+}
+
+/* ================================================================== */
+/*  TABLET (768–1024px): Keep navbar tidy when docs are open           */
+/* ================================================================== */
+
+@media (min-width: 769px) and (max-width: 1200px) {
+  /* Compress left nav items */
+  .navbar__items--left .dropdown > .navbar__link {
+    font-size: 0.76rem !important;
+    padding: 6px 8px !important;
+  }
+
+  /* Hi FAI / FAI Agent slightly smaller on tablet */
+  .navbar__item--hifai-glow,
+  .navbar__item--agent-glow {
+    padding: 5px 10px !important;
+    font-size: 0.72rem !important;
+  }
+
+  /* GitHub link shorter */
+  .navbar__items--right a[href*="github"] .navbar__link {
+    font-size: 0.75rem !important;
+  }
 }
