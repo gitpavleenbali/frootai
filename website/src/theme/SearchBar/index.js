@@ -346,19 +346,20 @@ export default function SearchBarWrapper() {
           {/* ── Search mode (desktop always, mobile when selected) ── */}
           {(mode === 'search') && (
             <>
-              {/* Back button on mobile */}
+              {/* Close button on mobile search mode */}
               {isMobile && (
                 <button
-                  onClick={() => setMode('menu')}
+                  onClick={() => setIsOpen(false)}
                   style={{
-                    display: 'flex', alignItems: 'center', gap: '6px',
-                    padding: '8px 14px', background: 'none', border: 'none',
-                    borderBottom: '1px solid rgba(255,255,255,0.06)',
-                    color: 'rgba(167,139,250,0.6)', fontSize: '0.78rem',
-                    cursor: 'pointer', width: '100%',
+                    position: 'absolute', top: '10px', right: '10px',
+                    background: 'none', border: 'none',
+                    color: 'rgba(255,255,255,0.4)', fontSize: '1.2rem',
+                    cursor: 'pointer', padding: '4px 8px',
+                    lineHeight: 1, zIndex: 1,
                   }}
+                  aria-label="Close search"
                 >
-                  ← Back to menu
+                  ✕
                 </button>
               )}
               {/* Search input */}
