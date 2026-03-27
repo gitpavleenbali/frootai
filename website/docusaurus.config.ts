@@ -166,6 +166,7 @@ const config: Config = {
             { to: "/docs/contributor-guide", label: "🤝 Contributor Guide" },
             { to: "/api-docs", label: "📡 REST API (Agent FAI)" },
             { to: "/docs/architecture-overview", label: "🏗️ Architecture" },
+            { to: "/eval-dashboard", label: "📊 Evaluation Dashboard" },
             { to: "/dev-hub-changelog", label: "📰 Changelog & Releases" },
           ],
         },

@@ -1453,6 +1453,105 @@ function activate(context) {
     })
   );
 
+  // ── Install Community Plugin ──
+  context.subscriptions.push(
+    vscode.commands.registerCommand("frootai.installPlugin", async () => {
+      const plugins = [
+        { label: "$(package) Enterprise RAG Plugin", description: "RAG Q&A with AI Search + OpenAI", detail: "Copies .github agents, instructions, configs for RAG pattern", value: "01-enterprise-rag" },
+        { label: "$(package) AI Landing Zone Plugin", description: "Foundation Azure infra for AI workloads", detail: "VNet, private endpoints, RBAC, GPU quotas", value: "02-ai-landing-zone" },
+        { label: "$(package) Deterministic Agent Plugin", description: "Reliable agent with temp=0, guardrails", detail: "Anti-sycophancy, structured JSON, citations", value: "03-deterministic-agent" },
+        { label: "$(package) Multi-Agent Service Plugin", description: "Supervisor + specialist agents", detail: "Container Apps, Agent Framework, Dapr", value: "07-multi-agent-service" },
+        { label: "$(package) Content Moderation Plugin", description: "AI Content Safety + filtering", detail: "Severity levels, custom categories, blocklists", value: "10-content-moderation" },
+        { label: "$(globe) Browse Plugin Marketplace", description: "Open frootai.dev/marketplace", value: "marketplace" },
+      ];
+      const pick = await vscode.window.showQuickPick(plugins, { placeHolder: "Select a community plugin to install into your workspace", ignoreFocusOut: true });
+      if (!pick) return;
+      if (pick.value === "marketplace") {
+        vscode.env.openExternal(vscode.Uri.parse("https://frootai.dev/marketplace"));
+        return;
+      }
+      const folders = vscode.workspace.workspaceFolders;
+      if (!folders) { vscode.window.showWarningMessage("Open a workspace first."); return; }
+      const wsRoot = folders[0].uri.fsPath;
+
+      // Create plugin files
+      const dirs = [".github/agents", ".github/instructions", "config", "spec"];
+      for (const d of dirs) {
+        const dirPath = path.join(wsRoot, d);
+        if (!fs.existsSync(dirPath)) fs.mkdirSync(dirPath, { recursive: true });
+      }
+
+      // Agent files
+      const agentContent = `---\ndescription: "Builder agent for ${pick.value}"\ntools:\n  - frootai\n---\n# Builder Agent\nUse FrootAI MCP for architecture patterns and best practices for ${pick.value}.\n`;
+      fs.writeFileSync(path.join(wsRoot, ".github/agents/builder.agent.md"), agentContent);
+
+      // WAF instruction
+      fs.writeFileSync(path.join(wsRoot, ".github/instructions/waf-security.instructions.md"),
+        `---\napplyTo: "**/*.{ts,js,py,bicep,json}"\n---\n# Security\n- Use Managed Identity\n- Store secrets in Key Vault\n- Enable Content Safety\n`);
+
+      // Config
+      fs.writeFileSync(path.join(wsRoot, "config/openai.json"), JSON.stringify({ model: "gpt-4o-mini", temperature: 0.1, max_tokens: 4096 }, null, 2));
+      fs.writeFileSync(path.join(wsRoot, "config/guardrails.json"), JSON.stringify({ max_tokens_per_request: 4096, blocked_categories: ["hate", "violence", "self-harm", "sexual"], pii_detection: true, grounding_check: true }, null, 2));
+
+      // SpecKit
+      fs.writeFileSync(path.join(wsRoot, "spec/play-spec.json"), JSON.stringify({ name: pick.value, version: "0.1.0", waf_alignment: { reliability: "unchecked", security: "unchecked", cost_optimization: "unchecked", operational_excellence: "unchecked", performance_efficiency: "unchecked", responsible_ai: "unchecked" } }, null, 2));
+
+      // plugin.json
+      fs.writeFileSync(path.join(wsRoot, "plugin.json"), JSON.stringify({ name: pick.value, version: "1.0.0", layers: { instructions: [".github/instructions/*.md"], agents: [".github/agents/*.md"], config: ["config/*.json"], spec: ["spec/*.json"] }, dependencies: ["frootai-mcp"], install: "copy" }, null, 2));
+
+      vscode.window.showInformationMessage(`✅ Plugin "${pick.value}" installed! Files: .github/agents, config, spec, plugin.json`);
+    })
+  );
+
+  // ── Run Evaluation ──
+  context.subscriptions.push(
+    vscode.commands.registerCommand("frootai.runEvaluation", async () => {
+      const folders = vscode.workspace.workspaceFolders;
+      if (!folders) { vscode.window.showWarningMessage("Open a workspace first."); return; }
+      const wsRoot = folders[0].uri.fsPath;
+      const evalConfig = path.join(wsRoot, "evaluation", "eval-config.json");
+
+      if (!fs.existsSync(evalConfig)) {
+        const create = await vscode.window.showWarningMessage("No evaluation/eval-config.json found. Create one?", "Yes", "No");
+        if (create === "Yes") {
+          if (!fs.existsSync(path.join(wsRoot, "evaluation"))) fs.mkdirSync(path.join(wsRoot, "evaluation"), { recursive: true });
+          fs.writeFileSync(evalConfig, JSON.stringify({ metrics: ["groundedness", "relevance", "coherence", "fluency"], thresholds: { groundedness: 4.0, relevance: 4.0, coherence: 4.0, fluency: 4.0 }, dataset: "evaluation/test-data.jsonl" }, null, 2));
+          vscode.window.showInformationMessage("✅ Created evaluation/eval-config.json with default thresholds.");
+        }
+        return;
+      }
+
+      // Read and display eval config
+      const config = JSON.parse(fs.readFileSync(evalConfig, "utf8"));
+      const panel = vscode.window.createWebviewPanel("frootai.evaluation", "Evaluation Dashboard", vscode.ViewColumn.One, { enableScripts: true });
+      const metrics = config.metrics || [];
+      const thresholds = config.thresholds || {};
+      const metricsHtml = metrics.map(m => {
+        const threshold = thresholds[m] || "N/A";
+        const color = threshold >= 4.0 ? "#10b981" : threshold >= 3.0 ? "#f59e0b" : "#ef4444";
+        return `<div style="padding:16px;border-radius:12px;border:2px solid ${color}33;background:${color}08;text-align:center;min-width:140px">
+          <div style="font-size:2rem;font-weight:800;color:${color}">${threshold}</div>
+          <div style="font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#888;margin-top:4px">${m}</div>
+          <div style="font-size:0.65rem;color:#666;margin-top:2px">threshold ≥ ${threshold}</div>
+        </div>`;
+      }).join("");
+
+      panel.webview.html = `<!DOCTYPE html><html><head><style>body{font-family:-apple-system,sans-serif;background:#0a0a0f;color:#e0e0e0;padding:24px}h1{font-size:1.5rem;margin-bottom:4px}h2{font-size:1.1rem;color:#10b981;margin-top:24px}.grid{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}.status{padding:12px 20px;border-radius:10px;font-size:0.85rem;font-weight:600}</style></head><body>
+        <h1>📊 Evaluation Dashboard</h1>
+        <p style="color:#888;font-size:0.85rem">Config: evaluation/eval-config.json</p>
+        <h2>Quality Thresholds</h2>
+        <div class="grid">${metricsHtml}</div>
+        <h2 style="margin-top:24px">Dataset</h2>
+        <p style="font-size:0.85rem">${config.dataset || "Not configured"}</p>
+        <h2>Status</h2>
+        <div class="status" style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);color:#f59e0b;display:inline-block">⏳ Awaiting evaluation run</div>
+        <p style="font-size:0.8rem;color:#666;margin-top:16px">To run evaluation: <code>python evaluation/eval.py</code> or add to CI pipeline</p>
+        <hr style="border-color:#222;margin:24px 0">
+        <p style="font-size:0.7rem;color:#555">FrootAI EvalKit — Part of the FROOT framework. <a href="https://frootai.dev" style="color:#10b981">frootai.dev</a></p>
+      </body></html>`;
+    })
+  );
+
   // ── Status Bar ──
   const statusBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
   statusBar.text = "$(tree-view-icon) FrootAI";
