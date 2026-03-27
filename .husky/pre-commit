@@ -1,2 +1,4 @@
 node scripts/sync-content.js
+node scripts/validate-consistency.js --fix
+git add -A
 node scripts/validate-consistency.js

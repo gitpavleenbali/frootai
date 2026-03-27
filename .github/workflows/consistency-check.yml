@@ -6,13 +6,47 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: write
+
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Run consistency validator
+
+      - name: Auto-fix consistency issues
+        run: node scripts/validate-consistency.js --fix || true
+
+      - name: Sync content
+        run: node scripts/sync-content.js || true
+
+      - name: Check if fixes were made
+        id: check_changes
+        run: |
+          if [ -n "$(git diff --name-only)" ]; then
+            echo "changes=true" >> $GITHUB_OUTPUT
+            echo "Files changed:"
+            git diff --name-only
+          else
+            echo "changes=false" >> $GITHUB_OUTPUT
+            echo "No changes needed"
+          fi
+
+      - name: Auto-commit fixes
+        if: steps.check_changes.outputs.changes == 'true' && github.event_name == 'push'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "fix(auto): sync versions + counts across ecosystem [skip ci]"
+          git push
+
+      - name: Final validation
         run: node scripts/validate-consistency.js
