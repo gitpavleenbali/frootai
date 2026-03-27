@@ -339,7 +339,7 @@ class SolutionPlayProvider {
       return SOLUTION_PLAYS.map((p) => {
         const item = new vscode.TreeItem(`${p.icon} ${p.id} — ${p.name}`, vscode.TreeItemCollapsibleState.None);
         item.description = p.status;
-        item.tooltip = `${p.name}\nStatus: ${p.status}\n\nRight-click for:\n• Init DevKit (.github Agentic OS)\n• Init TuneKit (config + infra + eval)\n• Init Hooks (guardrails)\n• Init Prompts (slash commands)\n\nClick to read details.`;
+        item.tooltip = `${p.name}\nStatus: ${p.status}\n\nClick for:\n• Init DevKit (.github Agentic OS)\n• Init TuneKit (config + infra + eval)\n• Init SpecKit (spec + WAF alignment)\n• Install as Plugin\n• Run Evaluation\n\nClick to open action menu.`;
         item.contextValue = "solutionPlay";
         item.command = { command: "frootai.openSolutionPlay", title: "Open", arguments: [p] };
         return item;
@@ -505,8 +505,11 @@ function activate(context) {
         { label: "$(notebook) Read User Guide", description: `Step-by-step setup guide for ${play.name}`, value: "userguide" },
         { label: "$(tools) Init DevKit", description: ".github Agentic OS (19 files) + agent.md + MCP", value: "devkit" },
         { label: "$(settings-gear) Init TuneKit", description: "config/*.json + infra/main.bicep + evaluation/", value: "tunekit" },
+        { label: "$(compass) Init SpecKit", description: "spec/play-spec.json + WAF alignment + eval thresholds", value: "speckit" },
         { label: "$(shield) Init Hooks", description: "guardrails.json (preToolUse policy gates)", value: "hooks" },
         { label: "$(terminal) Init Prompts", description: "4 slash commands (/deploy, /test, /review, /evaluate)", value: "prompts" },
+        { label: "$(package) Install as Plugin", description: "Install this play as a community plugin", value: "plugin" },
+        { label: "$(graph) Run Evaluation", description: "Open evaluation dashboard for this play", value: "eval" },
         { label: "$(github) Open on GitHub", description: `github.com/.../solution-plays/${play.dir}`, value: "github" },
       ], { placeHolder: `${play.icon} ${play.name} — What would you like to do?` });
 
@@ -535,10 +538,16 @@ function activate(context) {
         vscode.commands.executeCommand("frootai.initDevKit", play);
       } else if (action.value === "tunekit") {
         vscode.commands.executeCommand("frootai.initTuneKit", play);
+      } else if (action.value === "speckit") {
+        vscode.commands.executeCommand("frootai.initSpecKit", play);
       } else if (action.value === "hooks") {
         vscode.commands.executeCommand("frootai.initHooks", play);
       } else if (action.value === "prompts") {
         vscode.commands.executeCommand("frootai.initPrompts", play);
+      } else if (action.value === "plugin") {
+        vscode.commands.executeCommand("frootai.installPlugin");
+      } else if (action.value === "eval") {
+        vscode.commands.executeCommand("frootai.runEvaluation");
       } else if (action.value === "github") {
         vscode.env.openExternal(vscode.Uri.parse(`https://github.com/gitpavleenbali/frootai/tree/main/solution-plays/${play.dir}`));
       }
