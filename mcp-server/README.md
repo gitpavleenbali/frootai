@@ -1,7 +1,7 @@
 # frootai-mcp
 
 > **The AI architecture knowledge engine for your coding agent.**
-> 22 tools. 18 modules. 682KB of curated knowledge. Zero hallucination.
+> 22 tools. 16 modules. 682KB of curated knowledge. Zero hallucination.
 
 [![npm](https://img.shields.io/npm/v/frootai-mcp)](https://www.npmjs.com/package/frootai-mcp) [![license](https://img.shields.io/npm/l/frootai-mcp)](LICENSE)
 
@@ -151,6 +151,43 @@ Just talk: *"Build me an IT ticket API"* → *"Review this"* → *"Validate my c
 | `embedding_playground` | Cosine similarity between texts (educational) |
 
 </details>
+
+---
+
+## CLI — `npx frootai`
+
+The same package also ships a CLI for project scaffolding and knowledge lookups:
+
+```bash
+npx frootai init                              # Interactive project scaffolding
+npx frootai search "RAG architecture"         # Search knowledge base from terminal
+npx frootai cost enterprise-rag --scale prod  # Azure cost estimate
+npx frootai validate                          # Check project structure + configs
+npx frootai doctor                            # Health check (Node, git, MCP)
+```
+
+### `frootai init`
+
+3 questions → scaffolds a complete FrootAI project:
+
+```
+? What are you building? [Enterprise RAG / AI Agent / AI Gateway / ...]
+? Target scale? [dev / prod]
+? Project name? [my-ai-project]
+```
+
+Creates:
+```
+my-ai-project/
+├── .vscode/mcp.json          ← MCP server auto-connects
+├── .github/agents/           ← Builder, Reviewer, Tuner agents
+├── .github/copilot-instructions.md
+├── config/                   ← OpenAI, Search, Guardrails configs
+├── evaluation/               ← Eval thresholds
+└── README.md
+```
+
+Then just `cd my-ai-project && code .` — FrootAI MCP auto-connects in VS Code.
 
 ---
 

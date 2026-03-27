@@ -1,0 +1,66 @@
+name: Version Check
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  check-versions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Check version consistency across files
+        run: |
+          MCP_VERSION=$(node -p "require('./mcp-server/package.json').version")
+          EXT_VERSION=$(node -p "require('./vscode-extension/package.json').version")
+          
+          echo "MCP Server version: $MCP_VERSION"
+          echo "Extension version: $EXT_VERSION"
+
+          ERRORS=0
+
+          # Check README references
+          if grep -q "frootai-mcp@[0-9]" README.md; then
+            README_VERSION=$(grep -oP 'frootai-mcp@\K[0-9]+\.[0-9]+\.[0-9]+' README.md | head -1)
+            if [ "$README_VERSION" != "$MCP_VERSION" ]; then
+              echo "::error file=README.md::README references frootai-mcp@${README_VERSION} but package.json says ${MCP_VERSION}"
+              ERRORS=$((ERRORS+1))
+            fi
+          fi
+
+          # Check chatbot server.js
+          if [ -f functions/server.js ]; then
+            if ! grep -q "@${MCP_VERSION}" functions/server.js; then
+              echo "::error file=functions/server.js::Chatbot does not reference MCP @${MCP_VERSION}"
+              ERRORS=$((ERRORS+1))
+            fi
+            if ! grep -q "v${EXT_VERSION}" functions/server.js; then
+              echo "::error file=functions/server.js::Chatbot does not reference extension v${EXT_VERSION}"
+              ERRORS=$((ERRORS+1))
+            fi
+          fi
+
+          # Check tool count consistency
+          ACTUAL_TOOLS=$(grep -c 'server\.tool(' mcp-server/index.js || echo 0)
+          
+          if grep -qP "\d+ tools" mcp-server/package.json; then
+            DESC_TOOLS=$(grep -oP '(\d+) tools' mcp-server/package.json | head -1 | grep -oP '\d+')
+            if [ "$DESC_TOOLS" != "$ACTUAL_TOOLS" ]; then
+              echo "::error file=mcp-server/package.json::npm description says ${DESC_TOOLS} tools but index.js has ${ACTUAL_TOOLS}"
+              ERRORS=$((ERRORS+1))
+            fi
+          fi
+
+          if [ $ERRORS -gt 0 ]; then
+            echo ""
+            echo "❌ ${ERRORS} version mismatches found."
+            echo "Run: node scripts/sync-content.js"
+            exit 1
+          fi
+
+          echo "✅ All version references are consistent"

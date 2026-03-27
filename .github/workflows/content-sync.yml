@@ -1,0 +1,86 @@
+name: Content Sync Validator
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'mcp-server/index.js'
+      - 'mcp-server/package.json'
+      - 'mcp-server/knowledge.json'
+      - 'vscode-extension/package.json'
+      - 'solution-plays/**'
+      - 'README.md'
+      - 'functions/server.js'
+
+jobs:
+  validate-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Run content sync check
+        run: |
+          echo "🔍 Checking if content is synced across all channels..."
+          
+          # Run sync in dry-check mode (detect drift without changing files)
+          node -e "
+          const {readFileSync, existsSync, readdirSync} = require('fs');
+          const {join} = require('path');
+          
+          const ROOT = '.';
+          const read = (r) => { try { return readFileSync(join(ROOT,r),'utf8'); } catch { return null; } };
+          const readJSON = (r) => { const c=read(r); return c ? JSON.parse(c) : null; };
+          
+          const mcpPkg = readJSON('mcp-server/package.json');
+          const extPkg = readJSON('vscode-extension/package.json');
+          const mcpVersion = mcpPkg?.version || '0.0.0';
+          
+          const mcpIndex = read('mcp-server/index.js') || '';
+          const toolCount = (mcpIndex.match(/server\\.tool\\(/g) || []).length;
+          
+          const knowledge = readJSON('mcp-server/knowledge.json');
+          const moduleCount = knowledge?.modules ? Object.keys(knowledge.modules).length : 0;
+          
+          const playsDir = 'solution-plays';
+          const playCount = existsSync(playsDir) 
+            ? readdirSync(playsDir, {withFileTypes:true}).filter(d=>d.isDirectory()&&/^\d+/.test(d.name)).length 
+            : 0;
+          
+          let errors = 0;
+          
+          // Check npm description
+          if (mcpPkg?.description) {
+            const m = mcpPkg.description.match(/(\d+)\s*tools/);
+            if (m && m[1] !== String(toolCount)) {
+              console.error('❌ npm description says ' + m[1] + ' tools, actual: ' + toolCount);
+              errors++;
+            }
+            const pm = mcpPkg.description.match(/(\d+)\s*modules/);
+            if (pm && moduleCount > 0 && pm[1] !== String(moduleCount)) {
+              console.error('❌ npm description says ' + pm[1] + ' modules, actual: ' + moduleCount);
+              errors++;
+            }
+          }
+          
+          // Check README
+          const readme = read('README.md');
+          if (readme) {
+            const rv = readme.match(/frootai-mcp@(\d+\.\d+\.\d+)/);
+            if (rv && rv[1] !== mcpVersion) {
+              console.error('❌ README references @' + rv[1] + ', should be @' + mcpVersion);
+              errors++;
+            }
+          }
+          
+          if (errors > 0) {
+            console.error('');
+            console.error('Fix: run \"node scripts/sync-content.js\" then commit the changes.');
+            process.exit(1);
+          }
+          
+          console.log('✅ All content is in sync (' + toolCount + ' tools, ' + moduleCount + ' modules, ' + playCount + ' plays)');
+          "

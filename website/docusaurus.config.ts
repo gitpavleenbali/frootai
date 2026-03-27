@@ -125,6 +125,7 @@ const config: Config = {
             { to: "/ecosystem", label: "🔗 Ecosystem Overview" },
             { to: "/vscode-extension", label: "🖥️ VS Code Extension" },
             { to: "/mcp-tooling", label: "🔌 MCP Server (22 tools)" },
+            { to: "/cli", label: "⚡ CLI (npx frootai)" },
             { to: "/setup-guide", label: "📋 Setup Guide" },
           ],
         },

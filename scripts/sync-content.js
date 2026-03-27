@@ -191,7 +191,24 @@ updateFile('functions/server.js', (content) => {
   return content;
 }, 'Chatbot version refs');
 
-// ─── 5. Sync website MCP page if it exists ───
+// ─── 5. Sync MCP server README ───
+console.log('\n📄 Syncing mcp-server/README.md...');
+
+updateFile('mcp-server/README.md', (content) => {
+  content = content.replace(/\b\d+ tools\b/g, (match) => {
+    const n = parseInt(match);
+    return n > 10 ? `${toolCount} tools` : match;
+  });
+  content = content.replace(/\b\d+ modules\b/g, (match) => {
+    const n = parseInt(match);
+    return n > 5 ? `${moduleCount} modules` : match;
+  });
+  content = content.replace(/\b\d+ solution plays\b/g, `${playCount} solution plays`);
+  content = content.replace(/frootai-mcp@\d+\.\d+\.\d+/g, `frootai-mcp@${mcpVersion}`);
+  return content;
+}, 'MCP README counts + version');
+
+// ─── 6. Sync website MCP page if it exists ───
 const websiteMcpPage = 'website/docs/mcp-server.md';
 if (existsSync(join(ROOT, websiteMcpPage))) {
   console.log('\n🌐 Syncing website MCP docs...');
