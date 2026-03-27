@@ -280,14 +280,14 @@ frootai/
 │   ├── LLM-Landscape.md     F2
 │   ├── ...                   (all 16 modules)
 │   └── T3-Production-Patterns.md  T3
-├── mcp-server/            ← MCP server (npm: frootai-mcp@3.1.2)
+├── mcp-server/            ← MCP server (npm: frootai-mcp@3.2.0)
 │   ├── index.js             22 tools (6 static + 4 live + 3 chain + 3 AI ecosystem + 6 compute)
 │   ├── knowledge.json       Bundled knowledge (682 KB, 18 modules)
 │   ├── agent-card.json      A2A protocol Agent Card
 │   ├── build-knowledge.js   Bundle generator
 │   └── package.json         npm config
 ├── vscode-extension/      ← VS Code extension (v1.1.1)
-│   ├── src/extension.js     17 commands, standalone engine, cached downloads
+│   ├── src/extension.js     19 commands, standalone engine, cached downloads
 │   ├── knowledge.json       Bundled knowledge (682 KB)
 │   └── package.json         Marketplace config
 ├── functions/             ← Agent FAI chatbot API (REST)
