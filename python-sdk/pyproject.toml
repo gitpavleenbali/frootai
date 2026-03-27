@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "frootai"
+version = "3.2.0"
+description = "FrootAI SDK — The open glue for AI architecture. Programmatic access to 22 MCP tools, 20 solution plays, 18 knowledge modules."
+readme = "README.md"
+license = {text = "MIT"}
+authors = [{name = "Pavleen Bali", email = "pavleenbali@frootai.dev"}]
+requires-python = ">=3.10"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+keywords = ["frootai", "ai", "architecture", "azure", "mcp", "agents", "rag", "sdk"]
+dependencies = ["httpx>=0.25.0"]
+
+[project.urls]
+Homepage = "https://frootai.dev"
+Repository = "https://github.com/gitpavleenbali/frootai"
+Documentation = "https://frootai.dev/api-docs"
+
+[project.scripts]
+frootai = "frootai.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["frootai*"]

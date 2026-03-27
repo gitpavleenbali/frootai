@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "frootai-mcp"
+version = "3.2.0"
+description = "FrootAI MCP Server — AI architecture knowledge + compute tools. 22 tools, 18 modules, 200+ terms, 20 solution plays. Python implementation."
+readme = "README.md"
+license = {text = "MIT"}
+authors = [{name = "Pavleen Bali", email = "pavleenbali@frootai.dev"}]
+requires-python = ">=3.10"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+keywords = ["mcp", "ai", "architecture", "azure", "copilot", "claude", "frootai", "agents"]
+dependencies = []
+
+[project.urls]
+Homepage = "https://frootai.dev"
+Repository = "https://github.com/gitpavleenbali/frootai"
+Documentation = "https://frootai.dev/setup-guide"
+"Bug Tracker" = "https://github.com/gitpavleenbali/frootai/issues"
+
+[project.scripts]
+frootai-mcp-py = "frootai_mcp.server:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["frootai_mcp*"]
+
+[tool.setuptools.package-data]
+frootai_mcp = ["knowledge.json"]

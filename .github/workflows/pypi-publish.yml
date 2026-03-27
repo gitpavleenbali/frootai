@@ -1,0 +1,53 @@
+name: Publish Python Packages to PyPI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'python-mcp/**'
+      - 'python-sdk/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publish-mcp:
+    runs-on: ubuntu-latest
+    if: contains(github.event.head_commit.message, 'python-mcp') || github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install build tools
+        run: pip install build twine
+      - name: Build frootai-mcp
+        working-directory: python-mcp
+        run: python -m build
+      - name: Publish to PyPI
+        working-directory: python-mcp
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+        run: twine upload dist/* --skip-existing
+
+  publish-sdk:
+    runs-on: ubuntu-latest
+    if: contains(github.event.head_commit.message, 'python-sdk') || github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install build tools
+        run: pip install build twine
+      - name: Build frootai SDK
+        working-directory: python-sdk
+        run: python -m build
+      - name: Publish to PyPI
+        working-directory: python-sdk
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+        run: twine upload dist/* --skip-existing
