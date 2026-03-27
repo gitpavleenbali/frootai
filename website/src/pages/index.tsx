@@ -200,7 +200,7 @@ export default function FrootAIPage(): JSX.Element {
                 { label: "📈 FrootAI Adoption", to: "/adoption", color: "#f43f5e" },
                 { label: "📚 FAI Learning Hub", to: "/learning-hub", color: "#f97316" },
                 { label: "🛠️ FAI Developer Hub", to: "/dev-hub", color: "#0ea5e9" },
-                { label: "✨ FAI Agent", to: "/chatbot", color: "#f59e0b" },
+                { label: "✨ Agent FAI", to: "/chatbot", color: "#f59e0b" },
                 { label: "⭐ Star on GitHub", to: "https://github.com/gitpavleenbali/frootai", color: "#eab308" },
               ].map((link) => (
                 <Link key={link.label} to={link.to} className={styles.glowPill} style={{ "--pill-color": link.color } as React.CSSProperties}

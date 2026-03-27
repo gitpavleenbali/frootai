@@ -36,7 +36,7 @@ export default function CommunityPage(): JSX.Element {
               <li>18 Knowledge Modules</li>
               <li>200+ AI Glossary Terms</li>
               <li>Solution Configurator</li>
-              <li>FAI Agent</li>
+              <li>Agent FAI</li>
               <li>Workshop Materials</li>
               <li>Community Support</li>
             </ul>

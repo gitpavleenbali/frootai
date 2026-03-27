@@ -26,7 +26,7 @@
 - [ ] VS Code Marketplace shows new version
 - [ ] `docker pull ghcr.io/gitpavleenbali/frootai-mcp:latest` works
 - [ ] frootai.dev loads correctly
-- [ ] FAI Agent chatbot responds with correct version info
+- [ ] Agent FAI chatbot responds with correct version info
 
 ### Secrets Required (GitHub repo Settings → Secrets)
 - `NPM_TOKEN` — npm access token for publishing

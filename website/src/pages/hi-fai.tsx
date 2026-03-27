@@ -298,7 +298,7 @@ export default function HiFaiPage(): JSX.Element {
             ) : (
               <Link to="/chatbot"
                 style={{ padding: "8px 24px", borderRadius: "10px", background: "linear-gradient(135deg, #f59e0b, #eab308)", color: "#000", border: "none", fontSize: "0.8rem", fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 12px rgba(245,158,11,0.2)" }}>
-                ✨ Ask FAI Agent →
+                ✨ Ask Agent FAI →
               </Link>
             )}
           </div>
@@ -330,7 +330,7 @@ export default function HiFaiPage(): JSX.Element {
         {/* ═══ BOTTOM ═══ */}
         <div style={{ textAlign: "center", display: "flex", gap: "10px", justifyContent: "center", flexWrap: "wrap" }}>
           <Link to="/" className={styles.glowPill} style={{ "--pill-color": "#10b981" } as React.CSSProperties}>🌳 Back to FrootAI</Link>
-          <Link to="/chatbot" className={styles.glowPill} style={{ "--pill-color": "#f59e0b" } as React.CSSProperties}>✨ FAI Agent</Link>
+          <Link to="/chatbot" className={styles.glowPill} style={{ "--pill-color": "#f59e0b" } as React.CSSProperties}>✨ Agent FAI</Link>
           <Link to="https://github.com/gitpavleenbali/frootai" className={styles.glowPill} style={{ "--pill-color": "#eab308" } as React.CSSProperties}>⭐ Star on GitHub</Link>
         </div>
       </div>

@@ -176,7 +176,7 @@ const config: Config = {
         },
         {
           to: "/chatbot",
-          label: "✨ FAI Agent",
+          label: "✨ Agent FAI",
           position: "right",
           className: "navbar__item--agent-glow",
         },
@@ -206,7 +206,7 @@ const config: Config = {
             { label: "Knowledge Hub", to: "/docs/" },
             { label: "Packages", to: "/packages" },
             { label: "Setup Guide", to: "/setup-guide" },
-            { label: "FAI Agent", to: "/chatbot" },
+            { label: "Agent FAI", to: "/chatbot" },
             { label: "Configurator", to: "/configurator" },
           ],
         },

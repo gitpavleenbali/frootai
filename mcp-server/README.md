@@ -189,6 +189,35 @@ my-ai-project/
 
 Then just `cd my-ai-project && code .` — FrootAI MCP auto-connects in VS Code.
 
+### `frootai validate --waf`
+
+Run a WAF scorecard against your project (6 pillars, 17 checks):
+
+```bash
+npx frootai validate --waf
+```
+
+Returns pass/fail for each WAF pillar: Reliability, Security, Cost Optimization, Operational Excellence, Performance Efficiency, Responsible AI.
+
+---
+
+## REST API
+
+Agent FAI is also available as a REST API:
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/health` | Health check |
+| POST | `/api/search-plays` | Search 20 solution plays |
+| POST | `/api/estimate-cost` | Azure cost estimate |
+| POST | `/api/chat` | Chat with Agent FAI |
+| POST | `/api/chat/stream` | Streaming chat (SSE) |
+| GET | `/api/openapi.json` | OpenAPI 3.1 spec |
+
+**Base URL**: `https://frootai-chatbot-api.azurewebsites.net` · Rate limit: 60 req/min
+
+[📡 API Docs →](https://frootai.dev/api-docs) · [OpenAPI Spec →](https://frootai-chatbot-api.azurewebsites.net/api/openapi.json)
+
 ---
 
 ## What's Bundled
@@ -207,7 +236,10 @@ Then just `cd my-ai-project && code .` — FrootAI MCP auto-connects in VS Code.
 | | |
 |---|---|
 | **Website** | [frootai.dev](https://frootai.dev) |
+| **CLI Docs** | [frootai.dev/cli](https://frootai.dev/cli) |
+| **REST API Docs** | [frootai.dev/api-docs](https://frootai.dev/api-docs) |
 | **VS Code Extension** | [marketplace.visualstudio.com](https://marketplace.visualstudio.com/items?itemName=pavleenbali.frootai) |
+| **Docker** | [ghcr.io/gitpavleenbali/frootai-mcp](https://github.com/gitpavleenbali/frootai/pkgs/container/frootai-mcp) |
 | **GitHub** | [github.com/gitpavleenbali/frootai](https://github.com/gitpavleenbali/frootai) |
 | **Setup Guide** | [frootai.dev/setup-guide](https://frootai.dev/setup-guide) |
 

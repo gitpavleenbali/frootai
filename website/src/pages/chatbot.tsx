@@ -219,7 +219,7 @@ export default function ChatbotPage(): JSX.Element {
   const followUps = lastAssistant ? getFollowUps(lastAssistant.text) : [];
 
   return (
-    <Layout title="FAI Agent - FrootAI" description="AI-powered architecture guide. Grounded in 20 solution plays, 22 MCP tools, 18 knowledge modules.">
+    <Layout title="Agent FAI - FrootAI" description="AI-powered architecture guide. Grounded in 20 solution plays, 22 MCP tools, 18 knowledge modules.">
       {/* Bouncing dots + streaming cursor animations */}
       <style>{`
         @keyframes bounceDot {
@@ -247,7 +247,7 @@ export default function ChatbotPage(): JSX.Element {
             Powered by Azure OpenAI GPT-4.1
           </div>
           <h1 style={{ fontSize: "2.2rem", fontWeight: 800, margin: "0 0 6px", background: "linear-gradient(135deg, #f59e0b 0%, #eab308 40%, #f97316 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
-            ✨ FAI Agent
+            ✨ Agent FAI
           </h1>
           <p style={{ color: "var(--ifm-color-emphasis-500)", fontSize: "0.88rem", margin: "0 0 4px", fontWeight: 500 }}>
             Your open glue for binding <span style={{ color: "#10b981", fontWeight: 700 }}>Infrastructure</span>, <span style={{ color: "#06b6d4", fontWeight: 700 }}>Platform</span> & <span style={{ color: "#7c3aed", fontWeight: 700 }}>Application</span> with the Agentic Ecosystem
@@ -282,7 +282,7 @@ export default function ChatbotPage(): JSX.Element {
                     <span className="bounce-dot" />
                     <span className="bounce-dot" />
                     <span className="bounce-dot" />
-                    <span style={{ color: "var(--ifm-color-emphasis-400)", marginLeft: "6px", fontSize: "0.8rem" }}>FAI Agent is thinking</span>
+                    <span style={{ color: "var(--ifm-color-emphasis-400)", marginLeft: "6px", fontSize: "0.8rem" }}>Agent FAI is thinking</span>
                   </span>
                 </div>
               </div>

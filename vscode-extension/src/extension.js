@@ -951,6 +951,100 @@ function activate(context) {
     })
   );
 
+  // ── Command: Init SpecKit (spec/ + WAF alignment) ──
+  context.subscriptions.push(
+    vscode.commands.registerCommand("frootai.initSpecKit", async (preSelectedPlay) => {
+      const wsFolder = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
+      if (!wsFolder) { vscode.window.showWarningMessage("Open a folder first."); return; }
+
+      let selectedPlay = preSelectedPlay;
+      if (!selectedPlay) {
+        const plays = SOLUTION_PLAYS.map(p => ({ label: `${p.icon} ${p.id} — ${p.name}`, description: p.status, value: p }));
+        const pick = await vscode.window.showQuickPick(plays, { placeHolder: "Initialize SpecKit from which solution play?" });
+        if (!pick) return;
+        selectedPlay = pick.value;
+      }
+
+      // Create spec/ directory
+      const specDir = path.join(wsFolder, "spec");
+      if (!fs.existsSync(specDir)) fs.mkdirSync(specDir, { recursive: true });
+
+      // Generate play-spec.json from template
+      const specTemplate = {
+        "$schema": "https://frootai.dev/schemas/spec.json",
+        name: selectedPlay.name,
+        version: "0.1.0",
+        play: selectedPlay.id,
+        description: `${selectedPlay.name} implementation`,
+        scale: "dev",
+        team: { owner: "", reviewers: [] },
+        architecture: {
+          pattern: selectedPlay.id === "01" ? "rag" : selectedPlay.id === "07" ? "multi-agent" : "standard",
+          components: [],
+          data_flow: ""
+        },
+        config: {
+          openai: { model: "gpt-4o-mini", temperature: 0.1, max_tokens: 4096 },
+          search: { top_k: 5, semantic_config: "default", min_score: 0.75 },
+          guardrails: { max_tokens_per_request: 4096, blocked_categories: ["hate", "violence", "self-harm", "sexual"], pii_detection: true, grounding_check: true }
+        },
+        evaluation: {
+          metrics: ["groundedness", "relevance", "coherence", "fluency"],
+          thresholds: { groundedness: 4.0, relevance: 4.0, coherence: 4.0, fluency: 4.0 }
+        },
+        waf_alignment: {
+          reliability: "Retry + circuit breaker on all AI calls",
+          security: "Managed Identity + Key Vault + Content Safety",
+          cost_optimization: "GPT-4o-mini for dev, model routing for prod",
+          operational_excellence: "CI/CD + consistency validation + uptime monitors",
+          performance_efficiency: "Response caching + streaming + async",
+          responsible_ai: "Content safety filters + groundedness checks"
+        }
+      };
+
+      const specPath = path.join(specDir, "play-spec.json");
+      if (!fs.existsSync(specPath)) {
+        fs.writeFileSync(specPath, JSON.stringify(specTemplate, null, 2), "utf-8");
+      }
+
+      // Download WAF instruction files
+      const wafFiles = [
+        ".github/instructions/waf-reliability.instructions.md",
+        ".github/instructions/waf-security.instructions.md",
+        ".github/instructions/waf-cost-optimization.instructions.md",
+        ".github/instructions/waf-operational-excellence.instructions.md",
+        ".github/instructions/waf-performance-efficiency.instructions.md",
+        ".github/instructions/waf-responsible-ai.instructions.md",
+      ];
+
+      let wafCopied = 0;
+      for (const f of wafFiles) {
+        const dstPath = path.join(wsFolder, f);
+        const dir = path.dirname(dstPath);
+        if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+        if (fs.existsSync(dstPath)) { wafCopied++; continue; }
+        const localPath = root ? path.join(root, f) : null;
+        if (localPath && fs.existsSync(localPath)) {
+          fs.copyFileSync(localPath, dstPath);
+          wafCopied++;
+        } else {
+          try {
+            const content = await downloadFromGitHub(f);
+            fs.writeFileSync(dstPath, content, "utf-8");
+            wafCopied++;
+          } catch { /* WAF file may not exist */ }
+        }
+      }
+
+      vscode.window.showInformationMessage(
+        `✅ SpecKit initialized for ${selectedPlay.name}!\n` +
+        `• spec/play-spec.json (architecture + WAF alignment)\n` +
+        `• ${wafCopied} WAF instruction files (.github/instructions/)\n` +
+        `Run \`npx frootai validate --waf\` to check WAF scorecard.`
+      );
+    })
+  );
+
   // ── Command: Install MCP Server ──
   context.subscriptions.push(
     vscode.commands.registerCommand("frootai.installMcpServer", async () => {

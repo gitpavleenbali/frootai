@@ -988,7 +988,7 @@ div[style] {
   text-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
 }
 
-/*  FAI Agent navbar glow  */
+/*  Agent FAI navbar glow  */
 .navbar__item--agent-glow {
   background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(234, 179, 8, 0.08)) !important;
   border: 1px solid rgba(245, 158, 11, 0.4) !important;
@@ -1009,7 +1009,7 @@ div[style] {
 }
 
 /* ================================================================== */
-/*  MOBILE: Hi FAI & FAI Agent — equal sizing, never overflow          */
+/*  MOBILE: Hi FAI & Agent FAI — equal sizing, never overflow          */
 /* ================================================================== */
 
 /* Desktop: both buttons same minimum width for consistency */
@@ -1060,7 +1060,7 @@ div[style] {
 
 @media (max-width: 996px) {
 
-  /* Hide Hi FAI, FAI Agent, Search FAI, GitHub from top bar on mobile */
+  /* Hide Hi FAI, Agent FAI, Search FAI, GitHub from top bar on mobile */
   .navbar__items--right > .navbar__item--hifai-glow,
   .navbar__items--right > .navbar__item--agent-glow,
   .navbar__items--right > .navbar__item--search-link,
@@ -1105,7 +1105,7 @@ div[style] {
     display: none !important;
   }
 
-  /* ── SIDEBAR: add Search + GitHub below FAI Agent ── */
+  /* ── SIDEBAR: add Search + GitHub below Agent FAI ── */
 
   /* Style Search FAI in sidebar — purple */
   .navbar-sidebar .navbar__item--search-link {
@@ -1207,7 +1207,7 @@ div[style] {
 }
 
 /* ── Extra-small phones: no special overrides needed ── */
-/* Hi FAI & FAI Agent are in ⚡ menu, only 1 pill on navbar */
+/* Hi FAI & Agent FAI are in ⚡ menu, only 1 pill on navbar */
 
 /* Hide Search FAI from desktop navbar — 🔍 pill already handles search */
 .navbar__item--search-link {
@@ -1257,7 +1257,7 @@ div[style] {
     padding: 6px 8px !important;
   }
 
-  /* Hi FAI / FAI Agent slightly smaller on tablet */
+  /* Hi FAI / Agent FAI slightly smaller on tablet */
   .navbar__item--hifai-glow,
   .navbar__item--agent-glow {
     padding: 5px 10px !important;

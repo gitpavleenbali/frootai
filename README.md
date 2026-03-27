@@ -127,6 +127,10 @@ graph TB
             T2["evaluation/"]
             T3["infra/main.bicep"]
         end
+        subgraph SK["📋 SpecKit — Architecture"]
+            S1["spec/play-spec.json"]
+            S2["WAF alignment"]
+        end
     end
     
     YOU --> EXT
@@ -139,10 +143,13 @@ graph TB
 
 | Component | Who Uses It | What It Does |
 |-----------|------------|-------------|
-| **VS Code Extension** | You (human) | Browse plays, search terms, init DevKit/TuneKit, auto-chain agents |
+| **VS Code Extension** | You (human) | Browse plays, search terms, init DevKit/TuneKit/SpecKit, auto-chain agents |
 | **MCP Server (npm)** | Your AI agent | Copilot/Claude calls 22 tools (6 static + 4 live + 3 chain + 3 AI ecosystem + 6 compute) |
+| **CLI** | You (terminal) | `npx frootai init/search/cost/validate/doctor` — scaffolding, search, cost estimates |
 | **DevKit (.github/ + infra/)** | Developer | .github Agentic OS + Bicep infrastructure + co-coder context |
 | **TuneKit (config/ + eval/)** | Platform team | AI parameter tuning: temperature, models, guardrails, evaluation |
+| **SpecKit (spec/ + WAF)** | Architect | Architecture specification, WAF alignment, evaluation thresholds |
+| **REST API** | Any client | 5 endpoints: chat, search, cost, health, OpenAPI — [/api-docs](https://frootai.dev/api-docs) |
 
 ### .github Agentic OS (per Solution Play)
 
@@ -257,7 +264,7 @@ Pre-tuned, deployable AI solutions — infra + AI config + agent instructions + 
 | 03 | [Deterministic Agent](./solution-plays/03-deterministic-agent/) | Reliable agent with temp=0, guardrails, eval | ✅ Ready |
 | 04–20 | [17 more plays](./solution-plays/) | Voice AI, IT tickets, multi-agent, fine-tuning, edge AI... | 🛠️ Skeleton |
 
-**Every play ships with:** .github Agentic OS (19 files) + DevKit + TuneKit
+**Every play ships with:** .github Agentic OS (19 files) + DevKit + TuneKit + SpecKit
 
 [📖 All Solution Plays →](./solution-plays/)
 
@@ -279,12 +286,18 @@ frootai/
 │   ├── agent-card.json      A2A protocol Agent Card
 │   ├── build-knowledge.js   Bundle generator
 │   └── package.json         npm config
-├── vscode-extension/      ← VS Code extension (v1.0.0)
-│   ├── src/extension.js     16 commands, standalone engine, cached downloads
+├── vscode-extension/      ← VS Code extension (v1.1.1)
+│   ├── src/extension.js     17 commands, standalone engine, cached downloads
 │   ├── knowledge.json       Bundled knowledge (682 KB)
 │   └── package.json         Marketplace config
-├── website/               ← Docusaurus site (17 pages)
-│   ├── src/pages/           chatbot, configurator, partners, marketplace, dev-hub, adoption + core
+├── functions/             ← Agent FAI chatbot API (REST)
+│   ├── server.js            5 endpoints + Agent FAI system prompt
+│   └── openapi.json         OpenAPI 3.1 specification
+├── config/                ← Configuration templates
+│   ├── spec-template.json   SpecKit template (WAF + architecture)
+│   └── froot-packages.json  FROOT Packages manifest
+├── website/               ← Docusaurus site (24 pages)
+│   ├── src/pages/           chatbot, configurator, cli, api-docs, partners, marketplace, dev-hub, adoption + core
 │   ├── docusaurus.config.ts
 │   └── sidebars.ts
 ├── scripts/               ← Automation scripts (Bash + PowerShell)

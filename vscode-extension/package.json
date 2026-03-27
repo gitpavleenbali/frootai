@@ -111,6 +111,10 @@
         "title": "FrootAI: Initialize TuneKit (config + evaluation + infra)"
       },
       {
+        "command": "frootai.initSpecKit",
+        "title": "FrootAI: Initialize SpecKit (spec + WAF alignment)"
+      },
+      {
         "command": "frootai.installMcpServer",
         "title": "FrootAI: Install MCP Server (npm)"
       },

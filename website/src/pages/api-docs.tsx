@@ -66,8 +66,8 @@ const endpoints = [
 }`,
   },
   {
-    method: "POST", path: "/api/chat", summary: "Chat with FAI Agent",
-    desc: "Send a message to the FAI Agent. Returns the complete AI response.",
+    method: "POST", path: "/api/chat", summary: "Chat with Agent FAI",
+    desc: "Send a message to Agent FAI. Returns the complete AI response.",
     example: `curl -X POST https://frootai-chatbot-api.azurewebsites.net/api/chat \\
   -H "Content-Type: application/json" \\
   -d '{"message": "What is RAG architecture?"}'`,
@@ -100,12 +100,12 @@ export default function APIReferencePage(): JSX.Element {
   const [expandedIdx, setExpandedIdx] = useState<number | null>(null);
 
   return (
-    <Layout title="API Reference — FrootAI" description="REST API documentation for FrootAI Chatbot API — search plays, estimate costs, chat with FAI Agent.">
+    <Layout title="API Reference — FrootAI" description="REST API documentation for FrootAI Chatbot API — search plays, estimate costs, chat with Agent FAI.">
       <div style={{ maxWidth: "900px", margin: "0 auto", padding: "40px 24px 80px" }}>
 
         <h1 style={{ fontSize: "2rem", fontWeight: 800, marginBottom: "8px" }}>📡 API Reference</h1>
         <p style={{ fontSize: "0.95rem", color: "var(--ifm-color-emphasis-500)", marginBottom: "12px" }}>
-          REST API for the FrootAI Chatbot — search plays, estimate costs, and chat with FAI Agent.
+          REST API for the FrootAI Chatbot — search plays, estimate costs, and chat with Agent FAI.
         </p>
         <p style={{ fontSize: "0.82rem", color: "var(--ifm-color-emphasis-400)", marginBottom: "32px" }}>
           Base URL: <code style={{ color: "#10b981" }}>https://frootai-chatbot-api.azurewebsites.net</code>

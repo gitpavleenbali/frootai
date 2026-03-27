@@ -309,7 +309,7 @@ export default function SearchBarWrapper() {
                   textDecoration: 'none', transition: 'all 0.2s',
                 }}
               >
-                <span style={{ fontSize: '1.2rem' }}>✨</span> FAI Agent
+                <span style={{ fontSize: '1.2rem' }}>✨</span> Agent FAI
               </a>
               <button
                 onClick={openSearch}
