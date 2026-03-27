@@ -2,8 +2,12 @@ name: Publish MCP Server to npm
 
 on:
   push:
+    branches: [main]
+    paths:
+      - 'mcp-server/**'
     tags:
       - 'mcp-v*'
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -19,18 +23,24 @@ jobs:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Verify package version matches tag
+      - name: Check if version is newer than npm
+        id: version_check
         working-directory: mcp-server
         run: |
-          PKG_VERSION=$(node -p "require('./package.json').version")
-          TAG_VERSION="${GITHUB_REF_NAME#mcp-v}"
-          if [ "$PKG_VERSION" != "$TAG_VERSION" ]; then
-            echo "ERROR: package.json version ($PKG_VERSION) does not match tag ($TAG_VERSION)"
-            exit 1
+          LOCAL=$(node -p "require('./package.json').version")
+          NPM=$(npm view frootai-mcp version 2>/dev/null || echo "0.0.0")
+          echo "local=$LOCAL" >> $GITHUB_OUTPUT
+          echo "npm=$NPM" >> $GITHUB_OUTPUT
+          if [ "$LOCAL" = "$NPM" ]; then
+            echo "skip=true" >> $GITHUB_OUTPUT
+            echo "Version $LOCAL already published — skipping."
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+            echo "Publishing frootai-mcp@$LOCAL (npm has $NPM)"
           fi
-          echo "Publishing frootai-mcp@$PKG_VERSION"
 
       - name: Publish to npm
+        if: steps.version_check.outputs.skip != 'true'
         working-directory: mcp-server
         run: npm publish --access public
         env:

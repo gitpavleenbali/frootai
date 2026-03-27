@@ -2,8 +2,12 @@ name: Publish VS Code Extension
 
 on:
   push:
+    branches: [main]
+    paths:
+      - 'vscode-extension/**'
     tags:
       - 'ext-v*'
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -21,18 +25,24 @@ jobs:
       - name: Install vsce
         run: npm install -g @vscode/vsce
 
-      - name: Verify package version matches tag
+      - name: Check if version is newer than marketplace
+        id: version_check
         working-directory: vscode-extension
         run: |
-          PKG_VERSION=$(node -p "require('./package.json').version")
-          TAG_VERSION="${GITHUB_REF_NAME#ext-v}"
-          if [ "$PKG_VERSION" != "$TAG_VERSION" ]; then
-            echo "ERROR: package.json version ($PKG_VERSION) does not match tag ($TAG_VERSION)"
-            exit 1
+          LOCAL=$(node -p "require('./package.json').version")
+          MARKETPLACE=$(npx @vscode/vsce show pavleenbali.frootai --json 2>/dev/null | node -p "JSON.parse(require('fs').readFileSync('/dev/stdin','utf8')).versions[0].version" 2>/dev/null || echo "0.0.0")
+          echo "local=$LOCAL" >> $GITHUB_OUTPUT
+          echo "marketplace=$MARKETPLACE" >> $GITHUB_OUTPUT
+          if [ "$LOCAL" = "$MARKETPLACE" ]; then
+            echo "skip=true" >> $GITHUB_OUTPUT
+            echo "Version $LOCAL already published — skipping."
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+            echo "Publishing frootai extension v$LOCAL (marketplace has $MARKETPLACE)"
           fi
-          echo "Publishing frootai extension v$PKG_VERSION"
 
       - name: Package and Publish
+        if: steps.version_check.outputs.skip != 'true'
         working-directory: vscode-extension
         run: |
           vsce package
