@@ -1,0 +1,36 @@
+{
+  "name": "17-ai-observability",
+  "version": "0.1.0",
+  "play": "17-ai-observability",
+  "description": "FrootAI Solution Play: ai observability",
+  "scale": "dev",
+  "architecture": {
+    "pattern": "custom",
+    "data_flow": "See README.md for architecture diagram"
+  },
+  "config": {
+    "openai": "config/openai.json",
+    "guardrails": "config/guardrails.json"
+  },
+  "evaluation": {
+    "config": "evaluation/eval-config.json",
+    "metrics": [
+      "groundedness",
+      "relevance",
+      "coherence",
+      "fluency"
+    ],
+    "thresholds": {
+      "groundedness": 4,
+      "relevance": 4
+    }
+  },
+  "waf_alignment": {
+    "reliability": "Retry + health checks",
+    "security": "Managed Identity + Content Safety",
+    "cost_optimization": "Right-sized for dev",
+    "operational_excellence": "CI/CD + consistency checks",
+    "performance_efficiency": "Caching + streaming",
+    "responsible_ai": "Content safety + groundedness"
+  }
+}

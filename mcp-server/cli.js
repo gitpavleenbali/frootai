@@ -488,6 +488,127 @@ function cmdValidate() {
   }
 
   console.log(`\n  ${passed}/${checks.length + 1} checks passed\n`);
+
+  // WAF scorecard (if --waf flag)
+  if (args.includes('--waf')) {
+    cmdWafScorecard();
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// WAF SCORECARD — Well-Architected Framework check
+// ═══════════════════════════════════════════════════
+function cmdWafScorecard() {
+  console.log(`${c.cyan}  WAF Alignment Scorecard${c.reset}\n`);
+
+  const pillars = [
+    {
+      name: 'Reliability',
+      checks: [
+        { label: 'Health endpoint config', test: () => existsSync('config/openai.json') },
+        { label: 'Retry/backoff in instructions', test: () => existsSync('.github/instructions/waf-reliability.instructions.md') },
+        { label: 'Evaluation thresholds', test: () => existsSync('evaluation/eval-config.json') },
+      ]
+    },
+    {
+      name: 'Security',
+      checks: [
+        { label: 'Security instructions', test: () => existsSync('.github/instructions/waf-security.instructions.md') },
+        { label: 'Guardrails config', test: () => existsSync('config/guardrails.json') },
+        { label: 'No hardcoded secrets', test: () => {
+          try {
+            const files = ['config/openai.json', '.env'];
+            for (const f of files) {
+              if (existsSync(f)) {
+                const content = readFileSync(f, 'utf8');
+                if (/sk-[a-zA-Z0-9]{20,}/.test(content) || /password\s*[:=]\s*["'][^"']+["']/i.test(content)) return false;
+              }
+            }
+            return true;
+          } catch (e) { return true; }
+        }},
+      ]
+    },
+    {
+      name: 'Cost Optimization',
+      checks: [
+        { label: 'Cost optimization instructions', test: () => existsSync('.github/instructions/waf-cost-optimization.instructions.md') },
+        { label: 'Model config (temperature, max_tokens)', test: () => {
+          try { const c = JSON.parse(readFileSync('config/openai.json','utf8')); return c.max_tokens !== undefined; } catch (e) { return false; }
+        }},
+        { label: 'Token budget in guardrails', test: () => {
+          try { const c = JSON.parse(readFileSync('config/guardrails.json','utf8')); return c.max_tokens_per_request !== undefined; } catch (e) { return false; }
+        }},
+      ]
+    },
+    {
+      name: 'Operational Excellence',
+      checks: [
+        { label: 'CI/CD config (.github/workflows)', test: () => existsSync('.github/workflows') },
+        { label: 'Copilot instructions', test: () => existsSync('.github/copilot-instructions.md') },
+        { label: 'Agent definitions', test: () => existsSync('.github/agents/builder.agent.md') },
+      ]
+    },
+    {
+      name: 'Performance',
+      checks: [
+        { label: 'Performance instructions', test: () => existsSync('.github/instructions/waf-performance-efficiency.instructions.md') },
+        { label: 'Search config (top_k)', test: () => {
+          try { const c = JSON.parse(readFileSync('config/search.json','utf8')); return c.top_k !== undefined; } catch (e) { return false; }
+        }},
+      ]
+    },
+    {
+      name: 'Responsible AI',
+      checks: [
+        { label: 'RAI instructions', test: () => existsSync('.github/instructions/waf-responsible-ai.instructions.md') },
+        { label: 'Content safety in guardrails', test: () => {
+          try { const c = JSON.parse(readFileSync('config/guardrails.json','utf8')); return Array.isArray(c.blocked_categories); } catch (e) { return false; }
+        }},
+        { label: 'Grounding check enabled', test: () => {
+          try { const c = JSON.parse(readFileSync('config/guardrails.json','utf8')); return c.grounding_check === true; } catch (e) { return false; }
+        }},
+      ]
+    },
+  ];
+
+  let totalPassed = 0;
+  let totalChecks = 0;
+
+  console.log(`  ${'Pillar'.padEnd(25)} | Score  | Status`);
+  console.log(`  ${'─'.repeat(25)}─┼────────┼${'─'.repeat(20)}`);
+
+  for (const pillar of pillars) {
+    const passed = pillar.checks.filter(ch => ch.test()).length;
+    const total = pillar.checks.length;
+    totalPassed += passed;
+    totalChecks += total;
+    const pct = Math.round((passed / total) * 100);
+    const bar = pct >= 80 ? `${c.green}${pct}%${c.reset}` : pct >= 50 ? `${c.yellow}${pct}%${c.reset}` : `${c.red}${pct}%${c.reset}`;
+    const status = pct === 100 ? `${c.green}✅ Complete${c.reset}` : pct >= 50 ? `${c.yellow}⚠️  Partial${c.reset}` : `${c.red}❌ Needs work${c.reset}`;
+    console.log(`  ${pillar.name.padEnd(25)} | ${String(pct + '%').padEnd(6)} | ${status}`);
+  }
+
+  const overallPct = Math.round((totalPassed / totalChecks) * 100);
+  console.log(`  ${'─'.repeat(25)}─┼────────┼${'─'.repeat(20)}`);
+  console.log(`  ${'OVERALL'.padEnd(25)} | ${overallPct}%    | ${totalPassed}/${totalChecks} checks`);
+  console.log('');
+
+  // Show failing checks
+  let failures = 0;
+  for (const pillar of pillars) {
+    for (const ch of pillar.checks) {
+      if (!ch.test()) {
+        if (failures === 0) console.log(`${c.dim}  Missing:${c.reset}`);
+        console.log(`  ${c.red}❌${c.reset} ${pillar.name}: ${ch.label}`);
+        failures++;
+      }
+    }
+  }
+  if (failures === 0) {
+    console.log(`  ${c.green}All WAF checks passed!${c.reset}`);
+  }
+  console.log('');
 }
 
 // ═══════════════════════════════════════════════════
@@ -566,6 +687,7 @@ function cmdHelp() {
   console.log(`    ${c.green}search${c.reset} <query>     Search FrootAI knowledge base`);
   console.log(`    ${c.green}cost${c.reset} [play]        Cost estimate (--scale dev|prod)`);
   console.log(`    ${c.green}validate${c.reset}           Check project structure + configs`);
+  console.log(`    ${c.green}validate --waf${c.reset}     WAF alignment scorecard (6 pillars)`);
   console.log(`    ${c.green}doctor${c.reset}             Health check for your setup`);
   console.log(`    ${c.green}version${c.reset}            Show version info`);
   console.log(`    ${c.green}help${c.reset}               Show this help\n`);
@@ -573,6 +695,7 @@ function cmdHelp() {
   console.log(`    ${c.dim}npx frootai init${c.reset}`);
   console.log(`    ${c.dim}npx frootai search "RAG architecture"${c.reset}`);
   console.log(`    ${c.dim}npx frootai cost enterprise-rag --scale prod${c.reset}`);
+  console.log(`    ${c.dim}npx frootai validate --waf${c.reset}`);
   console.log(`    ${c.dim}npx frootai doctor${c.reset}\n`);
   console.log(`  ${c.dim}Docs: https://frootai.dev${c.reset}`);
   console.log(`  ${c.dim}GitHub: https://github.com/gitpavleenbali/frootai${c.reset}\n`);

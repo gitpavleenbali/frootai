@@ -201,11 +201,37 @@ function estimateCost(playId, scale) {
   return { play: p, items, total, scale };
 }
 
+// ═══ RATE LIMITING (in-memory, sliding window) ═══
+const RATE_LIMIT = { windowMs: 60000, maxRequests: 60 };
+const rateLimitStore = new Map();
+
+function rateLimitCheck(ip) {
+  const now = Date.now();
+  if (!rateLimitStore.has(ip)) {
+    rateLimitStore.set(ip, [now]);
+    return true;
+  }
+  const timestamps = rateLimitStore.get(ip).filter(t => now - t < RATE_LIMIT.windowMs);
+  timestamps.push(now);
+  rateLimitStore.set(ip, timestamps);
+  return timestamps.length <= RATE_LIMIT.maxRequests;
+}
+
+// Clean up old entries every 5 minutes
+setInterval(() => {
+  const now = Date.now();
+  for (const [ip, timestamps] of rateLimitStore) {
+    const valid = timestamps.filter(t => now - t < RATE_LIMIT.windowMs);
+    if (valid.length === 0) rateLimitStore.delete(ip);
+    else rateLimitStore.set(ip, valid);
+  }
+}, 300000);
+
 const server = http.createServer(async (req, res) => {
   // CORS
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS, GET");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, X-API-Key, Authorization");
 
   if (req.method === "OPTIONS") {
     res.writeHead(200);
@@ -213,10 +239,31 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  // ═══ RATE LIMITING (in-memory, per IP) ═══
+  const clientIP = req.headers["x-forwarded-for"] || req.socket.remoteAddress || "unknown";
+  if (!rateLimitCheck(clientIP)) {
+    res.writeHead(429, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ error: "Rate limit exceeded. Max 60 requests per minute." }));
+    return;
+  }
+
+  // OpenAPI spec
+  if (req.method === "GET" && req.url === "/api/openapi.json") {
+    try {
+      const spec = require("fs").readFileSync(require("path").join(__dirname, "openapi.json"), "utf8");
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(spec);
+    } catch (e) {
+      res.writeHead(404, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ error: "OpenAPI spec not found" }));
+    }
+    return;
+  }
+
   // Health check
   if (req.method === "GET" && (req.url === "/" || req.url === "/api/health")) {
     res.writeHead(200, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ status: "ok", service: "frootai-chatbot-api", model: AZURE_OPENAI_DEPLOYMENT, tools: 22 }));
+    res.end(JSON.stringify({ status: "ok", service: "frootai-chatbot-api", model: AZURE_OPENAI_DEPLOYMENT, tools: 22, version: "3.1.2" }));
     return;
   }
 
