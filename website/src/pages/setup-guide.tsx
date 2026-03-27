@@ -26,7 +26,7 @@ export default function SetupGuidePage(): JSX.Element {
 
         <h1 style={{ fontSize: "2rem", fontWeight: 800, marginBottom: "8px" }}>📖 FrootAI Setup Guide</h1>
         <p style={{ fontSize: "0.95rem", color: "var(--ifm-color-emphasis-500)", marginBottom: "32px" }}>
-          Two tools, one setup page. Get FrootAI’s <strong>MCP Server</strong> (for your AI agent) and <strong>VS Code Extension</strong> (for you) up and running in minutes.
+          Two tools, one setup page. Get FrootAI's <strong>MCP Server</strong> (for your AI agent) and <strong>VS Code Extension</strong> (for you) up and running in minutes. Plus <strong>CLI</strong> and <strong>Docker</strong> options.
         </p>
 
         {/* ══ SECTION SELECTOR ══ */}
@@ -36,6 +36,12 @@ export default function SetupGuidePage(): JSX.Element {
           </button>
           <button onClick={() => { document.getElementById('vscode-section')?.scrollIntoView({ behavior: 'smooth' }); }} style={{ padding: "10px 24px", borderRadius: "10px", border: "2px solid rgba(99,102,241,0.3)", background: "rgba(99,102,241,0.04)", color: "var(--ifm-font-color-base)", fontWeight: 700, fontSize: "0.88rem", cursor: "pointer" }}>
             💻 VS Code Extension Setup
+          </button>
+          <button onClick={() => { document.getElementById('cli-section')?.scrollIntoView({ behavior: 'smooth' }); }} style={{ padding: "10px 24px", borderRadius: "10px", border: "2px solid rgba(245,158,11,0.3)", background: "rgba(245,158,11,0.04)", color: "var(--ifm-font-color-base)", fontWeight: 700, fontSize: "0.88rem", cursor: "pointer" }}>
+            ⚡ CLI Setup
+          </button>
+          <button onClick={() => { document.getElementById('docker-section')?.scrollIntoView({ behavior: 'smooth' }); }} style={{ padding: "10px 24px", borderRadius: "10px", border: "2px solid rgba(6,182,212,0.3)", background: "rgba(6,182,212,0.04)", color: "var(--ifm-font-color-base)", fontWeight: 700, fontSize: "0.88rem", cursor: "pointer" }}>
+            🐳 Docker Setup
           </button>
         </div>
 
@@ -365,6 +371,106 @@ npm install`}
               <p style={{ fontSize: "0.82rem", color: "var(--ifm-color-emphasis-500)", marginTop: "6px" }}>{item.a}</p>
             </details>
           ))}
+        </div>
+
+        {/* ═══════════════════════════════════════════ */}
+        {/* PART 3: CLI                                            */}
+        {/* ═══════════════════════════════════════════ */}
+        <div id="cli-section" style={{ padding: "24px", borderRadius: "16px", border: "2px solid rgba(245,158,11,0.2)", background: "rgba(245,158,11,0.02)", marginBottom: "48px" }}>
+          <h2 style={{ ...h2Style, marginTop: 0, color: "#f59e0b" }}>⚡ Part 3: CLI Setup</h2>
+          <p style={{ fontSize: "0.85rem", color: "var(--ifm-color-emphasis-500)", marginBottom: "20px" }}>
+            Scaffold projects, search knowledge, estimate costs, and validate configs — all from the terminal. No install needed.
+          </p>
+          <div style={cardStyle}>
+            <h3 style={{ ...h3Style, marginTop: 0 }}>Quick Start</h3>
+            <pre style={codeStyle}>{`# Run any command directly via npx
+npx frootai help
+
+# Interactive project scaffolding
+npx frootai init
+
+# One-command play scaffold
+npx frootai scaffold 01-enterprise-rag
+
+# Search knowledge
+npx frootai search "RAG architecture"
+
+# WAF alignment scorecard
+npx frootai validate --waf
+
+# Health check
+npx frootai doctor`}</pre>
+          </div>
+          <div style={cardStyle}>
+            <h3 style={{ ...h3Style, marginTop: 0 }}>All 8 Commands</h3>
+            <table style={{ width: "100%", fontSize: "0.82rem", borderCollapse: "collapse" }}>
+              <thead><tr style={{ borderBottom: "1px solid var(--ifm-color-emphasis-200)" }}><th style={{ textAlign: "left", padding: "8px" }}>Command</th><th style={{ textAlign: "left", padding: "8px" }}>What it does</th></tr></thead>
+              <tbody>
+                {[
+                  ["init", "Interactive project scaffolding (auto-detects existing projects)"],
+                  ["scaffold <play>", "One-command play setup with all 5 FROOT kits"],
+                  ["search <query>", "Search 18 knowledge modules"],
+                  ["cost <play>", "Estimate Azure AI costs (--scale dev|prod)"],
+                  ["validate", "Check project structure + configs"],
+                  ["validate --waf", "WAF alignment scorecard (6 pillars, 17 checks)"],
+                  ["doctor", "Health check: Node.js, npm, VS Code, MCP"],
+                  ["help", "Show all commands"],
+                ].map(([cmd, desc]) => (
+                  <tr key={cmd} style={{ borderBottom: "1px solid var(--ifm-color-emphasis-100)" }}>
+                    <td style={{ padding: "8px", fontFamily: "var(--ifm-font-family-monospace)", fontWeight: 600 }}>{cmd}</td>
+                    <td style={{ padding: "8px" }}>{desc}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: "0.82rem", textAlign: "center" }}>
+            <Link to="/cli" style={{ color: "#f59e0b", fontWeight: 600 }}>Full CLI Documentation →</Link>
+          </p>
+        </div>
+
+        {/* ═══════════════════════════════════════════ */}
+        {/* PART 4: DOCKER                                         */}
+        {/* ═══════════════════════════════════════════ */}
+        <div id="docker-section" style={{ padding: "24px", borderRadius: "16px", border: "2px solid rgba(6,182,212,0.2)", background: "rgba(6,182,212,0.02)", marginBottom: "48px" }}>
+          <h2 style={{ ...h2Style, marginTop: 0, color: "#06b6d4" }}>🐳 Part 4: Docker Setup</h2>
+          <p style={{ fontSize: "0.85rem", color: "var(--ifm-color-emphasis-500)", marginBottom: "20px" }}>
+            Run FrootAI anywhere — no Node.js required. Multi-arch (amd64 + arm64). Same 22 tools, 682KB knowledge.
+          </p>
+          <div style={cardStyle}>
+            <h3 style={{ ...h3Style, marginTop: 0 }}>Quick Start</h3>
+            <pre style={codeStyle}>{`# Pull and run (auto-selects architecture)
+docker run -i --rm ghcr.io/gitpavleenbali/frootai-mcp:latest
+
+# Pin a specific version
+docker run -i --rm ghcr.io/gitpavleenbali/frootai-mcp:3.1.2`}</pre>
+          </div>
+          <div style={cardStyle}>
+            <h3 style={{ ...h3Style, marginTop: 0 }}>Claude Desktop / Cursor</h3>
+            <pre style={codeStyle}>{`{
+  "mcpServers": {
+    "frootai": {
+      "command": "docker",
+      "args": ["run", "-i", "--rm", "ghcr.io/gitpavleenbali/frootai-mcp:latest"]
+    }
+  }
+}`}</pre>
+          </div>
+          <div style={cardStyle}>
+            <h3 style={{ ...h3Style, marginTop: 0 }}>VS Code Copilot (.vscode/mcp.json)</h3>
+            <pre style={codeStyle}>{`{
+  "servers": {
+    "frootai": {
+      "command": "docker",
+      "args": ["run", "-i", "--rm", "ghcr.io/gitpavleenbali/frootai-mcp:latest"],
+      "type": "stdio"
+    }
+  }
+}`}</pre>
+          </div>
+          <p style={{ fontSize: "0.82rem", textAlign: "center" }}>
+            <Link to="/docker" style={{ color: "#06b6d4", fontWeight: 600 }}>Full Docker Documentation →</Link>
+          </p>
         </div>
 
         {/* ── CTA ── */}
