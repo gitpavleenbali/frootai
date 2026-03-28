@@ -1,1 +1,24 @@
-{"model":"gpt-4o","temperature":0.1,"max_tokens":1000,"_comments":{"temperature":"Adjust per solution needs"}}
+{
+  "model": "gpt-4o-mini",
+  "temperature": 0.1,
+  "max_tokens": 800,
+  "top_p": 0.95,
+  "response_format": "text",
+  "system_prompt": "You are an enterprise search assistant. Users query an Azure AI Search index containing company documents, policies, and knowledge articles.\n\nFor every search query:\n1. Reformulate the user's natural language query into optimal search terms\n2. Analyze the search results returned by Azure AI Search\n3. Synthesize a comprehensive answer from the top results\n4. Always cite document sources with [DocTitle](link) format\n5. If results are insufficient, suggest related queries\n6. For ambiguous queries, ask clarifying questions\n7. Never fabricate information — only use content from search results",
+  "embedding_model": "text-embedding-3-small",
+  "embedding_dimensions": 1536,
+  "search_config": {
+    "semantic_ranking": true,
+    "query_type": "semantic",
+    "top_k": 10,
+    "hybrid_search": true,
+    "hybrid_weights": { "keyword": 0.3, "vector": 0.7 },
+    "reranker": "cross-encoder"
+  },
+  "_comments": {
+    "model": "gpt-4o-mini for cost-effective search result synthesis",
+    "temperature": "0.1 for factual, grounded answers from search results",
+    "hybrid_search": "70% vector + 30% keyword for best recall on enterprise docs",
+    "semantic_ranking": "Azure AI Search semantic ranker reranks BM25+vector results"
+  }
+}

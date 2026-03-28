@@ -1,1 +1,39 @@
-{"content_safety":{"enabled":true},"pii_detection":{"enabled":true},"prompt_injection":{"enabled":true}}
+{
+  "content_safety": {
+    "enabled": true,
+    "severity_thresholds": { "hate": 2, "sexual": 2, "violence": 2, "self_harm": 2 }
+  },
+  "pii_detection": {
+    "enabled": true,
+    "types": ["ssn", "credit_card", "api_key", "connection_string"],
+    "action": "redact_from_results"
+  },
+  "prompt_injection": {
+    "enabled": true,
+    "action": "block_and_log"
+  },
+  "search_specific": {
+    "max_results_per_query": 20,
+    "require_citation": true,
+    "citation_format": "[DocTitle](url)",
+    "no_answer_response": "I couldn't find relevant results. Try rephrasing your query or browse the document categories.",
+    "data_classification_filter": {
+      "enabled": true,
+      "user_clearance_required": true,
+      "classifications": ["public", "internal", "confidential"],
+      "default_max_classification": "internal"
+    },
+    "query_logging": {
+      "enabled": true,
+      "anonymize_user": false,
+      "log_zero_results": true,
+      "retention_days": 90
+    },
+    "rate_limit_per_user_per_minute": 20
+  },
+  "abstention": {
+    "enabled": true,
+    "topics": ["competitor_analysis", "unreleased_products"],
+    "response": "This information is restricted. Please contact your manager for access."
+  }
+}

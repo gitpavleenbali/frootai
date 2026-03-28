@@ -1,1 +1,43 @@
-{"content_safety":{"enabled":true},"pii_detection":{"enabled":true},"prompt_injection":{"enabled":true}}
+{
+  "content_safety": {
+    "enabled": true,
+    "severity_thresholds": { "hate": 0, "sexual": 0, "violence": 0, "self_harm": 0 },
+    "custom_blocklists": ["brand-protection", "competitor-names", "profanity-extended"],
+    "api_version": "2024-09-01"
+  },
+  "pii_detection": {
+    "enabled": true,
+    "types": ["email", "phone_number", "ssn", "credit_card", "address", "ip_address", "passport"],
+    "action": "flag_and_redact",
+    "retain_hash_for_dedup": true
+  },
+  "prompt_injection": {
+    "enabled": true,
+    "action": "block_and_log"
+  },
+  "moderation_specific": {
+    "pipeline": [
+      { "stage": 1, "service": "azure_content_safety", "action": "fast_filter", "latency_budget_ms": 100 },
+      { "stage": 2, "service": "gpt_classifier", "action": "edge_case_review", "latency_budget_ms": 2000 },
+      { "stage": 3, "service": "human_review", "action": "flagged_content", "sla_hours": 4 }
+    ],
+    "auto_block_severity": 4,
+    "auto_approve_severity": 1,
+    "flag_range": { "min": 2, "max": 3 },
+    "human_review_queue": {
+      "max_queue_size": 500,
+      "escalation_when_full": "auto_block",
+      "reviewer_min_agreement": 2
+    },
+    "throughput": {
+      "max_items_per_second": 100,
+      "batch_size": 10,
+      "retry_on_429": true
+    },
+    "appeals": {
+      "enabled": true,
+      "appeal_window_hours": 72,
+      "requires_human_review": true
+    }
+  }
+}

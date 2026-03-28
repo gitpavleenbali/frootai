@@ -1,1 +1,35 @@
-{"content_safety":{"enabled":true},"pii_detection":{"enabled":true},"prompt_injection":{"enabled":true}}
+{
+  "content_safety": {
+    "enabled": true,
+    "severity_thresholds": { "hate": 2, "sexual": 2, "violence": 2, "self_harm": 0 }
+  },
+  "pii_detection": {
+    "enabled": true,
+    "types": ["email", "phone_number", "ssn", "credit_card", "api_key"],
+    "action": "mask_in_logs"
+  },
+  "prompt_injection": {
+    "enabled": true,
+    "action": "block_and_log"
+  },
+  "multi_agent_specific": {
+    "max_agent_hops": 5,
+    "max_total_tokens_per_request": 10000,
+    "agent_timeout_seconds": 30,
+    "supervisor_must_route": true,
+    "prevent_recursive_calls": true,
+    "allowed_agents": ["research_agent", "action_agent", "analysis_agent"],
+    "destructive_action_requires_confirmation": true,
+    "inter_agent_context_size_limit": 4000,
+    "audit_trail": {
+      "log_all_handoffs": true,
+      "log_agent_inputs_outputs": true,
+      "retention_days": 90
+    }
+  },
+  "abstention": {
+    "enabled": true,
+    "topics": ["financial_transactions_over_10000", "employee_termination", "legal_contracts"],
+    "response": "This action requires human approval. Routing to your manager."
+  }
+}

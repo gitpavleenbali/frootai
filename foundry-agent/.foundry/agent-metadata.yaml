@@ -1,0 +1,21 @@
+# FrootAI Enterprise RAG Agent — Foundry Metadata
+project_name: frootai-rag-agent
+resource_group: rg-dev
+subscription_id: 37ffd444-46e0-41dd-9e4b-f12857262095
+location: swedencentral
+
+agent:
+  name: frootai-enterprise-rag
+  display_name: "FrootAI Enterprise RAG Agent"
+  description: "Production RAG pipeline with AI Search + Azure OpenAI. Hybrid retrieval, semantic ranking, citation grounding."
+  model: gpt-4o-mini
+  play_id: "01"
+
+hub:
+  name: frootai-hub
+  resource_group: rg-dev
+
+ai_services:
+  name: cost-intelligence-agent-resource
+  resource_group: rg-dev
+  endpoint: https://cost-intelligence-agent-resource.cognitiveservices.azure.com/

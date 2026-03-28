@@ -1,1 +1,31 @@
-{"content_safety":{"enabled":true},"pii_detection":{"enabled":true},"prompt_injection":{"enabled":true}}
+{
+  "content_safety": {
+    "enabled": true,
+    "severity_thresholds": { "hate": 2, "sexual": 0, "violence": 2, "self_harm": 0 }
+  },
+  "pii_detection": {
+    "enabled": true,
+    "types": ["employee_id", "email", "phone_number", "ssn"],
+    "action": "mask_in_logs",
+    "mask_in_response": false
+  },
+  "prompt_injection": {
+    "enabled": true,
+    "action": "block_and_log"
+  },
+  "teams_bot_specific": {
+    "max_response_length_chars": 2000,
+    "require_sso_auth": true,
+    "allowed_channels": ["msteams", "webchat"],
+    "adaptive_card_max_actions": 5,
+    "conversation_timeout_minutes": 30,
+    "rate_limit_per_user_per_minute": 10,
+    "allowed_topics": ["hr_policies", "it_support", "facilities", "onboarding", "company_info"],
+    "blocked_topics": ["salary_negotiation", "competitor_info", "stock_trading"]
+  },
+  "abstention": {
+    "enabled": true,
+    "topics": ["medical_advice", "legal_advice", "salary_details", "performance_reviews"],
+    "response": "I can't help with that topic. Please contact HR directly at hr@company.com."
+  }
+}
